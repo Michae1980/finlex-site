@@ -1,9 +1,8 @@
-name: Deploy docs to GitHub Pages
+name: Validate & Deploy FinLex PWA to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -12,34 +11,34 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DOCS_BASE: /${{ github.event.repository.name }}/
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          fetch-depth: 0
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-      - name: Setup Pages
+          python-version: "3.11"
+
+      - name: Build static PWA site (CI mode)
+        run: python3 scripts/build_site.py --ci
+
+      - name: Validate site data, shards & privacy compliance
+        run: python3 scripts/validate.py
+
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-      - name: Install dependencies
-        run: npm ci
-      - name: Build with VitePress
-        run: npm run docs:build
-      - name: Upload artifact
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/.vitepress/dist
+          path: "./site"
 
   deploy:
     environment:

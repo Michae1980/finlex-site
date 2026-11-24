@@ -1,58 +1,54 @@
-# 问财答税 · FinLex 文档站
+# 问财答税 · FinLex 财税法规检索与联想工作台
 
-「问财答税（FinLex）」的对外文档站：**可核对出处的会计准则 / 税法法条 / 案例检索与联想解读**。
+「问财答税（FinLex）」的对外静态知识站：**可核对出处的会计准则 / 税法法条 / 审计准则 / 实务案例检索与交叉联想工作台**。
 
-结构参考 [walkinglabs/learn-harness-engineering](https://github.com/walkinglabs/learn-harness-engineering)（MIT）的课程站形态：Markdown 内容 + VitePress + GitHub Actions 自动部署 GitHub Pages。
+界面与工程范式借鉴 `formula-graph`（零第三方依赖 Python 构建校验 + 静态单页渐进式网页应用 PWA + GitHub Pages 自动发布），并针对财税长文本阅读场景采用「左侧 36% 导航目录 + 右侧 64% 法条原文主阅读区」可拖拽分栏布局。
 
 ## 目录结构
 
-```
+```text
 finlex-site/
-├── README.md
-├── package.json
-├── docs/
-│   ├── index.md              # 首页（hero + 特性卡）
-│   ├── .vitepress/config.mts # 站点配置（导航 / 侧栏 / 中文界面）
-│   ├── guide/                # 指南：关于 / 快速开始 / 合规边界
-│   ├── chapters/             # 章节：会计准则篇 / 税法条文篇 / 案例研读篇
-│   ├── cases/                # 案例研讨
-│   ├── resources/            # 资源：引用格式 / 官方数据源
-│   └── 同类项目调研.md        # 立项调研留痕
-└── .github/workflows/
-    └── deploy-pages.yml      # push 到 main 自动构建并部署 GitHub Pages
+├── .github/workflows/deploy-pages.yml  # GitHub Pages 自动校验、构建与发布工作流
+├── scripts/
+│   ├── build_prototype.py              # 从 finlex.db 脱敏导出索引、全库正文语料与单文档分片
+│   ├── build_site.py                   # 构建正式 site/ PWA 目录（支持本地同步与 --ci 模式）
+│   └── validate.py                     # 零依赖静态站完整性与隐私合规校验器
+├── prototype/
+│   ├── template.html                   # 前端交互模板（卡片列表 / 台账表格 / 聚焦图谱 / 主阅读区）
+│   ├── pwa/                            # PWA 清单、Service Worker 与应用图标源码
+│   └── index.html                      # 本地双击离线预览入口
+└── site/                               # 可直接托管部署的正式静态网站 + PWA 输出目录
+    ├── index.html
+    ├── manifest.webmanifest
+    ├── sw.js
+    ├── icon.svg / icon-192.png / icon-512.png
+    └── data/
+        ├── index.js                    # 首屏轻量法规索引与 405 条关联边（~321 KB）
+        ├── fulltext.js                 # 按需加载的全库 5,417 条条文正文语料
+        └── docs/doc_<id>.js            # 210 份按需加载的单文档条文分片
 ```
 
-## 本地运行
+## 本地运行与构建
 
-```bash
-npm install
-npm run docs:dev      # 本地预览 http://localhost:5173
-npm run docs:build    # 构建静态站（输出 docs/.vitepress/dist）
-npm run docs:preview  # 预览构建产物
-```
+- **直接离线双击查看**：用现代浏览器打开 `site/index.html`（或 `prototype/index.html`），无需本地服务器即可完整使用。
+- **本地预览 PWA 安装与离线缓存**：
+  ```bash
+  python3 -m http.server -d site 8080
+  ```
+  浏览器打开 `http://localhost:8080`，点击顶部「⬇ 安装桌面版」可安装为独立桌面应用。
+- **从 `finlex.db` 同步最新数据并校验构建**（仅需 Python 3.9+，零第三方依赖）：
+  ```bash
+  python3 scripts/build_site.py && python3 scripts/validate.py
+  ```
 
-## 发布到 GitHub Pages
+## 自动发布到 GitHub Pages
 
-1. 在 GitHub 新建仓库（建议名 `finlex-site`，公开仓库）；
-2. 推送本目录到该仓库 `main` 分支；
-3. 仓库 Settings → Pages → Source 选择 **GitHub Actions**；
-4. 之后每次 push 到 `main`，`deploy-pages.yml` 自动构建并部署。
+1. 将本仓库推送至 GitHub 的 `main` 分支（含 `site/data/` 脱敏静态分片）；
+2. 在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**；
+3. 每次推送到 `main`，`.github/workflows/deploy-pages.yml` 自动运行 `python3 scripts/build_site.py --ci` 与 `python3 scripts/validate.py`，校验通过后发布 `site/`。
 
-访问地址：`https://<用户名>.github.io/<仓库名>/`（站点 `base` 由工作流自动按仓库名注入）。
+## 内容与合规纪律
 
-## 内容纪律
-
-- **有出处才发布**：引用格式见 [docs/resources/citation.md](docs/resources/citation.md)；
-- **对外隐私**：任何页面不得出现本机路径、内部工具名、采集过程；来源只写官方机构名 + 官网 URL；
-- **合规红线**：不构成法律意见 / 鉴证 / 审计结论；不承诺节税；免责声明常驻 [docs/guide/compliance.md](docs/guide/compliance.md)。
-
-## 同类项目调研（立项留痕）
-
-完整台账见 [docs/同类项目调研.md](docs/同类项目调研.md)。
-
-| 项 | 结论 |
-|----|------|
-| 检索日期 | 2026-10-17 |
-| 查询词（多组） | tax law knowledge base documentation site / tax accounting knowledge base website / tax knowledge base vitepress / 会计 税法 知识库 / 税法 文档 等（详见台账） |
-| 高契合同类 | **无**（中文财税知识站 + VitePress 形态未检出可比项目） |
-| 结论 | **自建**；结构只读借鉴 walkinglabs/learn-harness-engineering（MIT，API 核实 ⭐19988 / 2026-10-01 有提交），不复用其代码 |
+- **有出处才发布**：标准引用格式 `《文件名》（文号）第X条`，正文每条提供一键复制标准引用按钮与官网原文链接；
+- **对外隐私红线**：构建与校验阶段强制剥离内部备注与本机路径，保证 0 隐私泄漏；
+- **合规边界**：全站常驻免责声明，不构成法律意见、涉税鉴证或审计结论；实务案例恒置底并标注「案例参考，非规范依据」。

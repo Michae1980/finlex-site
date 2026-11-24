@@ -1,0 +1,546 @@
+#!/usr/bin/env python3
+"""
+FinLex 静态交互原型构建与脱敏校验脚本（零第三方依赖，需 Python 3.9+）
+
+功能：
+1. 从关联项目 ../finlex/backend/data/finlex.db 读取规范文档、条文与关联边；
+2. 执行对外隐私与合规红线校验（剥离内部备注/本机路径，校验官网 URL，标注用户补充案例）；
+3. 按纯业务主题归并 4 级联级分类（问题域 -> 规范层级 -> 效力状态 -> 业务专题）；
+4. 导出轻量首屏索引 prototype/data/index.js、按需全库正文检索引擎 prototype/data/fulltext.js
+   以及按文档拆分的 prototype/data/docs/doc_<id>.js（兼容 file:// 双击离线直接打开无 CORS 限制）；
+5. 同步生成 prototype/index.html（基于 prototype/template.html）。
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import json
+import re
+import sqlite3
+import sys
+from collections import Counter, defaultdict
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_DB = PROJECT_ROOT.parent / "finlex" / "backend" / "data" / "finlex.db"
+PROTOTYPE_DIR = PROJECT_ROOT / "prototype"
+DATA_DIR = PROTOTYPE_DIR / "data"
+DOCS_DIR = DATA_DIR / "docs"
+TEMPLATE_PATH = PROTOTYPE_DIR / "template.html"
+OUTPUT_HTML = PROTOTYPE_DIR / "index.html"
+
+# 隐私红线检测正则：禁止泄漏任何本机绝对路径
+LOCAL_PATH_RE = re.compile(r"(/Users/[^\s\"'<>]+|[A-Za-z]:\\Users\\[^\s\"'<>]+)")
+
+DOMAIN_META = [
+    {"id": "accounting", "label": "会计准则与核算"},
+    {"id": "tax", "label": "税收法规与征管"},
+    {"id": "audit", "label": "审计准则与实务"},
+    {"id": "general", "label": "综合商法与监管"},
+]
+
+DOC_TYPE_META = [
+    {"id": "law", "label": "法律", "authority": 1},
+    {"id": "regulation", "label": "行政法规", "authority": 2},
+    {"id": "standard", "label": "准则", "authority": 3},
+    {"id": "rule", "label": "部门规章", "authority": 4},
+    {"id": "guidance", "label": "解释 / 指南 / 解答", "authority": 5},
+    {"id": "normative", "label": "规范性文件与优惠", "authority": 6},
+    {"id": "interpretation", "label": "官方解读", "authority": 7},
+    {"id": "case", "label": "实务案例（参考）", "authority": 8},
+]
+
+STATUS_META = [
+    {"id": "in_force", "label": "现行有效"},
+    {"id": "superseded", "label": "已有新版替代"},
+    {"id": "pending", "label": "待补充电子原文"},
+]
+
+# 问题域权威权重（参考 finlex/docs/04-交叉联想设计.md，数值越小权威越高）
+AUTHORITY_RANK = {
+    ("accounting", "standard"): 1,
+    ("accounting", "guidance"): 2,
+    ("accounting", "law"): 3,
+    ("accounting", "rule"): 4,
+    ("accounting", "normative"): 5,
+    ("accounting", "interpretation"): 6,
+    ("accounting", "case"): 99,
+    ("tax", "law"): 1,
+    ("tax", "regulation"): 2,
+    ("tax", "rule"): 3,
+    ("tax", "normative"): 4,
+    ("tax", "interpretation"): 5,
+    ("tax", "case"): 99,
+    ("audit", "standard"): 1,
+    ("audit", "guidance"): 2,
+    ("audit", "law"): 3,
+    ("audit", "case"): 99,
+    ("general", "law"): 1,
+    ("general", "regulation"): 2,
+    ("general", "rule"): 3,
+    ("general", "normative"): 4,
+    ("general", "case"): 99,
+}
+
+# 按纯业务主题归并（准则应用指南、审计问题解答均直接归入对应业务专题）
+TOPIC_RULES = [
+    ("case_ref", "实务案例（非规范参考）", lambda d: d["doc_type"] == "case"),
+    # 会计域（纯业务主题）
+    (
+        "acc_rev_fin",
+        "收入、金融工具与租赁",
+        lambda d: d["domain"] == "accounting"
+        and any(k in d["title"] for k in ("收入", "金融", "租赁", "套期", "公允价值", "股份支付", "保险")),
+    ),
+    (
+        "acc_assets",
+        "存货、固定资产与长期资产",
+        lambda d: d["domain"] == "accounting"
+        and any(
+            k in d["title"]
+            for k in ("存货", "固定资产", "无形资产", "投资性房地产", "资产减值", "生物资产", "石油", "非货币性", "借款费用", "持有待售")
+        ),
+    ),
+    (
+        "acc_liab_spec",
+        "职工薪酬、补助、所得税与特殊交易",
+        lambda d: d["domain"] == "accounting"
+        and any(k in d["title"] for k in ("职工薪酬", "企业年金", "债务重组", "或有事项", "政府补助", "所得税", "外币")),
+    ),
+    (
+        "acc_equity_report",
+        "合并报表、股权投资与财务列报",
+        lambda d: d["domain"] == "accounting"
+        and any(
+            k in d["title"]
+            for k in (
+                "基本准则",
+                "合并",
+                "长期股权",
+                "财务报表",
+                "现金流量",
+                "中期",
+                "分部",
+                "关联方",
+                "每股收益",
+                "合营",
+                "在其他主体",
+                "资产负债表日后",
+                "会计政策",
+                "首次执行",
+                "小企业会计准则",
+                "可持续披露",
+            )
+        ),
+    ),
+    (
+        "acc_comp_interp",
+        "准则综合解释（第1–20号）与总指南",
+        lambda d: d["domain"] == "accounting",
+    ),
+    # 税务域
+    (
+        "tax_income",
+        "企业所得税与个人所得税",
+        lambda d: d["domain"] == "tax" and any(k in d["title"] for k in ("所得税", "研发费用", "高新技术")),
+    ),
+    (
+        "tax_vat_inv",
+        "增值税与发票管理",
+        lambda d: d["domain"] == "tax" and any(k in d["title"] for k in ("增值税", "发票", "出口退税", "小规模")),
+    ),
+    (
+        "tax_admin",
+        "税收征管与小微优惠",
+        lambda d: d["domain"] == "tax",
+    ),
+    # 审计域（将审计准则与问题解答按纯审计业务循环归并）
+    (
+        "audit_ic_special",
+        "内部控制与特殊行业/鉴证业务",
+        lambda d: d["domain"] == "audit"
+        and any(
+            k in d["title"]
+            for k in (
+                "内部控制",
+                "其他鉴证",
+                "鉴证业务",
+                "审阅准则",
+                "相关服务",
+                "特殊目的",
+                "验资",
+                "单一财务报表",
+                "简要财务报表",
+                "商业银行",
+                "银行监管",
+                "环境事项",
+                "衍生金融",
+                "电子商务",
+            )
+        ),
+    ),
+    (
+        "audit_evidence",
+        "审计证据、函证、存货与会计估计",
+        lambda d: d["domain"] == "audit"
+        and any(
+            k in d["title"]
+            for k in (
+                "证据",
+                "存货",
+                "函证",
+                "分析程序",
+                "抽样",
+                "会计估计",
+                "关联方",
+                "持续经营",
+                "期初",
+                "期后",
+                "书面声明",
+                "货币资金",
+                "商誉减值",
+                "收入确认",
+                "信用损失",
+            )
+        ),
+    ),
+    (
+        "audit_risk_fraud",
+        "风险评估、重要性与舞弊应对",
+        lambda d: d["domain"] == "audit"
+        and any(
+            k in d["title"]
+            for k in (
+                "舞弊",
+                "计划审计",
+                "重大错报风险",
+                "重要性",
+                "应对措施",
+                "服务机构",
+                "评价审计",
+                "职业怀疑",
+                "非常规交易",
+                "会计分录",
+                "法律法规",
+            )
+        ),
+    ),
+    (
+        "audit_report_gov",
+        "审计报告、集团审计与质量管理",
+        lambda d: d["domain"] == "audit",
+    ),
+    # 综合法域
+    (
+        "general_corp",
+        "会计法、公司法与综合商法",
+        lambda d: d["domain"] == "general",
+    ),
+]
+
+
+def classify_topic(doc: dict) -> tuple[str, str]:
+    for tid, label, pred in TOPIC_RULES:
+        if pred(doc):
+            return tid, label
+    return "general_corp", "其他综合规范"
+
+
+def sanitize_url(raw_url: str | None) -> tuple[str | None, str]:
+    if not raw_url:
+        return None, "official_pending"
+    val = raw_url.strip()
+    if val.lower() == "user-submitted":
+        return None, "user_submitted"
+    if val.startswith("http://") or val.startswith("https://"):
+        return val, "official"
+    return None, "official_pending"
+
+
+def clean_text(text: str | None) -> tuple[str, int]:
+    if not text:
+        return "", 0
+    hits = len(LOCAL_PATH_RE.findall(text))
+    cleaned = LOCAL_PATH_RE.sub("[已脱敏路径]", text) if hits else text
+    return cleaned.strip(), hits
+
+
+def make_first_article_preview(articles: list[dict]) -> str:
+    for a in articles:
+        raw = (a["text"] or "").strip()
+        if not raw:
+            continue
+        one_line = re.sub(r"\s+", " ", raw)
+        prefix = f"{a['no']}：" if a["no"] and not one_line.startswith(a["no"]) else ""
+        snippet = f"{prefix}{one_line}"
+        return snippet[:108] + ("…" if len(snippet) > 108 else "")
+    return ""
+
+
+def build_from_db(db_path: Path) -> dict:
+    if not db_path.exists():
+        raise FileNotFoundError(f"未找到数据库文件：{db_path}")
+
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+
+    raw_docs = cur.execute(
+        """
+        SELECT id, doc_type, domain, title, doc_no, issuer, pub_date,
+               effective_date, status, replaced_by_doc_id, parent_doc_id,
+               source_name, source_url, source_date, summary
+        FROM documents
+        ORDER BY id ASC
+        """
+    ).fetchall()
+
+    raw_articles = cur.execute(
+        """
+        SELECT id, document_id, article_no, heading, text_raw, seq
+        FROM articles
+        ORDER BY document_id ASC, seq ASC, id ASC
+        """
+    ).fetchall()
+
+    raw_links = cur.execute(
+        """
+        SELECT l.id, l.from_article_id, l.to_article_id, l.link_type,
+               l.note, l.strength, l.rel_kind,
+               a1.document_id AS from_doc_id, a1.article_no AS from_art_no,
+               a2.document_id AS to_doc_id, a2.article_no AS to_art_no
+        FROM article_links l
+        JOIN articles a1 ON l.from_article_id = a1.id
+        JOIN articles a2 ON l.to_article_id = a2.id
+        ORDER BY l.id ASC
+        """
+    ).fetchall()
+    conn.close()
+
+    privacy_redactions = 0
+    articles_by_doc: dict[int, list[dict]] = defaultdict(list)
+    fulltext_rows: list[list] = []
+
+    for row in raw_articles:
+        text_clean, hits = clean_text(row["text_raw"])
+        heading_clean, h_hits = clean_text(row["heading"])
+        privacy_redactions += hits + h_hits
+        art_no = (row["article_no"] or "").strip()
+        articles_by_doc[row["document_id"]].append(
+            {
+                "id": row["id"],
+                "no": art_no,
+                "heading": heading_clean,
+                "text": text_clean,
+                "seq": row["seq"],
+            }
+        )
+        # 紧凑全库全文检索语料行：[doc_id, article_no, heading, text]
+        compact_text = re.sub(r"\s+", " ", text_clean)
+        fulltext_rows.append([row["document_id"], art_no, heading_clean, compact_text])
+
+    documents: list[dict] = []
+    doc_ids_set: set[int] = set()
+    topic_labels: dict[str, str] = {}
+    warnings: list[str] = []
+
+    for row in raw_docs:
+        doc_id = row["id"]
+        doc_ids_set.add(doc_id)
+        title, h1 = clean_text(row["title"])
+        summary, h2 = clean_text(row["summary"])
+        privacy_redactions += h1 + h2
+
+        eff_status = row["status"] or "in_force"
+        if row["replaced_by_doc_id"] is not None:
+            eff_status = "superseded"
+
+        source_url, source_kind = sanitize_url(row["source_url"])
+        arts = articles_by_doc.get(doc_id, [])
+        first_preview = make_first_article_preview(arts)
+
+        if row["doc_type"] == "case" and len(summary) < 20:
+            warnings.append(f"案例 doc_id={doc_id} 摘要不足 20 字")
+
+        doc_obj = {
+            "id": doc_id,
+            "domain": row["domain"] or "general",
+            "doc_type": row["doc_type"] or "normative",
+            "title": title,
+            "doc_no": (row["doc_no"] or "").strip() or "待核实",
+            "issuer": (row["issuer"] or "").strip() or "待核实",
+            "pub_date": (row["pub_date"] or "").strip() or "待核实",
+            "effective_date": (row["effective_date"] or "").strip() or "待核实",
+            "status": eff_status,
+            "replaced_by_doc_id": row["replaced_by_doc_id"],
+            "source_name": (row["source_name"] or "").strip() or (row["issuer"] or "官方渠道"),
+            "source_url": source_url,
+            "source_kind": source_kind,
+            "summary": summary,
+            "first_preview": first_preview,
+            "article_count": len(arts),
+            "authority_rank": AUTHORITY_RANK.get((row["domain"], row["doc_type"]), 50),
+            "is_case": row["doc_type"] == "case",
+        }
+        tid, tlabel = classify_topic(doc_obj)
+        doc_obj["topic_id"] = tid
+        doc_obj["topic_label"] = tlabel
+        topic_labels[tid] = tlabel
+        documents.append(doc_obj)
+
+    # 聚合条文级关联边为文档级图谱边，保留精确的条文对引用明细
+    strength_order = {"strong": 3, "medium": 2, "weak": 1}
+    edge_map: dict[tuple[int, int, str], dict] = {}
+    dangling_links = 0
+
+    for row in raw_links:
+        fd = row["from_doc_id"]
+        td = row["to_doc_id"]
+        if fd not in doc_ids_set or td not in doc_ids_set:
+            dangling_links += 1
+            continue
+        if fd == td:
+            continue
+        rel_kind = row["rel_kind"] or "cites"
+        strength = row["strength"] or "medium"
+        note, h_note = clean_text(row["note"])
+        privacy_redactions += h_note
+
+        key = (fd, td, rel_kind)
+        if key not in edge_map:
+            edge_map[key] = {
+                "id": f"e_{fd}_{td}_{rel_kind}",
+                "from_doc_id": fd,
+                "to_doc_id": td,
+                "rel_kind": rel_kind,
+                "strength": strength,
+                "count": 0,
+                "pairs": [],
+            }
+        edge = edge_map[key]
+        if strength_order.get(strength, 0) > strength_order.get(edge["strength"], 0):
+            edge["strength"] = strength
+        edge["count"] += 1
+        if len(edge["pairs"]) < 12:
+            edge["pairs"].append(
+                {
+                    "from_art_no": (row["from_art_no"] or "").strip(),
+                    "to_art_no": (row["to_art_no"] or "").strip(),
+                    "strength": strength,
+                    "note": note,
+                }
+            )
+
+    # 补充 documents.replaced_by_doc_id 显式版本链
+    for d in documents:
+        rep_id = d["replaced_by_doc_id"]
+        if rep_id and rep_id in doc_ids_set:
+            key = (d["id"], rep_id, "superseded_by")
+            if key not in edge_map:
+                edge_map[key] = {
+                    "id": f"e_{d['id']}_{rep_id}_superseded_by",
+                    "from_doc_id": d["id"],
+                    "to_doc_id": rep_id,
+                    "rel_kind": "superseded_by",
+                    "strength": "strong",
+                    "count": 1,
+                    "pairs": [{"from_art_no": "全文", "to_art_no": "全文", "strength": "strong", "note": "效力沿革：已被新版本替代"}],
+                }
+
+    doc_links = sorted(
+        edge_map.values(),
+        key=lambda e: (-strength_order.get(e["strength"], 0), -e["count"], e["from_doc_id"], e["to_doc_id"]),
+    )
+
+    in_deg: Counter[int] = Counter()
+    out_deg: Counter[int] = Counter()
+    for e in doc_links:
+        out_deg[e["from_doc_id"]] += 1
+        in_deg[e["to_doc_id"]] += 1
+    for d in documents:
+        d["out_degree"] = out_deg[d["id"]]
+        d["in_degree"] = in_deg[d["id"]]
+        d["total_degree"] = out_deg[d["id"]] + in_deg[d["id"]]
+
+    topics_list = [
+        {"id": tid, "label": label}
+        for tid, label, _ in TOPIC_RULES
+        if tid in topic_labels
+    ]
+
+    index_payload = {
+        "meta": {
+            "built_at": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "document_count": len(documents),
+            "article_count": sum(len(v) for v in articles_by_doc.values()),
+            "raw_link_count": len(raw_links),
+            "doc_link_count": len(doc_links),
+            "connected_doc_count": sum(1 for d in documents if d["total_degree"] > 0),
+        },
+        "taxonomy": {
+            "domains": DOMAIN_META,
+            "doc_types": DOC_TYPE_META,
+            "statuses": STATUS_META,
+            "topics": topics_list,
+        },
+        "documents": documents,
+        "doc_links": doc_links,
+    }
+
+    # 写出首屏索引、全库按需全文语料、按文档条文分片
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    index_js_path = DATA_DIR / "index.js"
+    index_js_path.write_text(
+        "window.FINLEX_INDEX = " + json.dumps(index_payload, ensure_ascii=False, separators=(",", ":")) + ";\n",
+        encoding="utf-8",
+    )
+
+    fulltext_js_path = DATA_DIR / "fulltext.js"
+    fulltext_js_path.write_text(
+        "window.__finlexFulltextLoaded(" + json.dumps(fulltext_rows, ensure_ascii=False, separators=(",", ":")) + ");\n",
+        encoding="utf-8",
+    )
+
+    for doc_id in doc_ids_set:
+        doc_payload = {"id": doc_id, "articles": articles_by_doc.get(doc_id, [])}
+        doc_js_path = DOCS_DIR / f"doc_{doc_id}.js"
+        doc_js_path.write_text(
+            f"window.__finlexDocLoaded({doc_id}," + json.dumps(doc_payload, ensure_ascii=False, separators=(",", ":")) + ");\n",
+            encoding="utf-8",
+        )
+
+    if TEMPLATE_PATH.exists():
+        OUTPUT_HTML.write_text(TEMPLATE_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+
+    topic_counts = Counter(d["topic_label"] for d in documents)
+    return {
+        "documents": len(documents),
+        "articles": index_payload["meta"]["article_count"],
+        "raw_links": len(raw_links),
+        "doc_links": len(doc_links),
+        "connected_docs": index_payload["meta"]["connected_doc_count"],
+        "dangling_links": dangling_links,
+        "privacy_redactions": privacy_redactions,
+        "warnings": warnings,
+        "index_js_kb": round(index_js_path.stat().st_size / 1024, 1),
+        "fulltext_js_kb": round(fulltext_js_path.stat().st_size / 1024, 1),
+        "topic_distribution": dict(topic_counts.most_common()),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="从 finlex.db 构建脱敏静态交互原型")
+    parser.add_argument("--db", type=Path, default=DEFAULT_DB, help="finlex.db 路径")
+    args = parser.parse_args()
+
+    stats = build_from_db(args.db)
+    print(json.dumps(stats, ensure_ascii=False, indent=2))
+    if stats["dangling_links"] > 0:
+        print(f"ERROR: 检测到 {stats['dangling_links']} 条悬空关联边", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

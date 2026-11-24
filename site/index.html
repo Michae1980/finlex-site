@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1e40af" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="问财答税" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <title>问财答税 · FinLex 财税法规检索与联想工作台</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --surface-subtle: #f1f4f9;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --ink: #0f172a;
+      --ink-secondary: #475569;
+      --ink-muted: #64748b;
+      --primary: #2563eb;
+      --primary-soft: #eff6ff;
+      --primary-border: #93c5fd;
+      --strong: #059669;
+      --strong-soft: #ecfdf5;
+      --strong-border: #6ee7b7;
+      --medium: #d97706;
+      --medium-soft: #fffbeb;
+      --medium-border: #fcd34d;
+      --version: #7c3aed;
+      --version-soft: #f5f3ff;
+      --version-border: #c4b5fd;
+      --weak: #e11d48;
+      --weak-soft: #fff1f2;
+      --weak-border: #fda4af;
+      --warn-bg: #fff7ed;
+      --warn-border: #fdba74;
+      --warn-ink: #9a3412;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius-lg: 13px;
+      --radius-md: 10px;
+      --radius-pill: 999px;
+      --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      background: var(--bg); color: var(--ink);
+      font-family: var(--font-sans); font-size: 14px; line-height: 1.55;
+    }
+    .app { display: flex; flex-direction: column; width: 100%; height: 100dvh; overflow: hidden; }
+
+    /* 1. 顶部联级筛选栏 */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 18px;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 10px; z-index: 20;
+    }
+    .topbar-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex: 0 1 auto; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-badge {
+      width: 32px; height: 32px; border-radius: 9px;
+      background: linear-gradient(135deg, #1d4ed8, #2563eb); color: #fff;
+      display: grid; place-items: center; font-weight: 700; font-size: 15px;
+    }
+    .brand-title { font-size: 15px; font-weight: 600; color: var(--ink); }
+    .brand-sub { font-size: 11.5px; color: var(--ink-muted); }
+
+    .device-controls { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .step-arrow { color: var(--border-strong); font-size: 12px; user-select: none; }
+
+    .select-field {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--surface-subtle); border: 1px solid var(--border-strong);
+      border-radius: 8px; padding: 3px 8px;
+    }
+    .select-field.active-filter { background: var(--primary-soft); border-color: var(--primary-border); }
+    .select-field label { font-size: 11px; color: var(--ink-muted); user-select: none; white-space: nowrap; }
+    .select-field.active-filter label { color: #1d4ed8; font-weight: 600; }
+    .select-field select {
+      border: none; background: transparent; color: var(--ink);
+      font-size: 12px; font-weight: 500; outline: none; cursor: pointer;
+      padding: 2px 1px; max-width: 190px;
+    }
+    .select-field.active-filter select { color: #1e40af; font-weight: 600; }
+
+    .search-wrap { position: relative; display: inline-flex; align-items: center; }
+    .search-box {
+      border: 1px solid var(--border-strong); border-radius: 8px;
+      padding: 5px 10px; font-size: 12px; width: 220px;
+      outline: none; background: var(--surface); color: var(--ink);
+    }
+    .search-box:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.14); }
+    .ft-badge {
+      font-size: 10.5px; color: var(--ink-muted); padding: 2px 7px;
+      border-radius: var(--radius-pill); background: var(--surface-subtle); border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .ft-badge.ready { color: #047857; background: #ecfdf5; border-color: #a7f3d0; }
+
+    .toggle-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      border: 1px solid var(--border-strong); background: var(--surface); color: var(--ink-secondary);
+      padding: 5px 9px; border-radius: 8px; font-size: 12px; cursor: pointer; white-space: nowrap;
+    }
+    .toggle-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .toggle-btn.active { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); font-weight: 600; }
+
+    /* 2. 主工作区：左侧导航目录（默认 36%）+ 可拖拽分隔条 + 右侧主阅读区（默认 64%） */
+    .workspace { display: flex; flex: 1; min-height: 0; position: relative; }
+    .canvas-pane {
+      position: relative; display: flex; flex-direction: column; min-width: 280px; min-height: 0;
+      width: var(--left-pane-w, 36%); flex-shrink: 0;
+      background: var(--bg);
+    }
+    .pane-resizer {
+      width: 6px; flex-shrink: 0; cursor: col-resize;
+      background: var(--border); position: relative; z-index: 15;
+      transition: background 0.15s ease;
+    }
+    .pane-resizer:hover, .pane-resizer.dragging { background: var(--primary); }
+    .pane-resizer::after {
+      content: ""; position: absolute; top: 50%; left: 2px; transform: translateY(-50%);
+      width: 2px; height: 34px; border-radius: 2px; background: rgba(100, 116, 139, 0.45);
+    }
+    .pane-resizer:hover::after, .pane-resizer.dragging::after { background: #fff; }
+
+    .app.drawer-collapsed .canvas-pane { width: 100% !important; flex: 1; }
+    .app.drawer-collapsed .pane-resizer, .app.drawer-collapsed .drawer { display: none; }
+    .app.reader-expanded .canvas-pane, .app.reader-expanded .pane-resizer { display: none; }
+    .app.reader-expanded .drawer { border-left: none; }
+    .canvas-pane[data-view="graph"] {
+      background: radial-gradient(circle at 1px 1px, #cbd5e1 1px, transparent 0) 0 0 / 24px 24px, var(--bg);
+    }
+
+    .canvas-subbar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 8px; padding: 7px 14px;
+      background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border); z-index: 10;
+    }
+    .view-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+    .right-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+    .mode-switch {
+      display: inline-flex; padding: 3px; border-radius: 9px;
+      background: var(--surface-subtle); border: 1px solid var(--border); gap: 3px;
+    }
+    .mode-switch-btn {
+      border: none; background: transparent; color: var(--ink-secondary);
+      padding: 4px 10px; border-radius: 7px; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;
+    }
+    .mode-switch-btn.active { background: var(--surface); color: var(--primary); font-weight: 600; box-shadow: var(--shadow-sm); }
+
+    .view-badge {
+      font-size: 11px; font-weight: 600; color: #1d4ed8;
+      background: var(--primary-soft); border: 1px solid var(--primary-border);
+      padding: 2px 8px; border-radius: var(--radius-pill);
+      max-width: 240px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .path-finder { display: flex; align-items: center; gap: 4px; font-size: 12px; }
+    .path-finder select {
+      border: 1px solid var(--border-strong); border-radius: 7px; padding: 4px 6px;
+      font-size: 12px; background: var(--surface); color: var(--ink); max-width: 145px;
+    }
+    .zoom-controls {
+      display: inline-flex; align-items: center;
+      border: 1px solid var(--border-strong); border-radius: 7px; background: var(--surface); overflow: hidden;
+    }
+    .zoom-btn { border: none; background: transparent; padding: 4px 8px; font-size: 12px; cursor: pointer; color: var(--ink-secondary); }
+    .zoom-btn:hover { background: var(--surface-subtle); color: var(--ink); }
+    .zoom-val { font-size: 11px; color: var(--ink-muted); padding: 0 5px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); min-width: 42px; text-align: center; }
+    .action-btn { border: 1px solid var(--primary); background: var(--primary); color: #fff; padding: 4px 9px; border-radius: 7px; font-size: 12px; cursor: pointer; }
+    .action-btn.ghost { background: var(--surface); color: var(--ink-secondary); border-color: var(--border-strong); }
+
+    .legend-bar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 8px; padding: 5px 14px;
+      background: rgba(248, 250, 252, 0.94); border-bottom: 1px solid var(--border);
+      font-size: 11.5px; color: var(--ink-secondary);
+    }
+    .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 5px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+    /* 三视图显隐控制 */
+    .list-scroll, .table-scroll, .graph-scroll { flex: 1; overflow: auto; display: none; }
+    .canvas-pane[data-view="list"] .list-scroll { display: block; padding: 14px 16px 24px; }
+    .canvas-pane[data-view="table"] .table-scroll { display: block; padding: 10px 14px 24px; }
+    .canvas-pane[data-view="graph"] .graph-scroll { display: block; padding: 18px; }
+
+    /* 2A. 卡片列表视图（窄栏自动单列目录，拉宽自动多列） */
+    .list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 10px; }
+    .doc-card {
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-lg);
+      padding: 12px 14px; box-shadow: var(--shadow-sm); cursor: pointer;
+      display: flex; flex-direction: column; gap: 7px;
+      transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+    }
+    .doc-card:hover { transform: translateY(-1px); border-color: var(--primary-border); box-shadow: var(--shadow-md); }
+    .doc-card.selected { border-color: var(--primary); background: var(--primary-soft); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14); }
+    .doc-card.is-case { border-style: dashed; background: #fffdfa; }
+    .doc-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .doc-card-title { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+    .doc-card-meta { display: flex; flex-wrap: wrap; gap: 5px; font-size: 11px; color: var(--ink-muted); align-items: center; }
+    .doc-card-snippet {
+      font-size: 12px; color: var(--ink-secondary); line-height: 1.52;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .doc-card-snippet mark, .ledger-table mark { background: #fef08a; padding: 0 2px; border-radius: 3px; color: var(--ink); }
+    .doc-card-foot {
+      margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      font-size: 11px; color: var(--ink-muted);
+    }
+
+    /* 2B. 高密度台账表格视图 */
+    .ledger-wrap {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+      overflow-x: auto; box-shadow: var(--shadow-sm);
+    }
+    .ledger-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .ledger-table thead th {
+      position: sticky; top: 0; background: var(--surface-subtle); color: var(--ink-muted);
+      font-weight: 600; font-size: 11.5px; text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid var(--border); white-space: nowrap; z-index: 2;
+    }
+    .ledger-table tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.12s ease; }
+    .ledger-table tbody tr:hover { background: #f8fafc; }
+    .ledger-table tbody tr.selected { background: var(--primary-soft); }
+    .ledger-table tbody tr.is-case { background: #fffdfa; }
+    .ledger-table td { padding: 7px 10px; vertical-align: middle; }
+    .ledger-title { font-weight: 600; color: var(--ink); line-height: 1.35; }
+    .ledger-sub { font-size: 11px; color: var(--ink-muted); margin-top: 2px; max-width: 440px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* 2C. 聚焦关联图谱画布 */
+    .graph-zoom-wrap { transform-origin: top left; transition: transform 0.12s ease; }
+    .graph-stage { position: relative; flex-shrink: 0; }
+    .lane-header {
+      position: absolute; top: 4px; width: 296px; text-align: center;
+      font-size: 12px; font-weight: 600; color: var(--ink-muted);
+      background: rgba(255, 255, 255, 0.94); border: 1px solid var(--border);
+      border-radius: var(--radius-pill); padding: 4px 12px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .lane-header.bridge-lane { background: #f8fafc; border-style: dashed; border-color: #94a3b8; color: #475569; }
+    .lane-header.focus-center-lane { background: var(--primary-soft); border-color: var(--primary-border); color: #1d4ed8; }
+
+    .graph-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+    .edge-path { fill: none; stroke: #94a3b8; stroke-width: 1.7; opacity: 0.34; transition: stroke 0.18s ease, opacity 0.18s ease, stroke-width 0.18s ease; }
+    .edge-path.dashed { stroke-dasharray: 5 4; }
+    .edge-path.dimmed { opacity: 0.08; }
+    .edge-path.highlight-primary { stroke: var(--primary); stroke-width: 2.8; opacity: 1; }
+    .edge-path.highlight-strong { stroke: var(--strong); stroke-width: 2.6; opacity: 1; }
+    .edge-path.highlight-medium { stroke: var(--medium); stroke-width: 2.5; opacity: 1; stroke-dasharray: 5 4; }
+    .edge-path.highlight-version { stroke: var(--version); stroke-width: 2.6; opacity: 1; }
+    .edge-path.highlight-weak { stroke: var(--weak); stroke-width: 2.2; opacity: 0.9; stroke-dasharray: 4 4; }
+    .edge-path.highlight-path { stroke: #e11d48; stroke-width: 3.1; opacity: 1; stroke-dasharray: 7 4; }
+
+    .graph-node {
+      position: absolute; width: 296px; background: var(--surface);
+      border: 1.5px solid var(--border-strong); border-radius: var(--radius-lg);
+      padding: 10px 13px; box-shadow: var(--shadow-sm); cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, opacity 0.18s ease;
+      user-select: none; z-index: 3;
+    }
+    .graph-node.bridge-node { border-style: dashed; background: #f8fafc; opacity: 0.92; }
+    .graph-node.is-case { border-style: dashed; background: #fffdfa; }
+    .graph-node:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary); z-index: 8; opacity: 1; }
+    .graph-node.selected { border-color: var(--primary); border-width: 2px; border-style: solid; background: var(--primary-soft); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.16); z-index: 7; opacity: 1; }
+    .graph-node.rel-strong { border-color: var(--strong); background: var(--strong-soft); z-index: 5; opacity: 1; }
+    .graph-node.rel-medium { border-color: var(--medium); background: var(--medium-soft); z-index: 5; opacity: 1; }
+    .graph-node.rel-version { border-color: var(--version); background: var(--version-soft); z-index: 5; opacity: 1; }
+    .graph-node.rel-weak { border-color: var(--weak); background: var(--weak-soft); z-index: 5; opacity: 1; }
+    .graph-node.rel-path { border-color: #e11d48; background: #fff1f2; box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.14); z-index: 6; opacity: 1; }
+    .graph-node.dimmed { opacity: 0.18; }
+
+    .node-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
+    .node-title {
+      font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.35;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .node-badge { font-size: 10.5px; padding: 1px 6px; border-radius: var(--radius-pill); background: var(--surface-subtle); color: var(--ink-muted); border: 1px solid var(--border); flex-shrink: 0; }
+    .node-sub { font-size: 11px; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; }
+    .node-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 10.5px; color: var(--ink-muted); }
+
+    .edge-pill {
+      position: absolute; transform: translate(-50%, -50%);
+      background: var(--surface); border: 1px solid var(--primary-border);
+      border-radius: var(--radius-pill); padding: 2px 9px; font-size: 11px; color: var(--primary);
+      cursor: pointer; box-shadow: var(--shadow-sm); white-space: nowrap; z-index: 9;
+    }
+    .edge-pill:hover, .edge-pill.selected { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
+
+    /* 徽章样式 */
+    .pill { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 6px; border: 1px solid transparent; white-space: nowrap; }
+    .dom-accounting { background: #e0e7ff; color: #3730a3; }
+    .dom-tax { background: #dcfce7; color: #166534; }
+    .dom-audit { background: #e0f2fe; color: #0369a1; }
+    .dom-general { background: #f1f5f9; color: #334155; }
+    .st-in_force { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+    .st-superseded { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+    .st-pending { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+    .case-pill { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
+    .type-pill { background: var(--surface-subtle); color: var(--ink-secondary); border-color: var(--border); }
+    .hit-pill { background: #fef9c3; color: #854d0e; border-color: #fde047; }
+
+    /* 3. 右侧法条原文与关联主阅读区（默认占 64% 主视野） */
+    .drawer { flex: 1; min-width: 380px; background: var(--surface); display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    .drawer-tabs {
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border); background: var(--surface-subtle);
+      padding: 6px 16px 0; gap: 8px;
+    }
+    .drawer-tabs-left { display: flex; align-items: center; gap: 6px; }
+    .drawer-tab { border: none; background: transparent; padding: 9px 16px; font-size: 13.5px; font-weight: 500; color: var(--ink-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .drawer-tab.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); background: var(--surface); border-radius: 8px 8px 0 0; }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 18px 26px 28px; }
+    .drawer-footer {
+      border-top: 1px solid var(--border); background: #f8fafc;
+      padding: 8px 24px; font-size: 11.5px; color: var(--ink-muted);
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+
+    .section-label { font-size: 12px; font-weight: 600; color: var(--ink-muted); letter-spacing: 0.03em; margin: 16px 0 8px; display: flex; align-items: center; justify-content: space-between; }
+    .section-label:first-child { margin-top: 0; }
+
+    .hero-card { background: var(--surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 15px 18px; }
+    .hero-title { font-size: 18px; font-weight: 600; margin: 0 0 8px; line-height: 1.4; }
+    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 6px 14px; font-size: 12.5px; color: var(--ink-secondary); margin-top: 10px; }
+    .meta-grid div strong { color: var(--ink); font-weight: 500; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; align-items: center; }
+    .chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; padding: 2px 9px; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--border); color: var(--ink-secondary); }
+    .chip a { color: var(--primary); text-decoration: none; font-weight: 500; }
+    .chip a:hover { text-decoration: underline; }
+
+    .warn-banner {
+      background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-ink);
+      border-radius: var(--radius-md); padding: 10px 14px; font-size: 12.5px; margin-bottom: 12px;
+    }
+    .path-banner { background: #fff1f2; border: 1px solid #fda4af; color: #9f1239; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 12px; font-size: 12.5px; }
+
+    .in-doc-controls {
+      display: grid; grid-template-columns: 1fr 220px; gap: 8px;
+      position: sticky; top: -18px; z-index: 6;
+      background: var(--surface); padding: 10px 0; margin: 0 0 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .in-doc-search, .toc-select {
+      width: 100%; border: 1px solid var(--border-strong); border-radius: 8px;
+      padding: 7px 11px; font-size: 13px; outline: none; background: var(--surface); color: var(--ink);
+    }
+    .in-doc-search:focus, .toc-select:focus { border-color: var(--primary); }
+
+    .article-card {
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 14px 16px; margin-bottom: 11px; background: var(--surface);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .article-card.flash-target { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); background: var(--primary-soft); }
+    .article-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+    .article-no { font-size: 13.5px; font-weight: 600; color: var(--primary); }
+    .article-text { font-size: 14.5px; color: var(--ink); white-space: pre-wrap; line-height: 1.8; word-break: break-word; }
+    .article-text mark { background: #fef08a; padding: 0 2px; border-radius: 3px; }
+
+    .strength-filter-bar {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+      background: var(--surface-subtle); padding: 4px; border-radius: 10px; border: 1px solid var(--border);
+      margin: 10px 0 12px;
+    }
+    .strength-btn {
+      border: none; background: transparent; padding: 6px 4px; border-radius: 7px;
+      font-size: 11.5px; font-weight: 500; color: var(--ink-secondary); cursor: pointer;
+    }
+    .strength-btn.active { background: var(--surface); color: var(--primary); font-weight: 600; box-shadow: var(--shadow-sm); }
+
+    .rel-group-title {
+      font-size: 12px; font-weight: 600; color: var(--ink);
+      padding: 5px 9px; border-radius: 7px; background: var(--surface-subtle);
+      margin: 12px 0 8px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .rel-card {
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 10px 12px; margin-bottom: 8px; background: var(--surface);
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .rel-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
+    .rel-pairs {
+      background: var(--surface-subtle); border-radius: 7px; padding: 7px 9px;
+      font-size: 11.5px; color: var(--ink-secondary); display: flex; flex-direction: column; gap: 4px;
+    }
+    .rel-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .mini-btn {
+      border: 1px solid var(--border-strong); background: var(--surface); color: var(--ink-secondary);
+      padding: 3px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;
+    }
+    .mini-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .mini-btn.primary { background: var(--primary-soft); border-color: var(--primary-border); color: var(--primary); font-weight: 600; }
+
+    .empty-state {
+      display: grid; place-items: center; min-height: 200px;
+      color: var(--ink-muted); font-size: 14px; text-align: center; padding: 24px;
+    }
+
+    /* 合规说明弹窗 */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45);
+      display: none; place-items: center; z-index: 100; padding: 16px;
+    }
+    .modal-backdrop.open { display: grid; }
+    .modal-card {
+      background: var(--surface); border-radius: 14px; max-width: 560px; width: 100%;
+      padding: 18px 20px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25); max-height: 85vh; overflow-y: auto;
+    }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .modal-head h3 { margin: 0; font-size: 16px; }
+
+    /* 三端响应式 */
+    body.preview-framed { background: #e2e8f0; display: flex; justify-content: center; align-items: stretch; padding: 10px 0; }
+    body.preview-framed .app.mode-mobile { max-width: 430px; height: calc(100dvh - 20px); border-radius: 22px; border: 1px solid var(--border-strong); box-shadow: 0 20px 50px rgba(15, 23, 42, 0.2); }
+    body.preview-framed .app.mode-tablet { max-width: 920px; height: calc(100dvh - 20px); border-radius: 18px; border: 1px solid var(--border-strong); box-shadow: 0 18px 46px rgba(15, 23, 42, 0.16); }
+
+    .mobile-or-tablet-only { display: none; }
+    .desktop-or-tablet-only { display: inline-flex; }
+    .app.mode-mobile .desktop-or-tablet-only { display: none; }
+    .mobile-nav { display: none; }
+
+    .app.mode-tablet .topbar { padding: 8px 12px; gap: 8px; }
+    .app.mode-tablet .topbar-head { width: 100%; }
+    .app.mode-tablet .mobile-or-tablet-only { display: inline-flex; }
+    .app.mode-tablet .toolbar { display: none; width: 100%; padding-top: 6px; border-top: 1px solid var(--border); }
+    .app.mode-tablet.filters-open .toolbar { display: flex; }
+    .app.mode-tablet .step-arrow, .app.mode-tablet .path-finder { display: none; }
+    .app.mode-tablet .canvas-pane { width: 38%; min-width: 260px; }
+    .app.mode-tablet .drawer { min-width: 0; }
+    .app.mode-tablet .drawer-body { padding: 14px 16px; }
+    .app.mode-tablet.tablet-drawer-closed .canvas-pane { width: 100% !important; flex: 1; }
+    .app.mode-tablet.tablet-drawer-closed .pane-resizer, .app.mode-tablet.tablet-drawer-closed .drawer { display: none; }
+
+    .app.mode-mobile .topbar { padding: 8px 12px; gap: 6px; }
+    .app.mode-mobile .topbar-head { width: 100%; }
+    .app.mode-mobile .mobile-or-tablet-only { display: inline-flex; }
+    .app.mode-mobile .toolbar { display: none; width: 100%; padding-top: 8px; border-top: 1px solid var(--border); grid-template-columns: 1fr 1fr; gap: 7px; }
+    .app.mode-mobile.filters-open .toolbar { display: grid; }
+    .app.mode-mobile .toolbar .step-arrow { display: none; }
+    .app.mode-mobile .toolbar .select-field { width: 100%; justify-content: space-between; }
+    .app.mode-mobile .toolbar .search-wrap { grid-column: 1 / -1; width: 100%; }
+    .app.mode-mobile .toolbar .search-box { width: 100%; }
+    .app.mode-mobile .path-finder, .app.mode-mobile .legend-bar, .app.mode-mobile .view-badge { display: none; }
+    .app.mode-mobile .workspace { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+    .app.mode-mobile .pane-resizer { display: none; }
+    .app.mode-mobile .canvas-pane, .app.mode-mobile .drawer { width: 100% !important; min-width: 0; flex: 1; min-height: 0; border-left: none; }
+    .app.mode-mobile .drawer-tabs { display: none; }
+    .app.mode-mobile[data-mobile-pane="browse"] .drawer { display: none; }
+    .app.mode-mobile[data-mobile-pane="detail"] .canvas-pane,
+    .app.mode-mobile[data-mobile-pane="relations"] .canvas-pane { display: none; }
+    .app.mode-mobile .mobile-nav {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 4px 6px calc(4px + env(safe-area-inset-bottom, 0px)); gap: 4px; z-index: 25;
+    }
+    .mobile-nav-btn {
+      border: none; background: transparent; color: var(--ink-muted);
+      padding: 8px 4px; border-radius: 9px; font-size: 12px; font-weight: 500; cursor: pointer;
+    }
+    .mobile-nav-btn.active { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="app mode-desktop" id="appRoot" data-mobile-pane="browse">
+    <header class="topbar">
+      <div class="topbar-head">
+        <div class="brand">
+          <div class="brand-badge">法</div>
+          <div>
+            <div class="brand-title">问财答税 · FinLex 检索与联想工作台</div>
+            <div class="brand-sub" id="statsSubtitle">正在加载结构化法规索引...</div>
+          </div>
+        </div>
+        <div class="device-controls">
+          <button class="toggle-btn mobile-or-tablet-only" id="filterToggleBtn">🔍 筛选</button>
+          <button class="toggle-btn desktop-or-tablet-only active" id="drawerToggleBtn">◧ 收起详情</button>
+          <button class="toggle-btn" id="complianceBtn">⚖ 合规与来源</button>
+          <div class="select-field" title="切换桌面端、平板端或手机端界面">
+            <label for="deviceModeSelect">界面</label>
+            <select id="deviceModeSelect">
+              <option value="auto">自动适配</option>
+              <option value="desktop">桌面端</option>
+              <option value="tablet">平板端</option>
+              <option value="mobile">手机端</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="select-field" id="domainField">
+          <label for="domainSelect">1.问题域</label>
+          <select id="domainSelect"></select>
+        </div>
+        <span class="step-arrow">›</span>
+        <div class="select-field" id="typeField">
+          <label for="typeSelect">2.规范层级</label>
+          <select id="typeSelect"></select>
+        </div>
+        <span class="step-arrow">›</span>
+        <div class="select-field" id="statusField">
+          <label for="statusSelect">3.效力状态</label>
+          <select id="statusSelect"></select>
+        </div>
+        <span class="step-arrow">›</span>
+        <div class="select-field" id="topicField">
+          <label for="topicSelect">4.业务专题</label>
+          <select id="topicSelect"></select>
+        </div>
+        <div class="search-wrap">
+          <input class="search-box" id="searchInput" type="search" placeholder="全库检索标题 / 文号 / 5417条正文..." />
+        </div>
+        <span class="ft-badge" id="ftBadge" title="点击搜索框自动加载全库 5,417 条条文正文索引">正文索引按需加载</span>
+        <button class="toggle-btn" id="resetBtn">重置</button>
+        <button class="toggle-btn active" id="installPwaBtn" style="display:none" title="安装到桌面作为独立应用离线使用">⬇ 安装桌面版</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="canvas-pane" id="canvasPane" data-view="list">
+        <div class="canvas-subbar">
+          <div class="view-controls">
+            <div class="mode-switch" role="tablist" aria-label="主工作区视图切换">
+              <button class="mode-switch-btn active" id="listModeBtn">📋 卡片列表</button>
+              <button class="mode-switch-btn" id="tableModeBtn">📑 台账表格</button>
+              <button class="mode-switch-btn" id="graphModeBtn">🕸 聚焦图谱</button>
+            </div>
+            <span class="view-badge" id="viewBadge">按问题域权威序排列</span>
+            <button class="toggle-btn" id="focusOnlyBtn" style="display:none">🌐 回到全局泳道</button>
+            <button class="toggle-btn active" id="connectedOnlyBtn" style="display:none" title="隐藏暂无跨文档关联边的孤立单卡">🔗 仅看有关联</button>
+            <div class="select-field" id="layoutField" style="display:none">
+              <label for="layoutModeSelect">泳道</label>
+              <select id="layoutModeSelect">
+                <option value="domain">按问题域</option>
+                <option value="type">按规范层级</option>
+                <option value="topic">按业务专题</option>
+              </select>
+            </div>
+            <button class="toggle-btn" id="bridgeBtn" style="display:none" title="全局视图下虚框带出 1 跳跨域关联文档">⇄ 跨域桥梁</button>
+            <button class="toggle-btn" id="shareViewBtn" title="复制当前筛选与定位直达链接">🔗 分享视图</button>
+          </div>
+
+          <div class="right-controls" id="graphControls" style="display:none">
+            <div class="path-finder">
+              <select id="pathStart" aria-label="起点法规"></select>
+              <span>→</span>
+              <select id="pathEnd" aria-label="终点法规"></select>
+              <button class="action-btn" id="findPathBtn">查关联路径</button>
+              <button class="action-btn ghost" id="clearPathBtn" style="display:none">清除</button>
+            </div>
+            <div class="zoom-controls">
+              <button class="zoom-btn" id="zoomOutBtn" title="缩小">−</button>
+              <span class="zoom-val" id="zoomVal">100%</span>
+              <button class="zoom-btn" id="zoomInBtn" title="放大">+</button>
+              <button class="zoom-btn" id="zoomFitBtn" title="适应画布">适应</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="legend-bar">
+          <div class="legend">
+            <span class="legend-item"><span class="dot" style="background:var(--primary)"></span>当前选中</span>
+            <span class="legend-item"><span class="dot" style="background:var(--strong)"></span>直接依据（强）</span>
+            <span class="legend-item"><span class="dot" style="background:var(--medium)"></span>跨域衔接（中）</span>
+            <span class="legend-item"><span class="dot" style="background:var(--version)"></span>效力沿革</span>
+            <span class="legend-item"><span class="dot" style="background:var(--weak)"></span>解读 / 案例（弱·参考）</span>
+          </div>
+          <span id="layoutHint" style="color:var(--ink-muted)">点击任意法规查看原文条文与五组关联依据</span>
+        </div>
+
+        <div class="list-scroll" id="listScroll">
+          <div class="list-grid" id="listGrid"></div>
+        </div>
+
+        <div class="table-scroll" id="tableScroll">
+          <div class="ledger-wrap">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th>法规 / 案例名称</th>
+                  <th>问题域 / 层级</th>
+                  <th>业务专题</th>
+                  <th>文号</th>
+                  <th>生效日</th>
+                  <th>状态</th>
+                  <th>条文 / 关联</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="graph-scroll" id="graphScroll">
+          <div class="graph-zoom-wrap" id="zoomWrap">
+            <div class="graph-stage" id="graphStage">
+              <div id="laneLayer"></div>
+              <svg class="graph-svg" id="graphSvg">
+                <defs>
+                  <marker id="arrow-default" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                    <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#94a3b8" />
+                  </marker>
+                  <marker id="arrow-primary" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#2563eb" />
+                  </marker>
+                  <marker id="arrow-strong" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#059669" />
+                  </marker>
+                  <marker id="arrow-medium" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#d97706" />
+                  </marker>
+                  <marker id="arrow-version" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#7c3aed" />
+                  </marker>
+                  <marker id="arrow-weak" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#e11d48" />
+                  </marker>
+                </defs>
+                <g id="edgeLayer"></g>
+              </svg>
+              <div id="nodeLayer"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="pane-resizer" id="paneResizer" title="左右拖动调整目录与原文阅读区宽度比例（双击还原默认）"></div>
+
+      <aside class="drawer">
+        <div class="drawer-tabs">
+          <div class="drawer-tabs-left">
+            <button class="drawer-tab active" data-tab="detail">法条原文与元数据</button>
+            <button class="drawer-tab" data-tab="relations">关联网络与依据分级</button>
+          </div>
+          <button class="toggle-btn desktop-or-tablet-only" id="readerExpandBtn" style="margin-bottom:5px;" title="隐藏左侧导航栏，全屏专注阅读法条原文">⤢ 专注阅读</button>
+        </div>
+        <div class="drawer-body" id="drawerBody"></div>
+        <div class="drawer-footer">
+          <span>本站内容仅供参考，不构成法律意见、涉税鉴证或审计结论。</span>
+          <button class="mini-btn" id="footerComplianceBtn">合规边界</button>
+        </div>
+      </aside>
+    </main>
+
+    <nav class="mobile-nav" aria-label="移动端切换">
+      <button class="mobile-nav-btn active" data-pane="browse">📋 列表 / 图谱</button>
+      <button class="mobile-nav-btn" data-pane="detail">📄 法条原文</button>
+      <button class="mobile-nav-btn" data-pane="relations">🔗 关联依据</button>
+    </nav>
+  </div>
+
+  <div class="modal-backdrop" id="complianceModal" role="dialog" aria-modal="true" aria-labelledby="complianceModalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="complianceModalTitle">免责声明、合规边界与引用规范</h3>
+        <button class="mini-btn" id="closeModalBtn">关闭</button>
+      </div>
+      <div class="warn-banner">
+        <strong>免责声明：</strong>本站内容仅供参考，不构成法律意见、涉税鉴证、审计结论或申报建议；申报与纳税义务以官方发布文本及主管机关口径为准。
+      </div>
+      <p style="font-size:13px; color:var(--ink-secondary); margin:8px 0;">
+        <strong>合规红线：</strong>不出具审计报告、不做涉税鉴证、不做代理记账、不承诺节税金额。案例在全站恒标「参考，非规范依据」。
+      </p>
+      <p style="font-size:13px; color:var(--ink-secondary); margin:8px 0;">
+        <strong>标准引用格式：</strong><code>《文件名》（文号）第X条</code>，并附官网原文链接。正文每条条文右侧提供一键复制标准引用按钮。
+      </p>
+      <p style="font-size:13px; color:var(--ink-secondary); margin:8px 0;">
+        <strong>官方来源渠道：</strong>财政部（mof.gov.cn）、全国人大（npc.gov.cn）、国务院（gov.cn）、国家税务总局（chinatax.gov.cn）、中国注册会计师协会（cicpa.org.cn）等官方公开文本。
+      </p>
+    </div>
+  </div>
+
+  <script src="./data/index.js"></script>
+  <script>
+    const DATA = window.FINLEX_INDEX;
+    const NODE_W = 296;
+    const NODE_H = 126;
+    const COL_GAP = 348;
+    const ROW_GAP = 148;
+
+    const DOMAIN_LABELS = Object.fromEntries(DATA.taxonomy.domains.map(x => [x.id, x.label]));
+    const TYPE_LABELS = Object.fromEntries(DATA.taxonomy.doc_types.map(x => [x.id, x.label]));
+    const STATUS_LABELS = Object.fromEntries(DATA.taxonomy.statuses.map(x => [x.id, x.label]));
+    const TOPIC_LABELS = Object.fromEntries(DATA.taxonomy.topics.map(x => [x.id, x.label]));
+
+    const REL_KIND_LABELS = {
+      cites: "正文引用", thematic: "专题配套",
+      supersedes: "替代旧版", superseded_by: "被新版替代",
+      applies_to: "案例适用（参考）", explains: "官方解读"
+    };
+    const STRENGTH_LABELS = { strong: "强", medium: "中", weak: "弱" };
+
+    const docById = Object.fromEntries(DATA.documents.map(d => [d.id, d]));
+    const docArticlesCache = {};
+    const docLoadCallbacks = {};
+
+    // 全库 5,417 条条文按需加载引擎（零 CORS，支持 file:// 双击）
+    let fulltextRows = null;
+    let fulltextLoading = false;
+    let fulltextHitMap = {}; // docId -> { count, artNo, snippet }
+
+    window.__finlexFulltextLoaded = function(rows) {
+      fulltextRows = rows || [];
+      fulltextLoading = false;
+      const badge = document.getElementById("ftBadge");
+      badge.textContent = `✓ ${fulltextRows.length} 条正文已就绪`;
+      badge.classList.add("ready");
+      if (state.searchQuery.trim()) updateView(false);
+    };
+
+    function ensureFulltextLoaded() {
+      if (fulltextRows || fulltextLoading) return;
+      fulltextLoading = true;
+      const badge = document.getElementById("ftBadge");
+      badge.textContent = "加载正文索引中...";
+      const s = document.createElement("script");
+      s.src = "./data/fulltext.js";
+      s.onerror = () => {
+        fulltextLoading = false;
+        badge.textContent = "正文索引加载失败";
+      };
+      document.body.appendChild(s);
+    }
+
+    window.__finlexDocLoaded = function(docId, payload) {
+      docArticlesCache[docId] = payload.articles || [];
+      const cbs = docLoadCallbacks[docId] || [];
+      delete docLoadCallbacks[docId];
+      cbs.forEach(fn => fn(docArticlesCache[docId]));
+    };
+
+    function loadDocArticles(docId, cb) {
+      if (docArticlesCache[docId]) { cb(docArticlesCache[docId]); return; }
+      if (!docLoadCallbacks[docId]) {
+        docLoadCallbacks[docId] = [cb];
+        const s = document.createElement("script");
+        s.src = `./data/docs/doc_${docId}.js`;
+        s.onerror = () => {
+          docArticlesCache[docId] = [];
+          const cbs = docLoadCallbacks[docId] || [];
+          delete docLoadCallbacks[docId];
+          cbs.forEach(fn => fn([]));
+        };
+        document.body.appendChild(s);
+      } else {
+        docLoadCallbacks[docId].push(cb);
+      }
+    }
+
+    const state = {
+      domainFilter: "all",
+      typeFilter: "all",
+      statusFilter: "all",
+      topicFilter: "all",
+      searchQuery: "",
+      viewMode: "list",          // "list" | "table" | "graph"
+      focusOnly: true,
+      connectedOnly: true,       // 图谱模式下是否仅看有关联网络的文档
+      layoutMode: "domain",      // "domain" | "type" | "topic"
+      includeBridges: false,
+      selectedDocId: 1,
+      selectedEdgeId: null,
+      activeTab: "detail",       // "detail" | "relations"
+      strengthFilter: "all",     // "all" | "strong" | "strong_medium" | "weak"
+      inDocQuery: "",
+      articleRenderLimit: 80,
+      zoom: 1.0,
+      activePath: null,
+      deviceMode: "auto",
+      filtersOpen: false,
+      drawerOpen: true,
+      readerExpanded: false,
+      customLeftPct: null,
+      mobilePane: "browse"
+    };
+
+    let currentView = {
+      matchedDocs: [],
+      coreIds: new Set(),
+      bridgeIds: new Set(),
+      visibleDocs: [],
+      visibleEdges: [],
+      positions: {},
+      lanes: [],
+      stageW: 900,
+      stageH: 420
+    };
+
+    function escapeHTML(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function highlightText(text, q) {
+      const safe = escapeHTML(text);
+      if (!q) return safe;
+      const escQ = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return safe.replace(new RegExp(`(${escQ})`, "gi"), "<mark>$1</mark>");
+    }
+
+    function hasValidDocNo(d) {
+      return Boolean(d.doc_no && d.doc_no !== "待核实");
+    }
+
+    function extractSnippet(text, q) {
+      const idx = text.toLowerCase().indexOf(q.toLowerCase());
+      if (idx < 0) return text.slice(0, 96) + (text.length > 96 ? "…" : "");
+      const start = Math.max(0, idx - 26);
+      const end = Math.min(text.length, idx + q.length + 58);
+      return (start > 0 ? "…" : "") + text.slice(start, end) + (end < text.length ? "…" : "");
+    }
+
+    function computeFulltextHits(qLower) {
+      const map = {};
+      if (!qLower || !fulltextRows) return map;
+      for (let i = 0; i < fulltextRows.length; i++) {
+        const [docId, artNo, heading, text] = fulltextRows[i];
+        const hitInText = text.toLowerCase().includes(qLower);
+        const hitInHead = heading && heading.toLowerCase().includes(qLower);
+        if (hitInText || hitInHead) {
+          if (!map[docId]) {
+            const snippetSrc = hitInText ? text : heading;
+            map[docId] = {
+              count: 1,
+              artNo: artNo || "条文",
+              snippet: `${artNo ? artNo + "：" : ""}${extractSnippet(snippetSrc, qLower)}`
+            };
+          } else {
+            map[docId].count += 1;
+          }
+        }
+      }
+      return map;
+    }
+
+    function filterByDomain(list) { return state.domainFilter === "all" ? list : list.filter(d => d.domain === state.domainFilter); }
+    function filterByType(list) { return state.typeFilter === "all" ? list : list.filter(d => d.doc_type === state.typeFilter); }
+    function filterByStatus(list) { return state.statusFilter === "all" ? list : list.filter(d => d.status === state.statusFilter); }
+    function filterByTopic(list) { return state.topicFilter === "all" ? list : list.filter(d => d.topic_id === state.topicFilter); }
+
+    function syncCascadingDropdowns() {
+      const all = DATA.documents;
+
+      const domSel = document.getElementById("domainSelect");
+      domSel.innerHTML = `<option value="all">全部问题域（${all.length}）</option>`;
+      DATA.taxonomy.domains.forEach(item => {
+        const cnt = all.filter(d => d.domain === item.id).length;
+        if (cnt > 0) domSel.add(new Option(`${item.label}（${cnt}）`, item.id));
+      });
+      if (![...domSel.options].some(o => o.value === state.domainFilter)) state.domainFilter = "all";
+      domSel.value = state.domainFilter;
+      document.getElementById("domainField").classList.toggle("active-filter", state.domainFilter !== "all");
+
+      const afterDom = filterByDomain(all);
+      const typeSel = document.getElementById("typeSelect");
+      typeSel.innerHTML = `<option value="all">全部层级（${afterDom.length}）</option>`;
+      DATA.taxonomy.doc_types.forEach(item => {
+        const cnt = afterDom.filter(d => d.doc_type === item.id).length;
+        if (cnt > 0) typeSel.add(new Option(`${item.label}（${cnt}）`, item.id));
+      });
+      if (![...typeSel.options].some(o => o.value === state.typeFilter)) state.typeFilter = "all";
+      typeSel.value = state.typeFilter;
+      document.getElementById("typeField").classList.toggle("active-filter", state.typeFilter !== "all");
+
+      const afterType = filterByType(afterDom);
+      const stSel = document.getElementById("statusSelect");
+      stSel.innerHTML = `<option value="all">全部状态（${afterType.length}）</option>`;
+      DATA.taxonomy.statuses.forEach(item => {
+        const cnt = afterType.filter(d => d.status === item.id).length;
+        if (cnt > 0) stSel.add(new Option(`${item.label}（${cnt}）`, item.id));
+      });
+      if (![...stSel.options].some(o => o.value === state.statusFilter)) state.statusFilter = "all";
+      stSel.value = state.statusFilter;
+      document.getElementById("statusField").classList.toggle("active-filter", state.statusFilter !== "all");
+
+      const afterSt = filterByStatus(afterType);
+      const topSel = document.getElementById("topicSelect");
+      topSel.innerHTML = `<option value="all">全部专题（${afterSt.length}）</option>`;
+      DATA.taxonomy.topics.forEach(item => {
+        const cnt = afterSt.filter(d => d.topic_id === item.id).length;
+        if (cnt > 0) topSel.add(new Option(`${item.label}（${cnt}）`, item.id));
+      });
+      if (![...topSel.options].some(o => o.value === state.topicFilter)) state.topicFilter = "all";
+      topSel.value = state.topicFilter;
+      document.getElementById("topicField").classList.toggle("active-filter", state.topicFilter !== "all");
+    }
+
+    function getDirectEdges(docId, pool = DATA.doc_links) {
+      const upstream = [], downstream = [];
+      pool.forEach(e => {
+        if (e.from_doc_id === docId && docById[e.to_doc_id]) upstream.push({ doc: docById[e.to_doc_id], edge: e, dir: "out" });
+        else if (e.to_doc_id === docId && docById[e.from_doc_id]) downstream.push({ doc: docById[e.from_doc_id], edge: e, dir: "in" });
+      });
+      return { upstream, downstream };
+    }
+
+    function classifyEdgeVisual(edge) {
+      if (edge.rel_kind === "supersedes" || edge.rel_kind === "superseded_by") return "version";
+      if (edge.rel_kind === "applies_to" || edge.rel_kind === "explains" || edge.strength === "weak") return "weak";
+      if (edge.strength === "strong") return "strong";
+      return "medium";
+    }
+
+    function findShortestPath(startId, endId) {
+      startId = Number(startId); endId = Number(endId);
+      if (startId === endId) return { nodeIds: new Set([startId]), edgeIds: new Set(), orderedDocIds: [startId] };
+      const adj = {};
+      DATA.doc_links.forEach(e => {
+        if (!adj[e.from_doc_id]) adj[e.from_doc_id] = [];
+        if (!adj[e.to_doc_id]) adj[e.to_doc_id] = [];
+        adj[e.from_doc_id].push({ nxt: e.to_doc_id, edgeId: e.id });
+        adj[e.to_doc_id].push({ nxt: e.from_doc_id, edgeId: e.id });
+      });
+      const q = [{ id: startId, nodes: [startId], edges: [] }];
+      const visited = new Set([startId]);
+      while (q.length) {
+        const cur = q.shift();
+        for (const item of (adj[cur.id] || [])) {
+          if (visited.has(item.nxt)) continue;
+          const nn = [...cur.nodes, item.nxt];
+          const ne = [...cur.edges, item.edgeId];
+          if (item.nxt === endId) return { nodeIds: new Set(nn), edgeIds: new Set(ne), orderedDocIds: nn };
+          visited.add(item.nxt);
+          q.push({ id: item.nxt, nodes: nn, edges: ne });
+        }
+      }
+      return null;
+    }
+
+    function getDocSnippet(d, q) {
+      if (q && fulltextHitMap[d.id]) return fulltextHitMap[d.id].snippet;
+      if (d.summary) return d.summary;
+      if (d.first_preview) return d.first_preview;
+      return `发布单位：${d.issuer} · 生效日：${d.effective_date}`;
+    }
+
+    function updateView(autoFit = false) {
+      let matched = filterByTopic(filterByStatus(filterByType(filterByDomain(DATA.documents))));
+      const q = state.searchQuery.trim();
+      const qLower = q.toLowerCase();
+
+      fulltextHitMap = qLower ? computeFulltextHits(qLower) : {};
+
+      if (qLower) {
+        matched = matched.filter(d => {
+          const metaHit =
+            d.title.toLowerCase().includes(qLower) ||
+            (hasValidDocNo(d) && d.doc_no.toLowerCase().includes(qLower)) ||
+            d.issuer.toLowerCase().includes(qLower) ||
+            (d.summary || "").toLowerCase().includes(qLower) ||
+            (d.first_preview || "").toLowerCase().includes(qLower);
+          return metaHit || Boolean(fulltextHitMap[d.id]);
+        });
+      }
+
+      // 排序：非案例优先 -> 检索时标题/文号命中优先 + 正文命中条数 -> 权威权重 -> 现行有效 -> 关联度
+      matched = matched.slice().sort((a, b) => {
+        if (a.is_case !== b.is_case) return a.is_case ? 1 : -1;
+        if (qLower) {
+          const aTitle = a.title.toLowerCase().includes(qLower) || a.doc_no.toLowerCase().includes(qLower) ? 1 : 0;
+          const bTitle = b.title.toLowerCase().includes(qLower) || b.doc_no.toLowerCase().includes(qLower) ? 1 : 0;
+          if (aTitle !== bTitle) return bTitle - aTitle;
+        }
+        if (a.authority_rank !== b.authority_rank) return a.authority_rank - b.authority_rank;
+        if (qLower) {
+          const aCnt = fulltextHitMap[a.id]?.count || 0;
+          const bCnt = fulltextHitMap[b.id]?.count || 0;
+          if (aCnt !== bCnt) return bCnt - aCnt;
+        }
+        if ((a.status === "in_force") !== (b.status === "in_force")) return a.status === "in_force" ? -1 : 1;
+        return b.total_degree - a.total_degree || a.id - b.id;
+      });
+
+      const isGraph = state.viewMode === "graph";
+      const graphPool = (isGraph && state.connectedOnly) ? matched.filter(d => d.total_degree > 0) : matched;
+      const activePool = isGraph ? graphPool : matched;
+      const coreIds = new Set(activePool.map(d => d.id));
+
+      if (activePool.length > 0 && (!state.selectedDocId || !coreIds.has(state.selectedDocId))) {
+        const best = activePool.find(d => d.total_degree > 0) || activePool[0];
+        state.selectedDocId = best.id;
+      }
+
+      document.getElementById("canvasPane").dataset.view = state.viewMode;
+      document.getElementById("listModeBtn").classList.toggle("active", state.viewMode === "list");
+      document.getElementById("tableModeBtn").classList.toggle("active", state.viewMode === "table");
+      document.getElementById("graphModeBtn").classList.toggle("active", isGraph);
+
+      document.getElementById("focusOnlyBtn").style.display = isGraph ? "inline-flex" : "none";
+      document.getElementById("connectedOnlyBtn").style.display = isGraph ? "inline-flex" : "none";
+      document.getElementById("layoutField").style.display = isGraph && !state.focusOnly ? "inline-flex" : "none";
+      document.getElementById("bridgeBtn").style.display = isGraph && !state.focusOnly ? "inline-flex" : "none";
+      document.getElementById("graphControls").style.display = isGraph ? "flex" : "none";
+
+      const focusBtn = document.getElementById("focusOnlyBtn");
+      focusBtn.classList.toggle("active", state.focusOnly);
+      focusBtn.textContent = state.focusOnly ? `🌐 回到全局泳道（${graphPool.length}）` : "◎ 聚焦当前法规";
+
+      const connBtn = document.getElementById("connectedOnlyBtn");
+      const connCnt = matched.filter(d => d.total_degree > 0).length;
+      connBtn.classList.toggle("active", state.connectedOnly);
+      connBtn.textContent = `🔗 仅看有关联（${connCnt}）`;
+
+      const crumbs = [];
+      if (state.domainFilter !== "all") crumbs.push(DOMAIN_LABELS[state.domainFilter]);
+      if (state.typeFilter !== "all") crumbs.push(TYPE_LABELS[state.typeFilter]);
+      if (state.statusFilter !== "all") crumbs.push(STATUS_LABELS[state.statusFilter]);
+      if (state.topicFilter !== "all") crumbs.push(TOPIC_LABELS[state.topicFilter]);
+      const scope = crumbs.length ? crumbs.join(" › ") : "全库财税与审计法规";
+      const totalArtHits = Object.values(fulltextHitMap).reduce((s, x) => s + x.count, 0);
+      const hitNote = qLower && fulltextRows ? ` · 正文命中 ${totalArtHits} 条` : "";
+      document.getElementById("statsSubtitle").textContent =
+        `${scope} · 命中 ${matched.length}/${DATA.meta.document_count} 份文档${hitNote} · 共 ${DATA.meta.article_count} 条条文`;
+
+      currentView.matchedDocs = matched;
+      currentView.coreIds = coreIds;
+
+      if (state.viewMode === "list") {
+        document.getElementById("viewBadge").textContent = `卡片：权威序 ${matched.length} 份`;
+        document.getElementById("layoutHint").textContent = qLower
+          ? "已优先展示匹配条文预览，点击任意卡片直接定位至命中条款"
+          : "无摘要文件自动展示首条正文预览；案例恒置底并标注非规范依据";
+        renderListView(matched);
+      } else if (state.viewMode === "table") {
+        document.getElementById("viewBadge").textContent = `台账：高密度 ${matched.length} 行`;
+        document.getElementById("layoutHint").textContent = "点击任意行在右侧展开原文条文与五组关联网络";
+        renderTableView(matched);
+      } else {
+        computeGraphLayout(graphPool, coreIds);
+        if (autoFit) fitViewToCanvas();
+        else applyZoom();
+        renderGraphView();
+        syncPathSelectors(graphPool);
+      }
+      renderDrawer();
+      syncStateToURL();
+    }
+
+    function renderListView(docs) {
+      const grid = document.getElementById("listGrid");
+      if (!docs.length) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">当前筛选条件下暂无匹配法规，请放宽条件或清空搜索词。</div>`;
+        return;
+      }
+      const q = state.searchQuery.trim();
+      grid.innerHTML = docs.map(d => {
+        const ft = fulltextHitMap[d.id];
+        const snippet = getDocSnippet(d, q);
+        return `
+          <article class="doc-card ${d.id === state.selectedDocId ? "selected" : ""} ${d.is_case ? "is-case" : ""}" onclick="selectDoc(${d.id})">
+            <div class="doc-card-head">
+              <div class="doc-card-title">${highlightText(d.title, q)}</div>
+              <span class="pill st-${d.status}">${STATUS_LABELS[d.status] || d.status}</span>
+            </div>
+            <div class="doc-card-meta">
+              <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain] || d.domain}</span>
+              <span class="pill type-pill">${TYPE_LABELS[d.doc_type] || d.doc_type}</span>
+              ${hasValidDocNo(d) ? `<span class="chip" style="padding:1px 6px;">${highlightText(d.doc_no, q)}</span>` : ""}
+              ${ft ? `<span class="pill hit-pill">正文命中 ${ft.count} 条</span>` : ""}
+              ${d.is_case ? `<span class="pill case-pill">案例参考 · 非规范依据</span>` : ""}
+            </div>
+            <div class="doc-card-snippet">${highlightText(snippet, q)}</div>
+            <div class="doc-card-foot">
+              <span>${escapeHTML(d.topic_label)} · ${d.article_count} 条 · 关联 ${d.total_degree}</span>
+              <button class="mini-btn primary" onclick="event.stopPropagation(); openInGraph(${d.id})">🕸 聚焦图谱</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderTableView(docs) {
+      const tbody = document.getElementById("tableBody");
+      if (!docs.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:36px;color:var(--ink-muted);">当前筛选条件下暂无匹配法规。</td></tr>`;
+        return;
+      }
+      const q = state.searchQuery.trim();
+      tbody.innerHTML = docs.map(d => {
+        const ft = fulltextHitMap[d.id];
+        const subText = ft ? ft.snippet : (d.summary || d.first_preview || "");
+        return `
+          <tr class="${d.id === state.selectedDocId ? "selected" : ""} ${d.is_case ? "is-case" : ""}" onclick="selectDoc(${d.id})">
+            <td>
+              <div class="ledger-title">
+                ${highlightText(d.title, q)}
+                ${ft ? `<span class="pill hit-pill" style="margin-left:5px;">正文 ${ft.count}</span>` : ""}
+                ${d.is_case ? `<span class="pill case-pill" style="margin-left:5px;">参考</span>` : ""}
+              </div>
+              ${subText ? `<div class="ledger-sub">${highlightText(subText, q)}</div>` : ""}
+            </td>
+            <td style="white-space:nowrap;">
+              <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain]}</span>
+              <span class="pill type-pill" style="margin-left:3px;">${TYPE_LABELS[d.doc_type]}</span>
+            </td>
+            <td style="white-space:nowrap;color:var(--ink-secondary);">${escapeHTML(d.topic_label)}</td>
+            <td style="white-space:nowrap;color:var(--ink-secondary);">${hasValidDocNo(d) ? highlightText(d.doc_no, q) : "—"}</td>
+            <td style="white-space:nowrap;color:var(--ink-muted);">${d.effective_date !== "待核实" ? escapeHTML(d.effective_date) : "—"}</td>
+            <td style="white-space:nowrap;"><span class="pill st-${d.status}">${STATUS_LABELS[d.status]}</span></td>
+            <td style="white-space:nowrap;color:var(--ink-muted);">${d.article_count} 条 / ${d.total_degree} 链</td>
+            <td style="white-space:nowrap;">
+              <button class="mini-btn primary" onclick="event.stopPropagation(); openInGraph(${d.id})">图谱</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function computeGraphLayout(matched, coreIds) {
+      const bridgeIds = new Set();
+      let visibleDocs = [];
+      let visibleEdges = [];
+      const positions = {};
+      const lanes = [];
+      let stageW = 900, stageH = 420;
+
+      if (state.focusOnly && state.selectedDocId && docById[state.selectedDocId]) {
+        const selId = state.selectedDocId;
+        const rel = getDirectEdges(selId, DATA.doc_links);
+        const leftIds = [], rightIds = [];
+        const seen = new Set([selId]);
+
+        rel.upstream.forEach(item => {
+          if (!seen.has(item.doc.id)) {
+            seen.add(item.doc.id); leftIds.push(item.doc.id);
+            if (!coreIds.has(item.doc.id)) bridgeIds.add(item.doc.id);
+          }
+        });
+        rel.downstream.forEach(item => {
+          if (!seen.has(item.doc.id)) {
+            seen.add(item.doc.id); rightIds.push(item.doc.id);
+            if (!coreIds.has(item.doc.id)) bridgeIds.add(item.doc.id);
+          }
+        });
+
+        const activeIds = new Set([selId, ...leftIds, ...rightIds]);
+        visibleDocs = DATA.documents.filter(d => activeIds.has(d.id));
+        visibleEdges = DATA.doc_links.filter(e =>
+          (e.from_doc_id === selId || e.to_doc_id === selId) &&
+          activeIds.has(e.from_doc_id) && activeIds.has(e.to_doc_id)
+        );
+
+        const cols = [];
+        if (leftIds.length) cols.push({ label: `直接依据 / 引用目标 · ${leftIds.length}`, ids: leftIds, isCenter: false });
+        cols.push({ label: "当前聚焦法规", ids: [selId], isCenter: true });
+        if (rightIds.length) cols.push({ label: `配套解释 / 跨域衔接 / 案例 · ${rightIds.length}`, ids: rightIds, isCenter: false });
+
+        const scroller = document.getElementById("graphScroll");
+        const availW = Math.max(760, (scroller ? scroller.clientWidth : 1000) - 40);
+        const padX = 28;
+        const minSpan = cols.length * NODE_W + Math.max(0, cols.length - 1) * 96 + padX * 2;
+        stageW = Math.max(availW, minSpan);
+        const gapX = cols.length > 1 ? Math.floor((stageW - padX * 2 - cols.length * NODE_W) / (cols.length - 1)) : 0;
+        const maxRows = Math.max(1, ...cols.map(c => c.ids.length));
+        const totalH = maxRows * ROW_GAP;
+        stageH = Math.max(400, 56 + totalH + 40);
+
+        cols.forEach((col, cIdx) => {
+          const x = cols.length === 1 ? Math.max(padX, Math.floor((stageW - NODE_W) / 2)) : padX + cIdx * (NODE_W + gapX);
+          lanes.push({ x, label: col.label, isFocusCenter: col.isCenter, isBridgeLane: false });
+          const colH = col.ids.length * ROW_GAP;
+          const startY = 54 + Math.max(0, Math.floor((totalH - colH) / 2));
+          col.ids.forEach((did, rIdx) => { positions[did] = { x, y: startY + rIdx * ROW_GAP }; });
+        });
+
+        document.getElementById("viewBadge").textContent = `聚焦：${docById[selId].title}`;
+        document.getElementById("layoutHint").textContent = `聚焦模式：展示 ${visibleDocs.length} 份直接关联文档与 ${visibleEdges.length} 条关系边`;
+      } else {
+        if (state.includeBridges && coreIds.size < DATA.documents.length) {
+          DATA.doc_links.forEach(e => {
+            if (coreIds.has(e.from_doc_id) && !coreIds.has(e.to_doc_id)) bridgeIds.add(e.to_doc_id);
+            if (coreIds.has(e.to_doc_id) && !coreIds.has(e.from_doc_id)) bridgeIds.add(e.from_doc_id);
+          });
+        }
+        const activeIds = new Set([...coreIds, ...bridgeIds]);
+        visibleDocs = DATA.documents.filter(d => activeIds.has(d.id));
+        visibleEdges = DATA.doc_links.filter(e => activeIds.has(e.from_doc_id) && activeIds.has(e.to_doc_id));
+
+        const colMap = new Map();
+        const addCol = (key, label, order, doc, isBridge = false) => {
+          if (!colMap.has(key)) colMap.set(key, { key, label, order, isBridge, items: [] });
+          colMap.get(key).items.push(doc);
+        };
+        const domOrder = Object.fromEntries(DATA.taxonomy.domains.map((x, i) => [x.id, i]));
+        const typeOrder = Object.fromEntries(DATA.taxonomy.doc_types.map((x, i) => [x.id, i]));
+        const topicOrder = Object.fromEntries(DATA.taxonomy.topics.map((x, i) => [x.id, i]));
+
+        visibleDocs.forEach(d => {
+          if (bridgeIds.has(d.id)) addCol("bridge", "跨域桥梁 · 外部关联", 999, d, true);
+          else if (state.layoutMode === "type") addCol(d.doc_type, TYPE_LABELS[d.doc_type] || d.doc_type, typeOrder[d.doc_type] ?? 99, d);
+          else if (state.layoutMode === "topic") addCol(d.topic_id, d.topic_label, topicOrder[d.topic_id] ?? 99, d);
+          else addCol(d.domain, DOMAIN_LABELS[d.domain] || d.domain, domOrder[d.domain] ?? 99, d);
+        });
+
+        const sortedCols = [...colMap.values()].sort((a, b) => a.order - b.order);
+        let colX = 24, maxRows = 1;
+        sortedCols.forEach(col => {
+          col.items.sort((a, b) => a.authority_rank - b.authority_rank || b.total_degree - a.total_degree);
+          const MAX_PER_COL = 12;
+          const chunks = [];
+          for (let i = 0; i < col.items.length; i += MAX_PER_COL) chunks.push(col.items.slice(i, i + MAX_PER_COL));
+          chunks.forEach((chunk, idx) => {
+            const suf = chunks.length > 1 ? ` (${idx + 1}/${chunks.length})` : "";
+            lanes.push({ x: colX, label: `${col.label}${suf} · ${chunk.length}`, isBridgeLane: col.isBridge, isFocusCenter: false });
+            maxRows = Math.max(maxRows, chunk.length);
+            chunk.forEach((d, r) => { positions[d.id] = { x: colX, y: 52 + r * ROW_GAP }; });
+            colX += COL_GAP;
+          });
+        });
+        stageW = Math.max(680, colX + 20);
+        stageH = Math.max(400, 52 + maxRows * ROW_GAP + 44);
+        document.getElementById("viewBadge").textContent = `全局泳道：${visibleDocs.length} 份文档`;
+        document.getElementById("layoutHint").textContent = `全局模式（${lanes.length} 列）：点击任意卡片立即聚焦其直接关联网络`;
+      }
+
+      currentView.bridgeIds = bridgeIds;
+      currentView.visibleDocs = visibleDocs;
+      currentView.visibleEdges = visibleEdges;
+      currentView.positions = positions;
+      currentView.lanes = lanes;
+      currentView.stageW = stageW;
+      currentView.stageH = stageH;
+    }
+
+    function computeCurve(fromPos, toPos) {
+      const sameCol = Math.abs(fromPos.x - toPos.x) < 10;
+      if (sameCol) {
+        const down = toPos.y > fromPos.y;
+        const x1 = fromPos.x + NODE_W / 2, y1 = down ? fromPos.y + NODE_H : fromPos.y;
+        const x2 = toPos.x + NODE_W / 2, y2 = down ? toPos.y : toPos.y + NODE_H;
+        const cx = x1 + (Math.abs(y2 - y1) > 160 ? 50 : 0);
+        const cy = (y1 + y2) / 2;
+        return { d: `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`, mx: (x1 + cx) / 2, my: cy };
+      }
+      const right = toPos.x > fromPos.x;
+      const x1 = right ? fromPos.x + NODE_W : fromPos.x, y1 = fromPos.y + NODE_H / 2;
+      const x2 = right ? toPos.x : toPos.x + NODE_W, y2 = toPos.y + NODE_H / 2;
+      const c = Math.min(Math.abs(x2 - x1) * 0.42, 160);
+      return {
+        d: `M ${x1} ${y1} C ${right ? x1 + c : x1 - c} ${y1}, ${right ? x2 - c : x2 + c} ${y2}, ${x2} ${y2}`,
+        mx: (x1 + x2) / 2, my: (y1 + y2) / 2
+      };
+    }
+
+    function renderGraphView() {
+      const stage = document.getElementById("graphStage");
+      const laneLayer = document.getElementById("laneLayer");
+      const edgeLayer = document.getElementById("edgeLayer");
+      const nodeLayer = document.getElementById("nodeLayer");
+
+      stage.style.width = `${currentView.stageW}px`;
+      stage.style.height = `${currentView.stageH}px`;
+      document.getElementById("graphSvg").setAttribute("viewBox", `0 0 ${currentView.stageW} ${currentView.stageH}`);
+
+      laneLayer.innerHTML = currentView.lanes.map(l =>
+        `<div class="lane-header ${l.isBridgeLane ? "bridge-lane" : ""} ${l.isFocusCenter ? "focus-center-lane" : ""}" style="left:${l.x}px" title="${escapeHTML(l.label)}">${escapeHTML(l.label)}</div>`
+      ).join("");
+      edgeLayer.innerHTML = "";
+      nodeLayer.innerHTML = "";
+
+      if (!currentView.visibleDocs.length) {
+        nodeLayer.innerHTML = `<div class="empty-state">当前条件下暂无可展示图谱节点（可尝试关闭「仅看有关联」开关）。</div>`;
+        return;
+      }
+
+      const selId = state.selectedDocId;
+      const directEdges = selId ? getDirectEdges(selId, currentView.visibleEdges) : { upstream: [], downstream: [] };
+      const neighborClass = {};
+      [...directEdges.upstream, ...directEdges.downstream].forEach(item => {
+        neighborClass[item.doc.id] = classifyEdgeVisual(item.edge);
+      });
+      const directEdgeIds = new Set([...directEdges.upstream, ...directEdges.downstream].map(x => x.edge.id));
+
+      currentView.visibleEdges.forEach(e => {
+        const fromPos = currentView.positions[e.from_doc_id];
+        const toPos = currentView.positions[e.to_doc_id];
+        if (!fromPos || !toPos) return;
+        const vis = classifyEdgeVisual(e);
+        let cls = vis === "medium" || vis === "weak" ? "edge-path dashed" : "edge-path";
+        let marker = "url(#arrow-default)";
+        let showPill = false;
+
+        if (state.activePath) {
+          if (state.activePath.edgeIds.has(e.id)) { cls += " highlight-path"; marker = "url(#arrow-weak)"; showPill = true; }
+          else cls += " dimmed";
+        } else if (state.selectedEdgeId === e.id && state.activeTab === "relations") {
+          cls += " highlight-primary"; marker = "url(#arrow-primary)"; showPill = true;
+        } else if (selId && directEdgeIds.has(e.id)) {
+          cls += ` highlight-${vis}`; marker = `url(#arrow-${vis})`; showPill = true;
+        } else if (selId) {
+          cls += " dimmed";
+        }
+
+        const curve = computeCurve(fromPos, toPos);
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", curve.d);
+        path.setAttribute("class", cls);
+        path.setAttribute("marker-end", marker);
+        edgeLayer.appendChild(path);
+
+        if (showPill) {
+          const pill = document.createElement("button");
+          pill.className = `edge-pill ${state.selectedEdgeId === e.id ? "selected" : ""}`;
+          pill.style.left = `${curve.mx}px`;
+          pill.style.top = `${curve.my}px`;
+          pill.textContent = `${REL_KIND_LABELS[e.rel_kind] || e.rel_kind} · ${STRENGTH_LABELS[e.strength] || e.strength}${e.count > 1 ? ` (${e.count})` : ""}`;
+          pill.onclick = (ev) => { ev.stopPropagation(); state.selectedEdgeId = e.id; state.activeTab = "relations"; renderGraphView(); renderDrawer(); };
+          nodeLayer.appendChild(pill);
+        }
+      });
+
+      currentView.visibleDocs.forEach(d => {
+        const pos = currentView.positions[d.id];
+        if (!pos) return;
+        const isBridge = currentView.bridgeIds.has(d.id);
+        let cls = "graph-node";
+        if (isBridge) cls += " bridge-node";
+        if (d.is_case) cls += " is-case";
+        if (state.activePath) cls += state.activePath.nodeIds.has(d.id) ? " rel-path" : " dimmed";
+        else if (d.id === selId) cls += " selected";
+        else if (selId && neighborClass[d.id]) cls += ` rel-${neighborClass[d.id]}`;
+        else if (selId) cls += " dimmed";
+
+        const subParts = [];
+        if (hasValidDocNo(d)) subParts.push(d.doc_no);
+        subParts.push(d.issuer);
+
+        const card = document.createElement("div");
+        card.className = cls;
+        card.style.left = `${pos.x}px`;
+        card.style.top = `${pos.y}px`;
+        card.innerHTML = `
+          <div class="node-head">
+            <div class="node-title" title="${escapeHTML(d.title)}">${escapeHTML(d.title)}</div>
+            <span class="node-badge">${isBridge ? "跨域桥梁" : `${d.article_count}条`}</span>
+          </div>
+          <div class="node-sub">${escapeHTML(subParts.join(" · "))}</div>
+          <div class="node-foot">
+            <span style="display:inline-flex;gap:4px;align-items:center;">
+              <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain] || d.domain}</span>
+              <span class="pill type-pill">${TYPE_LABELS[d.doc_type] || d.doc_type}</span>
+            </span>
+            <span class="pill st-${d.status}">${STATUS_LABELS[d.status] || d.status}</span>
+          </div>
+        `;
+        card.onclick = () => {
+          state.selectedDocId = d.id;
+          state.focusOnly = true;
+          state.selectedEdgeId = null;
+          state.activePath = null;
+          document.getElementById("clearPathBtn").style.display = "none";
+          updateView(true);
+        };
+        nodeLayer.appendChild(card);
+      });
+    }
+
+    function renderDrawer() {
+      const body = document.getElementById("drawerBody");
+      document.querySelectorAll(".drawer-tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === state.activeTab));
+
+      const d = docById[state.selectedDocId] || currentView.matchedDocs[0] || DATA.documents[0];
+      if (!d) { body.innerHTML = `<div class="empty-state">请选择一份法规查看详情。</div>`; return; }
+
+      let pathBanner = "";
+      if (state.activePath) {
+        const chain = state.activePath.orderedDocIds.map(id => `<button class="mini-btn" onclick="jumpToDoc(${id})">${escapeHTML(docById[id]?.title || id)}</button>`).join(" → ");
+        pathBanner = `<div class="path-banner"><strong>法规关联路径（${state.activePath.orderedDocIds.length - 1} 跳）：</strong><div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">${chain}</div></div>`;
+      }
+
+      if (state.activeTab === "detail") {
+        const sourceHTML = d.source_url
+          ? `<a href="${escapeHTML(d.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(d.source_name)}（官网原文 ↗）</a>`
+          : (d.source_kind === "user_submitted" ? `<span>用户补充，非官方案例</span>` : `<span>${escapeHTML(d.source_name)}（官网链接待补充）</span>`);
+
+        body.innerHTML = `
+          ${pathBanner}
+          ${d.is_case ? `<div class="warn-banner"><strong>案例参考，非规范依据：</strong>本条为实务案例摘要，仅供理解参考，不作为规范性法律或准则依据。</div>` : ""}
+          ${d.status === "superseded" && d.replaced_by_doc_id && docById[d.replaced_by_doc_id] ? `
+            <div class="warn-banner"><strong>效力沿革提醒：</strong>本文件已有更新替代版本，建议核对
+              <button class="mini-btn primary" onclick="jumpToDoc(${d.replaced_by_doc_id})">${escapeHTML(docById[d.replaced_by_doc_id].title)}</button>
+            </div>` : ""}
+          <div class="hero-card">
+            <h2 class="hero-title">${escapeHTML(d.title)}</h2>
+            <div class="meta-row">
+              <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain]}</span>
+              <span class="pill type-pill">${TYPE_LABELS[d.doc_type]}</span>
+              <span class="pill st-${d.status}">${STATUS_LABELS[d.status]}</span>
+              <span class="chip">业务专题：${escapeHTML(d.topic_label)}</span>
+            </div>
+            <div class="meta-grid">
+              <div>文号：<strong>${escapeHTML(d.doc_no)}</strong></div>
+              <div>发布单位：<strong>${escapeHTML(d.issuer)}</strong></div>
+              <div>发布日期：<strong>${escapeHTML(d.pub_date)}</strong></div>
+              <div>生效日期：<strong>${escapeHTML(d.effective_date)}</strong></div>
+            </div>
+            <div class="meta-row">
+              <span class="chip">出处：${sourceHTML}</span>
+              <button class="mini-btn primary" onclick="openInGraph(${d.id})">🕸 在图谱中聚焦</button>
+              <button class="mini-btn" onclick="copyCitation(${d.id}, '')">📋 复制文件引用</button>
+            </div>
+            ${d.summary ? `<div style="margin-top:9px; padding-top:8px; border-top:1px dashed var(--border); font-size:12.5px; color:var(--ink-secondary);"><strong>摘要：</strong>${escapeHTML(d.summary)}</div>` : ""}
+          </div>
+
+          <div class="section-label">
+            <span>正文条文（共 ${d.article_count} 条）</span>
+            <span id="articleMatchCount" style="font-weight:400;"></span>
+          </div>
+          <div class="in-doc-controls">
+            <input class="in-doc-search" id="inDocSearchInput" type="search" value="${escapeHTML(state.inDocQuery)}" placeholder="在本文件条文中检索关键词或条号..." />
+            <select class="toc-select" id="articleTocSelect" aria-label="条文目录快速跳转">
+              <option value="">目录跳转...</option>
+            </select>
+          </div>
+          <div id="articlesContainer"><div class="empty-state" style="min-height:120px;">正在加载本文件条文...</div></div>
+        `;
+
+        document.getElementById("inDocSearchInput").oninput = (e) => {
+          state.inDocQuery = e.target.value;
+          state.articleRenderLimit = 80;
+          renderArticlesList(d, docArticlesCache[d.id] || []);
+        };
+
+        loadDocArticles(d.id, (arts) => {
+          if (state.selectedDocId === d.id && state.activeTab === "detail") {
+            populateArticleToc(d, arts);
+            renderArticlesList(d, arts);
+          }
+        });
+      } else {
+        // Tab 2: 五组关联网络 + 强/中/弱强度筛选
+        const rel = getDirectEdges(d.id, DATA.doc_links);
+        const allItems = [...rel.upstream, ...rel.downstream];
+        const strongCnt = allItems.filter(x => x.edge.strength === "strong").length;
+        const medCnt = allItems.filter(x => x.edge.strength === "medium").length;
+        const weakCnt = allItems.filter(x => x.edge.strength === "weak").length;
+
+        const filteredItems = allItems.filter(x => {
+          if (state.strengthFilter === "strong") return x.edge.strength === "strong";
+          if (state.strengthFilter === "strong_medium") return x.edge.strength === "strong" || x.edge.strength === "medium";
+          if (state.strengthFilter === "weak") return x.edge.strength === "weak";
+          return true;
+        });
+
+        const groups = {
+          authority: { title: "直接依据（同域强规范引用 / 配套）", items: [] },
+          bridge: { title: "关联规定（跨域衔接 / 主题关联）", items: [] },
+          interpretation: { title: "官方解读", items: [] },
+          case: { title: "相关案例（参考，非规范依据）", items: [] },
+          version: { title: "效力沿革（版本替代链）", items: [] }
+        };
+
+        filteredItems.forEach(item => {
+          const e = item.edge, target = item.doc;
+          if (e.rel_kind === "supersedes" || e.rel_kind === "superseded_by") groups.version.items.push(item);
+          else if (target.doc_type === "case" || e.rel_kind === "applies_to") groups.case.items.push(item);
+          else if (target.doc_type === "interpretation" || e.rel_kind === "explains") groups.interpretation.items.push(item);
+          else if (e.strength === "strong" && target.domain === d.domain) groups.authority.items.push(item);
+          else groups.bridge.items.push(item);
+        });
+
+        const renderGroup = (grp) => {
+          if (!grp.items.length) return "";
+          return `
+            <div class="rel-group-title">
+              <span>${grp.title}</span>
+              <span class="pill type-pill">${grp.items.length}</span>
+            </div>
+            ${grp.items.map(item => {
+              const td = item.doc, e = item.edge;
+              const isSelEdge = state.selectedEdgeId === e.id;
+              const pairsHTML = (e.pairs || []).slice(0, 4).map(p =>
+                `<div>• ${item.dir === "out" ? `本文件 ${escapeHTML(p.from_art_no || "条文")} → 目标 ${escapeHTML(p.to_art_no || "条文")}` : `对方 ${escapeHTML(p.from_art_no || "条文")} → 本文件 ${escapeHTML(p.to_art_no || "条文")}`}${p.note ? `（${escapeHTML(p.note)}）` : ""}</div>`
+              ).join("");
+              return `
+                <div class="rel-card" style="${isSelEdge ? "border-color:var(--primary);background:var(--primary-soft);" : ""}">
+                  <div class="rel-card-top">
+                    <strong style="font-size:13px;line-height:1.4;">${escapeHTML(td.title)}</strong>
+                    <span class="pill type-pill">${REL_KIND_LABELS[e.rel_kind] || e.rel_kind} · ${STRENGTH_LABELS[e.strength]}</span>
+                  </div>
+                  <div class="meta-row" style="margin-top:0;">
+                    <span class="pill dom-${td.domain}">${DOMAIN_LABELS[td.domain]}</span>
+                    <span class="pill st-${td.status}">${STATUS_LABELS[td.status]}</span>
+                    ${td.is_case ? `<span class="pill case-pill">参考，非规范依据</span>` : ""}
+                  </div>
+                  ${td.summary ? `<div style="font-size:12px;color:var(--ink-secondary);">${escapeHTML(td.summary)}</div>` : ""}
+                  ${pairsHTML ? `<div class="rel-pairs">${pairsHTML}${e.count > 4 ? `<div>… 共 ${e.count} 处条文关联</div>` : ""}</div>` : ""}
+                  <div class="rel-actions">
+                    <button class="mini-btn primary" onclick="jumpToDoc(${td.id})">查看该文件原文</button>
+                    <button class="mini-btn" onclick="openInGraph(${td.id})">在图谱中聚焦</button>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          `;
+        };
+
+        const groupsHTML = Object.values(groups).map(renderGroup).join("");
+        body.innerHTML = `
+          ${pathBanner}
+          <div class="hero-card">
+            <div style="font-size:11.5px;color:var(--ink-muted);margin-bottom:4px;">当前主文档关联总览</div>
+            <h2 class="hero-title">${escapeHTML(d.title)}</h2>
+            <div style="font-size:12px;color:var(--ink-secondary);">共 <strong>${allItems.length}</strong> 份关联（强 ${strongCnt} · 中 ${medCnt} · 弱 ${weakCnt}）</div>
+          </div>
+          <div class="strength-filter-bar" role="group" aria-label="按关联强度筛选">
+            <button class="strength-btn ${state.strengthFilter === "all" ? "active" : ""}" onclick="setStrengthFilter('all')">全部 (${allItems.length})</button>
+            <button class="strength-btn ${state.strengthFilter === "strong" ? "active" : ""}" onclick="setStrengthFilter('strong')">仅强 (${strongCnt})</button>
+            <button class="strength-btn ${state.strengthFilter === "strong_medium" ? "active" : ""}" onclick="setStrengthFilter('strong_medium')">强+中 (${strongCnt + medCnt})</button>
+            <button class="strength-btn ${state.strengthFilter === "weak" ? "active" : ""}" onclick="setStrengthFilter('weak')">仅弱 (${weakCnt})</button>
+          </div>
+          ${groupsHTML || `<div class="empty-state" style="min-height:150px;">当前强度筛选下暂无关联文档。</div>`}
+        `;
+      }
+    }
+
+    function setStrengthFilter(val) {
+      state.strengthFilter = val;
+      renderDrawer();
+    }
+
+    function populateArticleToc(doc, articles) {
+      const sel = document.getElementById("articleTocSelect");
+      if (!sel) return;
+      sel.innerHTML = `<option value="">目录跳转（${articles.length} 条）</option>`;
+      articles.forEach((a, idx) => {
+        const label = `${a.no || `第${a.seq}条`}${a.heading ? ` · ${a.heading.slice(0, 14)}` : ""}`;
+        sel.add(new Option(label, String(idx)));
+      });
+      sel.onchange = (e) => {
+        if (e.target.value === "") return;
+        const targetIdx = Number(e.target.value);
+        if (state.inDocQuery) {
+          state.inDocQuery = "";
+          const inp = document.getElementById("inDocSearchInput");
+          if (inp) inp.value = "";
+        }
+        if (targetIdx >= state.articleRenderLimit) {
+          state.articleRenderLimit = targetIdx + 20;
+        }
+        renderArticlesList(doc, articles);
+        const card = document.getElementById(`art-card-${targetIdx}`);
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+          card.classList.add("flash-target");
+          setTimeout(() => card.classList.remove("flash-target"), 1600);
+        }
+      };
+    }
+
+    function renderArticlesList(doc, articles) {
+      const box = document.getElementById("articlesContainer");
+      const countEl = document.getElementById("articleMatchCount");
+      if (!box) return;
+      if (!articles.length) {
+        box.innerHTML = `<div class="empty-state" style="min-height:120px;">本文件暂无可展示正文条文（状态：${STATUS_LABELS[doc.status] || doc.status}）。</div>`;
+        if (countEl) countEl.textContent = "";
+        return;
+      }
+      const q = state.inDocQuery.trim();
+      const qLower = q.toLowerCase();
+      const indexed = articles.map((a, idx) => ({ a, idx }));
+      const filtered = qLower
+        ? indexed.filter(({ a }) => a.no.toLowerCase().includes(qLower) || a.heading.toLowerCase().includes(qLower) || a.text.toLowerCase().includes(qLower))
+        : indexed;
+      if (countEl) countEl.textContent = qLower ? `匹配 ${filtered.length}/${articles.length} 条` : "";
+
+      const slice = filtered.slice(0, state.articleRenderLimit);
+      box.innerHTML = slice.map(({ a, idx }) => `
+        <div class="article-card" id="art-card-${idx}">
+          <div class="article-head">
+            <span class="article-no">${highlightText(a.no || `第${a.seq}条`, q)}${a.heading ? ` · ${highlightText(a.heading, q)}` : ""}</span>
+            <button class="mini-btn" onclick="copyCitation(${doc.id}, '${escapeHTML(a.no).replace(/'/g, "\\'")}')">📋 复制引用</button>
+          </div>
+          <div class="article-text">${highlightText(a.text, q)}</div>
+        </div>
+      `).join("") + (filtered.length > state.articleRenderLimit
+        ? `<div style="text-align:center;margin:10px 0;"><button class="toggle-btn active" onclick="expandMoreArticles(${doc.id})">展开更多条文（剩余 ${filtered.length - state.articleRenderLimit} 条）</button></div>`
+        : "");
+    }
+
+    function expandMoreArticles(docId) {
+      state.articleRenderLimit += 120;
+      const d = docById[docId];
+      if (d) renderArticlesList(d, docArticlesCache[docId] || []);
+    }
+
+    function selectDoc(id) {
+      state.selectedDocId = id;
+      // 若当前有全库检索词且该文档正文命中，自动带入抽屉内条文搜索实现精准高亮定位
+      state.inDocQuery = (state.searchQuery.trim() && fulltextHitMap[id]) ? state.searchQuery.trim() : "";
+      state.articleRenderLimit = 80;
+      state.selectedEdgeId = null;
+      updateView(false);
+      if (getEffectiveDevice() === "mobile") setMobilePane("detail");
+    }
+
+    function jumpToDoc(id) {
+      state.selectedDocId = id;
+      state.inDocQuery = "";
+      state.articleRenderLimit = 80;
+      state.activeTab = "detail";
+      if (!currentView.coreIds.has(id)) {
+        state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
+        state.searchQuery = ""; document.getElementById("searchInput").value = "";
+        syncCascadingDropdowns();
+      }
+      updateView(true);
+    }
+
+    function openInGraph(id) {
+      state.selectedDocId = id;
+      state.viewMode = "graph";
+      state.focusOnly = true;
+      state.selectedEdgeId = null;
+      if (docById[id]?.total_degree === 0) state.connectedOnly = false;
+      if (getEffectiveDevice() === "mobile") state.mobilePane = "browse";
+      updateView(true);
+      applyDeviceMode(false);
+    }
+
+    async function copyCitation(docId, artNo) {
+      const d = docById[docId];
+      if (!d) return;
+      const noPart = hasValidDocNo(d) ? `（${d.doc_no}）` : "";
+      const cite = `《${d.title}》${noPart}${artNo || ""}${d.source_url ? `，原文链接：${d.source_url}` : ""}`;
+      try {
+        await navigator.clipboard.writeText(cite);
+        alert(`已复制标准引用：\n${cite}`);
+      } catch (e) {
+        window.prompt("复制标准引用：", cite);
+      }
+    }
+
+    function syncPathSelectors(pool) {
+      const sSel = document.getElementById("pathStart");
+      const eSel = document.getElementById("pathEnd");
+      const connected = pool.filter(d => d.total_degree > 0);
+      const list = connected.length >= 2 ? connected : DATA.documents.filter(d => d.total_degree > 0);
+      const prevS = sSel.value, prevE = eSel.value;
+      sSel.innerHTML = ""; eSel.innerHTML = "";
+      list.forEach(d => { sSel.add(new Option(d.title, d.id)); eSel.add(new Option(d.title, d.id)); });
+      if (list.length) {
+        sSel.value = list.some(d => String(d.id) === prevS) ? prevS : String(state.selectedDocId || list[0].id);
+        eSel.value = list.some(d => String(d.id) === prevE) ? prevE : String(list[list.length - 1].id);
+      }
+    }
+
+    function fitViewToCanvas() {
+      const scroller = document.getElementById("graphScroll");
+      const availW = Math.max(320, scroller.clientWidth - 36);
+      const ratio = availW / currentView.stageW;
+      state.zoom = +Math.max(state.focusOnly ? 0.85 : 0.72, Math.min(1.04, ratio)).toFixed(2);
+      applyZoom();
+    }
+
+    function applyZoom() {
+      const wrap = document.getElementById("zoomWrap");
+      wrap.style.transform = `scale(${state.zoom})`;
+      wrap.style.width = `${currentView.stageW * state.zoom}px`;
+      wrap.style.height = `${currentView.stageH * state.zoom}px`;
+      document.getElementById("zoomVal").textContent = `${Math.round(state.zoom * 100)}%`;
+    }
+
+    function buildShareURL() {
+      const p = new URLSearchParams();
+      if (state.domainFilter !== "all") p.set("domain", state.domainFilter);
+      if (state.typeFilter !== "all") p.set("type", state.typeFilter);
+      if (state.statusFilter !== "all") p.set("status", state.statusFilter);
+      if (state.topicFilter !== "all") p.set("topic", state.topicFilter);
+      if (state.searchQuery.trim()) p.set("q", state.searchQuery.trim());
+      if (state.viewMode !== "list") p.set("view", state.viewMode);
+      if (!state.focusOnly) p.set("focus", "0");
+      if (!state.connectedOnly) p.set("conn", "0");
+      if (state.selectedDocId) p.set("doc", state.selectedDocId);
+      if (state.activeTab !== "detail") p.set("tab", state.activeTab);
+      const qs = p.toString();
+      const base = window.location.href.split("?")[0];
+      return qs ? `${base}?${qs}` : base;
+    }
+
+    function syncStateToURL() {
+      if (location.protocol !== "http:" && location.protocol !== "https:") return;
+      try { history.replaceState(null, "", buildShareURL()); } catch (e) {}
+    }
+
+    function restoreStateFromURL() {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get("domain")) state.domainFilter = p.get("domain");
+      if (p.get("type")) state.typeFilter = p.get("type");
+      if (p.get("status")) state.statusFilter = p.get("status");
+      if (p.get("topic")) state.topicFilter = p.get("topic");
+      if (p.get("q")) {
+        state.searchQuery = p.get("q");
+        document.getElementById("searchInput").value = state.searchQuery;
+        ensureFulltextLoaded();
+      }
+      if (["list", "table", "graph"].includes(p.get("view"))) state.viewMode = p.get("view");
+      if (p.get("focus") === "0") state.focusOnly = false;
+      if (p.get("conn") === "0") state.connectedOnly = false;
+      if (p.get("doc") && docById[Number(p.get("doc"))]) state.selectedDocId = Number(p.get("doc"));
+      if (p.get("tab") === "relations") state.activeTab = "relations";
+    }
+
+    function getEffectiveDevice() {
+      if (state.deviceMode !== "auto") return state.deviceMode;
+      const w = window.innerWidth;
+      if (w <= 680) return "mobile";
+      if (w <= 1080) return "tablet";
+      return "desktop";
+    }
+
+    function applyDeviceMode(reFit = true) {
+      const eff = getEffectiveDevice();
+      const root = document.getElementById("appRoot");
+      document.body.classList.toggle("preview-framed", state.deviceMode !== "auto" && (
+        (state.deviceMode === "mobile" && window.innerWidth > 560) ||
+        (state.deviceMode === "tablet" && window.innerWidth > 1020)
+      ));
+      root.classList.remove("mode-desktop", "mode-tablet", "mode-mobile");
+      root.classList.add(`mode-${eff}`);
+      root.classList.toggle("filters-open", state.filtersOpen);
+      root.classList.toggle("drawer-collapsed", eff === "desktop" && !state.drawerOpen);
+      root.classList.toggle("tablet-drawer-closed", eff === "tablet" && !state.drawerOpen);
+      root.classList.toggle("reader-expanded", eff !== "mobile" && state.readerExpanded);
+      root.dataset.mobilePane = state.mobilePane;
+      applySplitRatio();
+
+      const dBtn = document.getElementById("drawerToggleBtn");
+      dBtn.classList.toggle("active", state.drawerOpen);
+      dBtn.textContent = state.drawerOpen ? "◧ 收起原文" : "◧ 展开原文";
+      const expBtn = document.getElementById("readerExpandBtn");
+      if (expBtn) {
+        expBtn.classList.toggle("active", state.readerExpanded);
+        expBtn.textContent = state.readerExpanded ? "⤡ 还原分栏" : "⤢ 专注阅读";
+      }
+      document.querySelectorAll(".mobile-nav-btn").forEach(b => b.classList.toggle("active", b.dataset.pane === state.mobilePane));
+      if (reFit && state.viewMode === "graph") setTimeout(() => fitViewToCanvas(), 40);
+    }
+
+    function applySplitRatio() {
+      const ws = document.querySelector(".workspace");
+      if (!ws) return;
+      // 列表/台账模式默认左 36% / 右 64%（原文为主视野）；图谱模式默认 50% / 50%
+      const pct = state.customLeftPct != null ? state.customLeftPct : (state.viewMode === "graph" ? 50 : 36);
+      ws.style.setProperty("--left-pane-w", `${pct}%`);
+    }
+
+    function initPaneResizer() {
+      const resizer = document.getElementById("paneResizer");
+      const ws = document.querySelector(".workspace");
+      if (!resizer || !ws) return;
+      let dragging = false;
+      resizer.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        dragging = true;
+        resizer.classList.add("dragging");
+        document.body.style.cursor = "col-resize";
+        document.body.style.userSelect = "none";
+      });
+      window.addEventListener("mousemove", (e) => {
+        if (!dragging) return;
+        const rect = ws.getBoundingClientRect();
+        const rawPct = ((e.clientX - rect.left) / rect.width) * 100;
+        state.customLeftPct = Math.round(Math.max(22, Math.min(68, rawPct)) * 10) / 10;
+        applySplitRatio();
+      });
+      window.addEventListener("mouseup", () => {
+        if (!dragging) return;
+        dragging = false;
+        resizer.classList.remove("dragging");
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+        try { localStorage.setItem("finlex_left_pct", String(state.customLeftPct)); } catch (err) {}
+        if (state.viewMode === "graph") fitViewToCanvas();
+      });
+      resizer.addEventListener("dblclick", () => {
+        state.customLeftPct = null;
+        try { localStorage.removeItem("finlex_left_pct"); } catch (err) {}
+        applySplitRatio();
+        if (state.viewMode === "graph") fitViewToCanvas();
+      });
+    }
+
+    function setMobilePane(pane) {
+      state.mobilePane = pane;
+      if (pane === "detail") { state.activeTab = "detail"; renderDrawer(); }
+      else if (pane === "relations") { state.activeTab = "relations"; renderDrawer(); }
+      applyDeviceMode(pane === "browse");
+    }
+
+    // 绑定事件
+    document.getElementById("domainSelect").onchange = (e) => { state.domainFilter = e.target.value; syncCascadingDropdowns(); updateView(true); };
+    document.getElementById("typeSelect").onchange = (e) => { state.typeFilter = e.target.value; syncCascadingDropdowns(); updateView(true); };
+    document.getElementById("statusSelect").onchange = (e) => { state.statusFilter = e.target.value; syncCascadingDropdowns(); updateView(true); };
+    document.getElementById("topicSelect").onchange = (e) => { state.topicFilter = e.target.value; updateView(true); };
+
+    const searchInputEl = document.getElementById("searchInput");
+    searchInputEl.onfocus = () => ensureFulltextLoaded();
+    let searchTimer = null;
+    searchInputEl.oninput = (e) => {
+      ensureFulltextLoaded();
+      state.searchQuery = e.target.value;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => updateView(false), 120);
+    };
+
+    document.getElementById("resetBtn").onclick = () => {
+      state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
+      state.searchQuery = ""; state.activePath = null; state.focusOnly = true; state.inDocQuery = "";
+      searchInputEl.value = "";
+      document.getElementById("clearPathBtn").style.display = "none";
+      syncCascadingDropdowns(); updateView(true);
+    };
+
+    document.getElementById("listModeBtn").onclick = () => { state.viewMode = "list"; state.readerExpanded = false; applySplitRatio(); updateView(false); };
+    document.getElementById("tableModeBtn").onclick = () => { state.viewMode = "table"; state.readerExpanded = false; applySplitRatio(); updateView(false); };
+    document.getElementById("graphModeBtn").onclick = () => { state.viewMode = "graph"; state.readerExpanded = false; applySplitRatio(); updateView(true); };
+    document.getElementById("focusOnlyBtn").onclick = () => { state.focusOnly = !state.focusOnly; updateView(true); };
+    document.getElementById("connectedOnlyBtn").onclick = () => { state.connectedOnly = !state.connectedOnly; updateView(true); };
+    document.getElementById("layoutModeSelect").onchange = (e) => { state.layoutMode = e.target.value; state.focusOnly = false; updateView(true); };
+    document.getElementById("bridgeBtn").onclick = (e) => { state.includeBridges = !state.includeBridges; e.target.classList.toggle("active", state.includeBridges); updateView(true); };
+
+    document.getElementById("findPathBtn").onclick = () => {
+      const res = findShortestPath(document.getElementById("pathStart").value, document.getElementById("pathEnd").value);
+      if (!res) { alert("未找到这两份法规之间的连通关联路径。"); return; }
+      state.focusOnly = false; state.activePath = res;
+      document.getElementById("clearPathBtn").style.display = "inline-block";
+      updateView(true);
+    };
+    document.getElementById("clearPathBtn").onclick = () => {
+      state.activePath = null; document.getElementById("clearPathBtn").style.display = "none"; updateView(true);
+    };
+
+    document.getElementById("zoomOutBtn").onclick = () => { state.zoom = Math.max(0.35, +(state.zoom - 0.1).toFixed(2)); applyZoom(); };
+    document.getElementById("zoomInBtn").onclick = () => { state.zoom = Math.min(1.25, +(state.zoom + 0.1).toFixed(2)); applyZoom(); };
+    document.getElementById("zoomFitBtn").onclick = () => fitViewToCanvas();
+
+    document.getElementById("shareViewBtn").onclick = async () => {
+      const url = buildShareURL();
+      try {
+        await navigator.clipboard.writeText(url);
+        const btn = document.getElementById("shareViewBtn");
+        btn.textContent = "✓ 已复制链接"; btn.classList.add("active");
+        setTimeout(() => { btn.textContent = "🔗 分享视图"; btn.classList.remove("active"); }, 1800);
+      } catch (e) { window.prompt("复制直达视图链接：", url); }
+    };
+
+    document.querySelectorAll(".drawer-tab").forEach(btn => {
+      btn.onclick = () => { state.activeTab = btn.dataset.tab; renderDrawer(); if (state.viewMode === "graph") renderGraphView(); };
+    });
+
+    document.getElementById("deviceModeSelect").onchange = (e) => { state.deviceMode = e.target.value; applyDeviceMode(true); };
+    document.getElementById("filterToggleBtn").onclick = () => { state.filtersOpen = !state.filtersOpen; applyDeviceMode(false); };
+    document.getElementById("drawerToggleBtn").onclick = () => { state.drawerOpen = !state.drawerOpen; if (state.drawerOpen) state.readerExpanded = false; applyDeviceMode(true); };
+    document.getElementById("readerExpandBtn").onclick = () => { state.readerExpanded = !state.readerExpanded; if (state.readerExpanded) state.drawerOpen = true; applyDeviceMode(true); };
+    document.querySelectorAll(".mobile-nav-btn").forEach(btn => { btn.onclick = () => setMobilePane(btn.dataset.pane); });
+    window.addEventListener("resize", () => { if (state.deviceMode === "auto") applyDeviceMode(false); });
+
+    const modal = document.getElementById("complianceModal");
+    document.getElementById("complianceBtn").onclick = () => modal.classList.add("open");
+    document.getElementById("footerComplianceBtn").onclick = () => modal.classList.add("open");
+    document.getElementById("closeModalBtn").onclick = () => modal.classList.remove("open");
+    modal.onclick = (e) => { if (e.target === modal) modal.classList.remove("open"); };
+
+    try {
+      const savedPct = parseFloat(localStorage.getItem("finlex_left_pct"));
+      if (!Number.isNaN(savedPct) && savedPct >= 22 && savedPct <= 68) state.customLeftPct = savedPct;
+    } catch (err) {}
+    // PWA 安装提示与 Service Worker 注册（仅在 http/https 环境下启用）
+    let deferredInstallPrompt = null;
+    const installPwaBtn = document.getElementById("installPwaBtn");
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      if (installPwaBtn) installPwaBtn.style.display = "inline-flex";
+    });
+    if (installPwaBtn) {
+      installPwaBtn.onclick = async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        installPwaBtn.style.display = "none";
+      };
+    }
+    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+
+    initPaneResizer();
+    restoreStateFromURL();
+    syncCascadingDropdowns();
+    updateView(false);
+    applyDeviceMode(false);
+  </script>
+</body>
+</html>

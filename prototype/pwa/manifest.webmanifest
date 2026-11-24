@@ -1,0 +1,31 @@
+{
+  "name": "问财答税 · FinLex 财税法规检索与联想工作台",
+  "short_name": "问财答税",
+  "description": "可核对出处的会计准则、税法法条、审计准则与实务案例检索及交叉联想工作台（支持离线使用）",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f6f7fb",
+  "theme_color": "#1e40af",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
