@@ -278,6 +278,54 @@ def make_first_article_preview(articles: list[dict]) -> str:
     return ""
 
 
+SERIES_PATTERNS = [
+    (re.compile(r"^中国注册会计师审计准则问题解答第(\d+)号——(.+)$"), lambda m: (f"审计问答 第{m.group(1)}号", m.group(2))),
+    (re.compile(r"^中国注册会计师审计准则第(\d+)号——(.+)$"), lambda m: (f"审计准则 第{m.group(1)}号", m.group(2))),
+    (re.compile(r"^中国注册会计师其他鉴证业务准则第(\d+)号——(.+)$"), lambda m: (f"其他鉴证 第{m.group(1)}号", m.group(2))),
+    (re.compile(r"^中国注册会计师审阅准则第(\d+)号——(.+)$"), lambda m: (f"审阅准则 第{m.group(1)}号", m.group(2))),
+    (re.compile(r"^中国注册会计师相关服务准则第(\d+)号——(.+)$"), lambda m: (f"相关服务 第{m.group(1)}号", m.group(2))),
+    (re.compile(r"^企业会计准则第0*(\d+)号——(.+?)应用指南$"), lambda m: (f"会计指南 第{m.group(1)}号", m.group(2))),
+    (re.compile(r"^企业会计准则第0*(\d+)号——(.+)$"), lambda m: (f"会计准则 第{m.group(1)}号", m.group(2))),
+    (re.compile(r"^企业会计准则——(.+)$"), lambda m: ("会计准则", m.group(1))),
+    (re.compile(r"^企业会计准则解释第(\d+)号$"), lambda m: (f"准则解释 第{m.group(1)}号", f"企业会计准则解释第{m.group(1)}号")),
+    (re.compile(r"^企业内部控制配套指引——(.+)$"), lambda m: ("内控配套指引", m.group(1))),
+    (re.compile(r"^企业可持续披露准则第(\d+)号——(.+)$"), lambda m: (f"可持续披露 第{m.group(1)}号", m.group(2))),
+    (re.compile(r"^发布通知——(.+)$"), lambda m: ("发布通知", m.group(1))),
+    (re.compile(r"^中华人民共和国(.+)$"), lambda m: ("国家法律", m.group(1))),
+]
+
+TRAILING_PAREN_RE = re.compile(r"[（(]([^（）()]+)[）)]$")
+
+
+def extract_display_parts(title: str, doc_type: str) -> tuple[str, str, str]:
+    """拆解冗长法规全称为 (series_badge, display_title, revision_badge)，保留完整 title 供引用与正文区展示。"""
+    base = title.strip()
+    revision_badge = ""
+
+    m_paren = TRAILING_PAREN_RE.search(base)
+    if m_paren:
+        inner = m_paren.group(1).strip()
+        m_rev = re.search(r"(\d{4})年.*?(修订|修正|发布)", inner)
+        if m_rev:
+            revision_badge = f"{m_rev.group(1)}{m_rev.group(2)}"
+            base = base[: m_paren.start()].strip()
+        elif "财会〔" in inner:
+            revision_badge = inner
+            base = base[: m_paren.start()].strip()
+
+    for pat, builder in SERIES_PATTERNS:
+        m = pat.match(base)
+        if m:
+            series, short_title = builder(m)
+            if series == "国家法律" and doc_type == "regulation":
+                series = "行政法规"
+            elif series == "国家法律" and doc_type == "rule":
+                series = "部门规章"
+            return series, short_title.strip(), revision_badge
+
+    return "", base, revision_badge
+
+
 def build_from_db(db_path: Path) -> dict:
     if not db_path.exists():
         raise FileNotFoundError(f"未找到数据库文件：{db_path}")
@@ -359,6 +407,7 @@ def build_from_db(db_path: Path) -> dict:
         source_url, source_kind = sanitize_url(row["source_url"])
         arts = articles_by_doc.get(doc_id, [])
         first_preview = make_first_article_preview(arts)
+        series_badge, display_title, revision_badge = extract_display_parts(title, row["doc_type"] or "normative")
 
         if row["doc_type"] == "case" and len(summary) < 20:
             warnings.append(f"案例 doc_id={doc_id} 摘要不足 20 字")
@@ -368,6 +417,9 @@ def build_from_db(db_path: Path) -> dict:
             "domain": row["domain"] or "general",
             "doc_type": row["doc_type"] or "normative",
             "title": title,
+            "display_title": display_title,
+            "series_badge": series_badge,
+            "revision_badge": revision_badge,
             "doc_no": (row["doc_no"] or "").strip() or "待核实",
             "issuer": (row["issuer"] or "").strip() or "待核实",
             "pub_date": (row["pub_date"] or "").strip() or "待核实",

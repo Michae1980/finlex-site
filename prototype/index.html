@@ -54,31 +54,94 @@
     }
     .app { display: flex; flex-direction: column; width: 100%; height: 100dvh; overflow: hidden; }
 
-    /* 1. 顶部联级筛选栏 */
+    /* 1. 顶部主栏（品牌 + 核心检索 + 工具）与次级筛选栏（领域标签 + 精简下拉） */
     .topbar {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      z-index: 20;
+    }
+    .topbar-main {
       padding: 10px 18px;
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-      gap: 10px; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
     }
-    .topbar-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex: 0 1 auto; }
-    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     .brand-badge {
-      width: 32px; height: 32px; border-radius: 9px;
+      width: 34px; height: 34px; border-radius: 9px;
       background: linear-gradient(135deg, #1d4ed8, #2563eb); color: #fff;
-      display: grid; place-items: center; font-weight: 700; font-size: 15px;
+      display: grid; place-items: center; font-weight: 700; font-size: 16px;
+      flex-shrink: 0;
     }
-    .brand-title { font-size: 15px; font-weight: 600; color: var(--ink); }
-    .brand-sub { font-size: 11.5px; color: var(--ink-muted); }
+    .brand-title { font-size: 15.5px; font-weight: 700; color: var(--ink); line-height: 1.25; }
+    .brand-sub { font-size: 11.5px; color: var(--ink-muted); line-height: 1.3; }
+
+    /* 核心全局检索框（视觉主角） */
+    .hero-search {
+      flex: 1; max-width: 560px; min-width: 220px; height: 38px;
+      display: flex; align-items: center; gap: 7px;
+      padding: 0 8px 0 13px;
+      background: #f8fafc; border: 1.5px solid var(--border-strong); border-radius: 10px;
+      transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .hero-search:hover { border-color: #94a3b8; }
+    .hero-search:focus-within {
+      background: var(--surface); border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+    .hero-search-icon { font-size: 14px; color: var(--ink-muted); user-select: none; flex-shrink: 0; }
+    .hero-search-input {
+      flex: 1; min-width: 0; border: none; background: transparent;
+      font-size: 13.5px; color: var(--ink); outline: none; padding: 0;
+    }
+    .hero-search-input::placeholder { color: #94a3b8; }
+    .search-clear-btn {
+      border: none; background: #e2e8f0; color: var(--ink-secondary);
+      width: 20px; height: 20px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 13px; line-height: 1; cursor: pointer; flex-shrink: 0;
+    }
+    .search-clear-btn:hover { background: #cbd5e1; color: var(--ink); }
+    .ft-badge {
+      font-size: 10.5px; color: var(--ink-muted); padding: 2px 8px;
+      border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--border);
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .ft-badge.ready { color: #047857; background: #ecfdf5; border-color: #a7f3d0; }
 
     .device-controls { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
-    .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-    .step-arrow { color: var(--border-strong); font-size: 12px; user-select: none; }
+
+    /* 第二行：领域分段标签 + 次级筛选下拉 */
+    .filterbar {
+      padding: 7px 18px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 10px;
+    }
+    .domain-pills { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+    .domain-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      border: 1px solid var(--border); background: var(--surface); color: var(--ink-secondary);
+      padding: 4px 11px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500;
+      cursor: pointer; white-space: nowrap; transition: all 0.14s ease;
+    }
+    .domain-pill:hover { border-color: var(--primary-border); color: var(--primary); }
+    .domain-pill.active {
+      background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600;
+      box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+    }
+    .domain-pill-cnt {
+      font-size: 11px; opacity: 0.78;
+      background: rgba(15, 23, 42, 0.06); padding: 0 5px; border-radius: 99px;
+    }
+    .domain-pill.active .domain-pill-cnt { background: rgba(255, 255, 255, 0.22); opacity: 1; }
+
+    .filter-selects { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 
     .select-field {
       display: inline-flex; align-items: center; gap: 4px;
-      background: var(--surface-subtle); border: 1px solid var(--border-strong);
+      background: var(--surface); border: 1px solid var(--border-strong);
       border-radius: 8px; padding: 3px 8px;
     }
     .select-field.active-filter { background: var(--primary-soft); border-color: var(--primary-border); }
@@ -87,23 +150,9 @@
     .select-field select {
       border: none; background: transparent; color: var(--ink);
       font-size: 12px; font-weight: 500; outline: none; cursor: pointer;
-      padding: 2px 1px; max-width: 190px;
+      padding: 2px 1px; max-width: 170px;
     }
     .select-field.active-filter select { color: #1e40af; font-weight: 600; }
-
-    .search-wrap { position: relative; display: inline-flex; align-items: center; }
-    .search-box {
-      border: 1px solid var(--border-strong); border-radius: 8px;
-      padding: 5px 10px; font-size: 12px; width: 220px;
-      outline: none; background: var(--surface); color: var(--ink);
-    }
-    .search-box:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.14); }
-    .ft-badge {
-      font-size: 10.5px; color: var(--ink-muted); padding: 2px 7px;
-      border-radius: var(--radius-pill); background: var(--surface-subtle); border: 1px solid var(--border);
-      white-space: nowrap;
-    }
-    .ft-badge.ready { color: #047857; background: #ecfdf5; border-color: #a7f3d0; }
 
     .toggle-btn {
       display: inline-flex; align-items: center; gap: 4px;
@@ -113,11 +162,11 @@
     .toggle-btn:hover { border-color: var(--primary); color: var(--primary); }
     .toggle-btn.active { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); font-weight: 600; }
 
-    /* 2. 主工作区：左侧导航目录（默认 36%）+ 可拖拽分隔条 + 右侧主阅读区（默认 64%） */
+    /* 2. 主工作区：左侧导航目录（默认 34% 且上限 540px）+ 可拖拽分隔条 + 右侧主阅读区 */
     .workspace { display: flex; flex: 1; min-height: 0; position: relative; }
     .canvas-pane {
       position: relative; display: flex; flex-direction: column; min-width: 280px; min-height: 0;
-      width: var(--left-pane-w, 36%); flex-shrink: 0;
+      width: var(--left-pane-w, 34%); max-width: var(--left-pane-max, 540px); flex-shrink: 0;
       background: var(--bg);
     }
     .pane-resizer {
@@ -132,7 +181,7 @@
     }
     .pane-resizer:hover::after, .pane-resizer.dragging::after { background: #fff; }
 
-    .app.drawer-collapsed .canvas-pane { width: 100% !important; flex: 1; }
+    .app.drawer-collapsed .canvas-pane { width: 100% !important; max-width: none !important; flex: 1; }
     .app.drawer-collapsed .pane-resizer, .app.drawer-collapsed .drawer { display: none; }
     .app.reader-expanded .canvas-pane, .app.reader-expanded .pane-resizer { display: none; }
     .app.reader-expanded .drawer { border-left: none; }
@@ -182,11 +231,12 @@
     .action-btn.ghost { background: var(--surface); color: var(--ink-secondary); border-color: var(--border-strong); }
 
     .legend-bar {
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      display: none; flex-wrap: wrap; align-items: center; justify-content: space-between;
       gap: 8px; padding: 5px 14px;
       background: rgba(248, 250, 252, 0.94); border-bottom: 1px solid var(--border);
       font-size: 11.5px; color: var(--ink-secondary);
     }
+    .canvas-pane[data-view="graph"] .legend-bar { display: flex; }
     .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
     .legend-item { display: inline-flex; align-items: center; gap: 5px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
@@ -209,6 +259,22 @@
     .doc-card.selected { border-color: var(--primary); background: var(--primary-soft); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14); }
     .doc-card.is-case { border-style: dashed; background: #fffdfa; }
     .doc-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .doc-card-title-wrap { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 3px; }
+    .doc-card-series { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+    .series-pill {
+      display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600;
+      padding: 1px 6px; border-radius: 5px; border: 1px solid #bfdbfe;
+      background: #eff6ff; color: #1d4ed8; white-space: nowrap; line-height: 1.4;
+    }
+    .series-pill.dom-accounting { background: #eef2ff; color: #3730a3; border-color: #c7d2fe; }
+    .series-pill.dom-audit { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+    .series-pill.dom-tax { background: #ecfdf5; color: #166534; border-color: #bbf7d0; }
+    .series-pill.dom-general { background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
+    .rev-pill {
+      display: inline-flex; align-items: center; font-size: 10px; font-weight: 500;
+      padding: 1px 6px; border-radius: 5px; background: #f8fafc; color: var(--ink-muted);
+      border: 1px solid var(--border); white-space: nowrap; line-height: 1.4;
+    }
     .doc-card-title { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
     .doc-card-meta { display: flex; flex-wrap: wrap; gap: 5px; font-size: 11px; color: var(--ink-muted); align-items: center; }
     .doc-card-snippet {
@@ -402,6 +468,7 @@
     .mini-btn {
       border: 1px solid var(--border-strong); background: var(--surface); color: var(--ink-secondary);
       padding: 3px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;
+      white-space: nowrap; flex-shrink: 0;
     }
     .mini-btn:hover { border-color: var(--primary); color: var(--primary); }
     .mini-btn.primary { background: var(--primary-soft); border-color: var(--primary-border); color: var(--primary); font-weight: 600; }
@@ -434,31 +501,30 @@
     .app.mode-mobile .desktop-or-tablet-only { display: none; }
     .mobile-nav { display: none; }
 
-    .app.mode-tablet .topbar { padding: 8px 12px; gap: 8px; }
-    .app.mode-tablet .topbar-head { width: 100%; }
+    .app.mode-tablet .topbar-main { padding: 8px 12px; gap: 10px; flex-wrap: wrap; }
+    .app.mode-tablet .hero-search { order: 3; flex: 1 1 100%; max-width: none; height: 36px; }
     .app.mode-tablet .mobile-or-tablet-only { display: inline-flex; }
-    .app.mode-tablet .toolbar { display: none; width: 100%; padding-top: 6px; border-top: 1px solid var(--border); }
-    .app.mode-tablet.filters-open .toolbar { display: flex; }
-    .app.mode-tablet .step-arrow, .app.mode-tablet .path-finder { display: none; }
-    .app.mode-tablet .canvas-pane { width: 38%; min-width: 260px; }
+    .app.mode-tablet .filterbar { display: none; padding: 8px 12px; }
+    .app.mode-tablet.filters-open .filterbar { display: flex; }
+    .app.mode-tablet .path-finder { display: none; }
+    .app.mode-tablet .canvas-pane { width: 38%; max-width: 420px; min-width: 260px; }
     .app.mode-tablet .drawer { min-width: 0; }
     .app.mode-tablet .drawer-body { padding: 14px 16px; }
-    .app.mode-tablet.tablet-drawer-closed .canvas-pane { width: 100% !important; flex: 1; }
+    .app.mode-tablet.tablet-drawer-closed .canvas-pane { width: 100% !important; max-width: none !important; flex: 1; }
     .app.mode-tablet.tablet-drawer-closed .pane-resizer, .app.mode-tablet.tablet-drawer-closed .drawer { display: none; }
 
-    .app.mode-mobile .topbar { padding: 8px 12px; gap: 6px; }
-    .app.mode-mobile .topbar-head { width: 100%; }
+    .app.mode-mobile .topbar-main { padding: 8px 12px; gap: 8px; flex-wrap: wrap; }
+    .app.mode-mobile .hero-search { order: 3; flex: 1 1 100%; max-width: none; height: 36px; }
+    .app.mode-mobile .hero-search .ft-badge { display: none; }
     .app.mode-mobile .mobile-or-tablet-only { display: inline-flex; }
-    .app.mode-mobile .toolbar { display: none; width: 100%; padding-top: 8px; border-top: 1px solid var(--border); grid-template-columns: 1fr 1fr; gap: 7px; }
-    .app.mode-mobile.filters-open .toolbar { display: grid; }
-    .app.mode-mobile .toolbar .step-arrow { display: none; }
-    .app.mode-mobile .toolbar .select-field { width: 100%; justify-content: space-between; }
-    .app.mode-mobile .toolbar .search-wrap { grid-column: 1 / -1; width: 100%; }
-    .app.mode-mobile .toolbar .search-box { width: 100%; }
+    .app.mode-mobile .filterbar { display: none; padding: 8px 12px; gap: 8px; }
+    .app.mode-mobile.filters-open .filterbar { display: flex; flex-direction: column; align-items: stretch; }
+    .app.mode-mobile .filter-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .app.mode-mobile .filter-selects .select-field { width: 100%; justify-content: space-between; }
     .app.mode-mobile .path-finder, .app.mode-mobile .legend-bar, .app.mode-mobile .view-badge { display: none; }
     .app.mode-mobile .workspace { display: flex; flex-direction: column; flex: 1; min-height: 0; }
     .app.mode-mobile .pane-resizer { display: none; }
-    .app.mode-mobile .canvas-pane, .app.mode-mobile .drawer { width: 100% !important; min-width: 0; flex: 1; min-height: 0; border-left: none; }
+    .app.mode-mobile .canvas-pane, .app.mode-mobile .drawer { width: 100% !important; max-width: none !important; min-width: 0; flex: 1; min-height: 0; border-left: none; }
     .app.mode-mobile .drawer-tabs { display: none; }
     .app.mode-mobile[data-mobile-pane="browse"] .drawer { display: none; }
     .app.mode-mobile[data-mobile-pane="detail"] .canvas-pane,
@@ -478,7 +544,7 @@
 <body>
   <div class="app mode-desktop" id="appRoot" data-mobile-pane="browse">
     <header class="topbar">
-      <div class="topbar-head">
+      <div class="topbar-main">
         <div class="brand">
           <div class="brand-badge">法</div>
           <div>
@@ -486,10 +552,18 @@
             <div class="brand-sub" id="statsSubtitle">正在加载结构化法规索引...</div>
           </div>
         </div>
+
+        <div class="hero-search" role="search">
+          <span class="hero-search-icon" aria-hidden="true">🔍</span>
+          <input class="hero-search-input" id="searchInput" type="search" placeholder="全库检索法规标题、文号或 5,417 条正文..." />
+          <button class="search-clear-btn" id="searchClearBtn" type="button" title="清空搜索" style="display:none">×</button>
+          <span class="ft-badge" id="ftBadge" title="点击搜索框自动加载全库 5,417 条条文正文索引">正文按需索引</span>
+        </div>
+
         <div class="device-controls">
-          <button class="toggle-btn mobile-or-tablet-only" id="filterToggleBtn">🔍 筛选</button>
-          <button class="toggle-btn desktop-or-tablet-only active" id="drawerToggleBtn">◧ 收起详情</button>
-          <button class="toggle-btn" id="complianceBtn">⚖ 合规与来源</button>
+          <button class="toggle-btn mobile-or-tablet-only" id="filterToggleBtn">筛选</button>
+          <button class="toggle-btn desktop-or-tablet-only active" id="drawerToggleBtn">◧ 收起原文</button>
+          <button class="toggle-btn" id="complianceBtn" title="查看免责声明、合规边界与官方来源">⚖ 合规</button>
           <div class="select-field" title="切换桌面端、平板端或手机端界面">
             <label for="deviceModeSelect">界面</label>
             <select id="deviceModeSelect">
@@ -499,35 +573,27 @@
               <option value="mobile">手机端</option>
             </select>
           </div>
+          <button class="toggle-btn active" id="installPwaBtn" style="display:none" title="安装到桌面作为独立应用离线使用">⬇ 安装</button>
         </div>
       </div>
 
-      <div class="toolbar">
-        <div class="select-field" id="domainField">
-          <label for="domainSelect">1.问题域</label>
-          <select id="domainSelect"></select>
+      <div class="filterbar">
+        <div class="domain-pills" id="domainPills" role="group" aria-label="按专业领域筛选"></div>
+        <div class="filter-selects">
+          <div class="select-field" id="typeField">
+            <label for="typeSelect">层级</label>
+            <select id="typeSelect"></select>
+          </div>
+          <div class="select-field" id="topicField">
+            <label for="topicSelect">专题</label>
+            <select id="topicSelect"></select>
+          </div>
+          <div class="select-field" id="statusField">
+            <label for="statusSelect">状态</label>
+            <select id="statusSelect"></select>
+          </div>
+          <button class="toggle-btn" id="resetBtn">重置</button>
         </div>
-        <span class="step-arrow">›</span>
-        <div class="select-field" id="typeField">
-          <label for="typeSelect">2.规范层级</label>
-          <select id="typeSelect"></select>
-        </div>
-        <span class="step-arrow">›</span>
-        <div class="select-field" id="statusField">
-          <label for="statusSelect">3.效力状态</label>
-          <select id="statusSelect"></select>
-        </div>
-        <span class="step-arrow">›</span>
-        <div class="select-field" id="topicField">
-          <label for="topicSelect">4.业务专题</label>
-          <select id="topicSelect"></select>
-        </div>
-        <div class="search-wrap">
-          <input class="search-box" id="searchInput" type="search" placeholder="全库检索标题 / 文号 / 5417条正文..." />
-        </div>
-        <span class="ft-badge" id="ftBadge" title="点击搜索框自动加载全库 5,417 条条文正文索引">正文索引按需加载</span>
-        <button class="toggle-btn" id="resetBtn">重置</button>
-        <button class="toggle-btn active" id="installPwaBtn" style="display:none" title="安装到桌面作为独立应用离线使用">⬇ 安装桌面版</button>
       </div>
     </header>
 
@@ -774,7 +840,7 @@
       connectedOnly: true,       // 图谱模式下是否仅看有关联网络的文档
       layoutMode: "domain",      // "domain" | "type" | "topic"
       includeBridges: false,
-      selectedDocId: 1,
+      selectedDocId: null,
       selectedEdgeId: null,
       activeTab: "detail",       // "detail" | "relations"
       strengthFilter: "all",     // "all" | "strong" | "strong_medium" | "weak"
@@ -855,22 +921,34 @@
     function filterByStatus(list) { return state.statusFilter === "all" ? list : list.filter(d => d.status === state.statusFilter); }
     function filterByTopic(list) { return state.topicFilter === "all" ? list : list.filter(d => d.topic_id === state.topicFilter); }
 
+    const DOMAIN_SHORT = { accounting: "会计", audit: "审计", tax: "税务", general: "综合" };
+
+    function setDomainFilter(val) {
+      state.domainFilter = val;
+      syncCascadingDropdowns();
+      updateView(true);
+    }
+
     function syncCascadingDropdowns() {
       const all = DATA.documents;
 
-      const domSel = document.getElementById("domainSelect");
-      domSel.innerHTML = `<option value="all">全部问题域（${all.length}）</option>`;
+      const pillsEl = document.getElementById("domainPills");
+      const domainItems = [{ id: "all", label: "全部", cnt: all.length }];
       DATA.taxonomy.domains.forEach(item => {
         const cnt = all.filter(d => d.domain === item.id).length;
-        if (cnt > 0) domSel.add(new Option(`${item.label}（${cnt}）`, item.id));
+        if (cnt > 0) domainItems.push({ id: item.id, label: DOMAIN_SHORT[item.id] || item.label, cnt });
       });
-      if (![...domSel.options].some(o => o.value === state.domainFilter)) state.domainFilter = "all";
-      domSel.value = state.domainFilter;
-      document.getElementById("domainField").classList.toggle("active-filter", state.domainFilter !== "all");
+      if (!domainItems.some(x => x.id === state.domainFilter)) state.domainFilter = "all";
+      pillsEl.innerHTML = domainItems.map(item => `
+        <button type="button" class="domain-pill ${state.domainFilter === item.id ? "active" : ""}" onclick="setDomainFilter('${item.id}')">
+          <span>${escapeHTML(item.label)}</span>
+          <span class="domain-pill-cnt">${item.cnt}</span>
+        </button>
+      `).join("");
 
       const afterDom = filterByDomain(all);
       const typeSel = document.getElementById("typeSelect");
-      typeSel.innerHTML = `<option value="all">全部层级（${afterDom.length}）</option>`;
+      typeSel.innerHTML = `<option value="all">全部（${afterDom.length}）</option>`;
       DATA.taxonomy.doc_types.forEach(item => {
         const cnt = afterDom.filter(d => d.doc_type === item.id).length;
         if (cnt > 0) typeSel.add(new Option(`${item.label}（${cnt}）`, item.id));
@@ -880,26 +958,26 @@
       document.getElementById("typeField").classList.toggle("active-filter", state.typeFilter !== "all");
 
       const afterType = filterByType(afterDom);
-      const stSel = document.getElementById("statusSelect");
-      stSel.innerHTML = `<option value="all">全部状态（${afterType.length}）</option>`;
-      DATA.taxonomy.statuses.forEach(item => {
-        const cnt = afterType.filter(d => d.status === item.id).length;
-        if (cnt > 0) stSel.add(new Option(`${item.label}（${cnt}）`, item.id));
-      });
-      if (![...stSel.options].some(o => o.value === state.statusFilter)) state.statusFilter = "all";
-      stSel.value = state.statusFilter;
-      document.getElementById("statusField").classList.toggle("active-filter", state.statusFilter !== "all");
-
-      const afterSt = filterByStatus(afterType);
       const topSel = document.getElementById("topicSelect");
-      topSel.innerHTML = `<option value="all">全部专题（${afterSt.length}）</option>`;
+      topSel.innerHTML = `<option value="all">全部（${afterType.length}）</option>`;
       DATA.taxonomy.topics.forEach(item => {
-        const cnt = afterSt.filter(d => d.topic_id === item.id).length;
+        const cnt = afterType.filter(d => d.topic_id === item.id).length;
         if (cnt > 0) topSel.add(new Option(`${item.label}（${cnt}）`, item.id));
       });
       if (![...topSel.options].some(o => o.value === state.topicFilter)) state.topicFilter = "all";
       topSel.value = state.topicFilter;
       document.getElementById("topicField").classList.toggle("active-filter", state.topicFilter !== "all");
+
+      const afterTop = filterByTopic(afterType);
+      const stSel = document.getElementById("statusSelect");
+      stSel.innerHTML = `<option value="all">全部（${afterTop.length}）</option>`;
+      DATA.taxonomy.statuses.forEach(item => {
+        const cnt = afterTop.filter(d => d.status === item.id).length;
+        if (cnt > 0) stSel.add(new Option(`${item.label}（${cnt}）`, item.id));
+      });
+      if (![...stSel.options].some(o => o.value === state.statusFilter)) state.statusFilter = "all";
+      stSel.value = state.statusFilter;
+      document.getElementById("statusField").classList.toggle("active-filter", state.statusFilter !== "all");
     }
 
     function getDirectEdges(docId, pool = DATA.doc_links) {
@@ -962,6 +1040,8 @@
         matched = matched.filter(d => {
           const metaHit =
             d.title.toLowerCase().includes(qLower) ||
+            (d.series_badge || "").toLowerCase().includes(qLower) ||
+            (d.display_title || "").toLowerCase().includes(qLower) ||
             (hasValidDocNo(d) && d.doc_no.toLowerCase().includes(qLower)) ||
             d.issuer.toLowerCase().includes(qLower) ||
             (d.summary || "").toLowerCase().includes(qLower) ||
@@ -974,8 +1054,8 @@
       matched = matched.slice().sort((a, b) => {
         if (a.is_case !== b.is_case) return a.is_case ? 1 : -1;
         if (qLower) {
-          const aTitle = a.title.toLowerCase().includes(qLower) || a.doc_no.toLowerCase().includes(qLower) ? 1 : 0;
-          const bTitle = b.title.toLowerCase().includes(qLower) || b.doc_no.toLowerCase().includes(qLower) ? 1 : 0;
+          const aTitle = a.title.toLowerCase().includes(qLower) || (a.series_badge || "").toLowerCase().includes(qLower) || a.doc_no.toLowerCase().includes(qLower) ? 1 : 0;
+          const bTitle = b.title.toLowerCase().includes(qLower) || (b.series_badge || "").toLowerCase().includes(qLower) || b.doc_no.toLowerCase().includes(qLower) ? 1 : 0;
           if (aTitle !== bTitle) return bTitle - aTitle;
         }
         if (a.authority_rank !== b.authority_rank) return a.authority_rank - b.authority_rank;
@@ -994,14 +1074,16 @@
       const coreIds = new Set(activePool.map(d => d.id));
 
       if (activePool.length > 0 && (!state.selectedDocId || !coreIds.has(state.selectedDocId))) {
-        const best = activePool.find(d => d.total_degree > 0) || activePool[0];
-        state.selectedDocId = best.id;
+        state.selectedDocId = isGraph ? (activePool.find(d => d.total_degree > 0) || activePool[0]).id : activePool[0].id;
       }
 
       document.getElementById("canvasPane").dataset.view = state.viewMode;
       document.getElementById("listModeBtn").classList.toggle("active", state.viewMode === "list");
       document.getElementById("tableModeBtn").classList.toggle("active", state.viewMode === "table");
       document.getElementById("graphModeBtn").classList.toggle("active", isGraph);
+
+      const hasFilter = state.domainFilter !== "all" || state.typeFilter !== "all" || state.statusFilter !== "all" || state.topicFilter !== "all" || Boolean(q);
+      document.getElementById("resetBtn").classList.toggle("active", hasFilter);
 
       document.getElementById("focusOnlyBtn").style.display = isGraph ? "inline-flex" : "none";
       document.getElementById("connectedOnlyBtn").style.display = isGraph ? "inline-flex" : "none";
@@ -1019,15 +1101,15 @@
       connBtn.textContent = `🔗 仅看有关联（${connCnt}）`;
 
       const crumbs = [];
-      if (state.domainFilter !== "all") crumbs.push(DOMAIN_LABELS[state.domainFilter]);
+      if (state.domainFilter !== "all") crumbs.push(DOMAIN_SHORT[state.domainFilter] || DOMAIN_LABELS[state.domainFilter]);
       if (state.typeFilter !== "all") crumbs.push(TYPE_LABELS[state.typeFilter]);
-      if (state.statusFilter !== "all") crumbs.push(STATUS_LABELS[state.statusFilter]);
       if (state.topicFilter !== "all") crumbs.push(TOPIC_LABELS[state.topicFilter]);
-      const scope = crumbs.length ? crumbs.join(" › ") : "全库财税与审计法规";
+      if (state.statusFilter !== "all") crumbs.push(STATUS_LABELS[state.statusFilter]);
+      const scope = crumbs.length ? crumbs.join(" · ") : "全库法规";
       const totalArtHits = Object.values(fulltextHitMap).reduce((s, x) => s + x.count, 0);
-      const hitNote = qLower && fulltextRows ? ` · 正文命中 ${totalArtHits} 条` : "";
+      const hitNote = qLower && fulltextRows ? ` · 正文 ${totalArtHits} 条` : "";
       document.getElementById("statsSubtitle").textContent =
-        `${scope} · 命中 ${matched.length}/${DATA.meta.document_count} 份文档${hitNote} · 共 ${DATA.meta.article_count} 条条文`;
+        `${scope} · ${matched.length}/${DATA.meta.document_count} 份${hitNote}`;
 
       currentView.matchedDocs = matched;
       currentView.coreIds = coreIds;
@@ -1063,10 +1145,18 @@
       grid.innerHTML = docs.map(d => {
         const ft = fulltextHitMap[d.id];
         const snippet = getDocSnippet(d, q);
+        const shortTitle = d.display_title || d.title;
         return `
           <article class="doc-card ${d.id === state.selectedDocId ? "selected" : ""} ${d.is_case ? "is-case" : ""}" onclick="selectDoc(${d.id})">
             <div class="doc-card-head">
-              <div class="doc-card-title">${highlightText(d.title, q)}</div>
+              <div class="doc-card-title-wrap">
+                ${(d.series_badge || d.revision_badge) ? `
+                  <div class="doc-card-series">
+                    ${d.series_badge ? `<span class="series-pill dom-${d.domain}">${highlightText(d.series_badge, q)}</span>` : ""}
+                    ${d.revision_badge ? `<span class="rev-pill">${highlightText(d.revision_badge, q)}</span>` : ""}
+                  </div>` : ""}
+                <div class="doc-card-title" title="${escapeHTML(d.title)}">${highlightText(shortTitle, q)}</div>
+              </div>
               <span class="pill st-${d.status}">${STATUS_LABELS[d.status] || d.status}</span>
             </div>
             <div class="doc-card-meta">
@@ -1096,11 +1186,14 @@
       tbody.innerHTML = docs.map(d => {
         const ft = fulltextHitMap[d.id];
         const subText = ft ? ft.snippet : (d.summary || d.first_preview || "");
+        const shortTitle = d.display_title || d.title;
         return `
           <tr class="${d.id === state.selectedDocId ? "selected" : ""} ${d.is_case ? "is-case" : ""}" onclick="selectDoc(${d.id})">
             <td>
-              <div class="ledger-title">
-                ${highlightText(d.title, q)}
+              <div class="ledger-title" title="${escapeHTML(d.title)}">
+                ${d.series_badge ? `<span class="series-pill dom-${d.domain}" style="margin-right:5px;">${highlightText(d.series_badge, q)}</span>` : ""}
+                ${highlightText(shortTitle, q)}
+                ${d.revision_badge ? `<span class="rev-pill" style="margin-left:5px;">${highlightText(d.revision_badge, q)}</span>` : ""}
                 ${ft ? `<span class="pill hit-pill" style="margin-left:5px;">正文 ${ft.count}</span>` : ""}
                 ${d.is_case ? `<span class="pill case-pill" style="margin-left:5px;">参考</span>` : ""}
               </div>
@@ -1346,12 +1439,17 @@
         card.className = cls;
         card.style.left = `${pos.x}px`;
         card.style.top = `${pos.y}px`;
+        const nodeShort = d.display_title || d.title;
+        const nodeSubParts = [];
+        if (d.series_badge) nodeSubParts.push(d.series_badge);
+        if (hasValidDocNo(d)) nodeSubParts.push(d.doc_no);
+        else if (!d.series_badge) nodeSubParts.push(d.issuer);
         card.innerHTML = `
           <div class="node-head">
-            <div class="node-title" title="${escapeHTML(d.title)}">${escapeHTML(d.title)}</div>
+            <div class="node-title" title="${escapeHTML(d.title)}">${escapeHTML(nodeShort)}</div>
             <span class="node-badge">${isBridge ? "跨域桥梁" : `${d.article_count}条`}</span>
           </div>
-          <div class="node-sub">${escapeHTML(subParts.join(" · "))}</div>
+          <div class="node-sub">${escapeHTML(nodeSubParts.join(" · "))}</div>
           <div class="node-foot">
             <span style="display:inline-flex;gap:4px;align-items:center;">
               <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain] || d.domain}</span>
@@ -1710,6 +1808,7 @@
       if (p.get("q")) {
         state.searchQuery = p.get("q");
         document.getElementById("searchInput").value = state.searchQuery;
+        document.getElementById("searchClearBtn").style.display = "inline-flex";
         ensureFulltextLoaded();
       }
       if (["list", "table", "graph"].includes(p.get("view"))) state.viewMode = p.get("view");
@@ -1758,9 +1857,17 @@
     function applySplitRatio() {
       const ws = document.querySelector(".workspace");
       if (!ws) return;
-      // 列表/台账模式默认左 36% / 右 64%（原文为主视野）；图谱模式默认 50% / 50%
-      const pct = state.customLeftPct != null ? state.customLeftPct : (state.viewMode === "graph" ? 50 : 36);
-      ws.style.setProperty("--left-pane-w", `${pct}%`);
+      if (state.customLeftPct != null) {
+        ws.style.setProperty("--left-pane-w", `${state.customLeftPct}%`);
+        ws.style.setProperty("--left-pane-max", "none");
+      } else if (state.viewMode === "graph") {
+        ws.style.setProperty("--left-pane-w", "50%");
+        ws.style.setProperty("--left-pane-max", "none");
+      } else {
+        // 列表/台账模式默认左 34% 且上限 540px，超宽屏下保证右侧法条阅读区占 65%+ 视野
+        ws.style.setProperty("--left-pane-w", "34%");
+        ws.style.setProperty("--left-pane-max", "540px");
+      }
     }
 
     function initPaneResizer() {
@@ -1807,25 +1914,34 @@
     }
 
     // 绑定事件
-    document.getElementById("domainSelect").onchange = (e) => { state.domainFilter = e.target.value; syncCascadingDropdowns(); updateView(true); };
     document.getElementById("typeSelect").onchange = (e) => { state.typeFilter = e.target.value; syncCascadingDropdowns(); updateView(true); };
-    document.getElementById("statusSelect").onchange = (e) => { state.statusFilter = e.target.value; syncCascadingDropdowns(); updateView(true); };
-    document.getElementById("topicSelect").onchange = (e) => { state.topicFilter = e.target.value; updateView(true); };
+    document.getElementById("topicSelect").onchange = (e) => { state.topicFilter = e.target.value; syncCascadingDropdowns(); updateView(true); };
+    document.getElementById("statusSelect").onchange = (e) => { state.statusFilter = e.target.value; updateView(true); };
 
     const searchInputEl = document.getElementById("searchInput");
+    const searchClearBtn = document.getElementById("searchClearBtn");
     searchInputEl.onfocus = () => ensureFulltextLoaded();
     let searchTimer = null;
     searchInputEl.oninput = (e) => {
       ensureFulltextLoaded();
       state.searchQuery = e.target.value;
+      searchClearBtn.style.display = state.searchQuery ? "inline-flex" : "none";
       clearTimeout(searchTimer);
       searchTimer = setTimeout(() => updateView(false), 120);
+    };
+    searchClearBtn.onclick = () => {
+      state.searchQuery = "";
+      searchInputEl.value = "";
+      searchClearBtn.style.display = "none";
+      searchInputEl.focus();
+      updateView(false);
     };
 
     document.getElementById("resetBtn").onclick = () => {
       state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
       state.searchQuery = ""; state.activePath = null; state.focusOnly = true; state.inDocQuery = "";
       searchInputEl.value = "";
+      searchClearBtn.style.display = "none";
       document.getElementById("clearPathBtn").style.display = "none";
       syncCascadingDropdowns(); updateView(true);
     };
