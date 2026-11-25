@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sqlite3
 from collections import Counter, defaultdict
@@ -77,6 +78,152 @@ def score_to_tier(score: int) -> str:
     return "L5"
 
 
+# 同准则家族内条文级语义锚定：通用法条停用词（过滤高频套话，保留高区分度业务术语）
+TERM_STOPWORDS = {
+    "企业", "应当", "按照", "本准则", "规定", "相关", "下列", "有关", "会计", "处理", "进行",
+    "确认", "计量", "披露", "附注", "财务", "报表", "项目", "金额", "发生", "或者", "以及",
+    "可以", "不得", "包括", "是指", "情形", "条件", "资产", "负债", "损益", "当期", "期间",
+    "以后", "之前", "以上", "以下", "其他", "其中", "同时", "满足", "符合", "适用", "除外",
+    "根据", "依据", "通过", "方式", "方法", "原则", "标准", "要求", "信息", "说明", "情况",
+    "影响", "变动", "变化", "调整", "计算", "确定", "判断", "评估", "估计", "分析", "考虑",
+    "存在", "具有", "构成", "属于", "作为", "计入", "转入", "形成", "产生", "导致", "引起",
+    "一项", "一定", "一般", "通常", "合理", "可靠", "主要", "重要", "重大", "具体", "相应",
+    "分别", "各自", "全部", "部分", "相同", "不同", "上述", "前述", "该项", "本条", "前款",
+}
+
+# 财税审高区分度业务短语（命中时给予更高语义权重）
+DOMAIN_ANCHOR_PHRASES = [
+    "主要责任人", "代理人", "可变对价", "合同履约成本", "合同取得成本", "合同资产", "合同负债",
+    "销售退回", "质量保证", "质保", "客户额外购买选择权", "授予知识产权许可", "售后回购",
+    "售后租回", "使用权资产", "租赁负债", "租赁变更", "短期租赁", "低价值资产租赁", "转租赁",
+    "可变租赁付款额", "融资租赁", "经营租赁", "租金减让",
+    "合同变更", "履约义务", "单独售价", "交易价格", "重大融资成分", "非现金对价", "应付客户对价",
+    "某一时段内", "某一时点", "履约进度", "控制权", "预收款", "现金折扣", "亏损合同", "储值卡", "购物卡",
+    "权益法", "成本法", "共同控制", "重大影响", "初始投资成本", "商誉", "公允价值", "账面价值",
+    "非同一控制", "同一控制", "反向购买", "补偿性资产", "分步实现", "合并对价",
+    "预期信用损失", "信用减值", "三阶段", "金融负债", "权益工具", "永续债", "回售权", "减资",
+    "套期保值", "公允价值套期", "现金流量套期", "金融资产转移", "终止确认", "继续涉入",
+    "以权益结算", "以现金结算", "可行权条件", "等待期", "授予日", "限制性股票", "股票期权", "集团股份支付",
+    "暂时性差异", "递延所得税资产", "递延所得税负债", "计税基础", "初始确认豁免", "单项交易",
+    "可兑换性", "即期汇率", "记账本位币", "外币财务报表折算",
+    "研究阶段", "开发阶段", "内部研发", "无形资产摊销", "使用寿命不确定",
+    "预定可使用状态", "固定资产折旧", "弃置费用", "更新改造", "持有待售", "处置组", "终止经营",
+    "与资产相关", "与收益相关", "政府补助", "总额法", "净额法", "财政贴息",
+    "专门借款", "一般借款", "资本化期间", "暂停资本化", "停止资本化",
+    "债务重组", "债权人", "债务人", "以资产清偿债务", "债转股", "修改其他条款",
+    "非货币性资产交换", "商业实质", "换入资产", "换出资产",
+    "PPP项目合同", "社会资本方", "无形资产模式", "金融资产模式", "混合模式",
+    "设定受益计划", "设定提存计划", "辞退福利", "离职后福利", "短期薪酬",
+    "关联方", "关键管理人员", "资金集中管理", "现金流量表", "经营活动", "投资活动", "筹资活动",
+]
+
+
+def extract_semantic_tokens(text: str) -> Counter[str]:
+    """提取文本中的高辨识度中文业务术语与 3-4 字片段，用于同准则家族内条文锚定。"""
+    if not text:
+        return Counter()
+    counts: Counter[str] = Counter()
+    for ph in DOMAIN_ANCHOR_PHRASES:
+        c = text.count(ph)
+        if c > 0:
+            counts[f"P:{ph}"] += c * 3
+    # 提取连续中文片段中的 2-4 字高区分度词
+    for seg in re.findall(r"[\u4e00-\u9fff]{2,}", text):
+        L = len(seg)
+        if L <= 4:
+            if seg not in TERM_STOPWORDS:
+                counts[seg] += 1
+        else:
+            for n in (3, 4):
+                for i in range(0, min(L - n + 1, 24)):
+                    gram = seg[i : i + n]
+                    if gram not in TERM_STOPWORDS:
+                        counts[gram] += 1
+    return counts
+
+
+def build_standard_term_index(std_arts: list[dict]) -> dict | None:
+    """为单部准则的非首条正文构建条文级 IDF 语义索引。"""
+    cand_arts = [a for a in std_arts if a["seq"] > 0 and len(a["text_raw"] or "") >= 20]
+    if len(cand_arts) < 3:
+        return None
+    doc_freq: Counter[str] = Counter()
+    art_vecs: list[tuple[dict, Counter[str]]] = []
+    for a in cand_arts:
+        toks = extract_semantic_tokens(f"{a['heading'] or ''} {a['text_raw'] or ''}")
+        art_vecs.append((a, toks))
+        for t in toks:
+            doc_freq[t] += 1
+    N = len(cand_arts)
+    idf = {t: math.log((N + 1.0) / (df + 0.5)) + 1.0 for t, df in doc_freq.items() if df <= max(3, int(N * 0.45))}
+    return {"idf": idf, "art_vecs": art_vecs}
+
+
+def match_child_to_standard_articles(
+    child_heading: str,
+    child_text: str,
+    std_index: dict | None,
+    std_art_num_map: dict[int, int],
+    top_k: int = 2,
+) -> list[tuple[int, str]]:
+    """将同准则家族的子条文（指南分节/实施问答/官方案例）锚定到主准则具体条文，返回 [(to_art_id, reason), ...]。"""
+    # 1) 优先检测显式同准则条号引用（如「本准则第三十四条」「该准则第16条」）
+    explicit_hits: list[tuple[int, str]] = []
+    seen_ids: set[int] = set()
+    head_and_lead = f"{child_heading or ''} {(child_text or '')[:1600]}"
+    for m in re.finditer(r"(?:本准则|该准则|新收入准则|收入准则|租赁准则|金融工具准则|股份支付准则|长投准则|企业会计准则第\s*0*\d+\s*号[^第]{0,16})第([一二三四五六七八九十百千0-9]+)条", head_and_lead):
+        n = cn_to_int(m.group(1))
+        if n and n > 1 and n in std_art_num_map:
+            aid = std_art_num_map[n]
+            if aid not in seen_ids:
+                seen_ids.add(aid)
+                explicit_hits.append((aid, f"显式指向第{n}条"))
+                if len(explicit_hits) >= top_k:
+                    return explicit_hits
+    if explicit_hits:
+        return explicit_hits
+
+    if not std_index:
+        return []
+
+    # 2) 同准则家族内 IDF 语义重合打分（标题 3x 权重 + 正文前 1800 字）
+    q_toks = extract_semantic_tokens(f"{child_heading or ''} {child_heading or ''} {child_heading or ''} {(child_text or '')[:1800]}")
+    if not q_toks:
+        return []
+    idf = std_index["idf"]
+    scored: list[tuple[float, list[str], dict]] = []
+    for art, a_toks in std_index["art_vecs"]:
+        score = 0.0
+        shared_phrases: list[str] = []
+        for t, q_cnt in q_toks.items():
+            if t not in a_toks or t not in idf:
+                continue
+            w = idf[t] * math.log1p(min(q_cnt, 6)) * math.log1p(min(a_toks[t], 6))
+            if t.startswith("P:"):
+                w *= 2.8
+                shared_phrases.append(t[2:])
+            score += w
+        if score > 0:
+            scored.append((score, shared_phrases, art))
+
+    if not scored:
+        return []
+    scored.sort(key=lambda x: -x[0])
+    best_score = scored[0][0]
+    # 严格置信门槛：需要达到较高重合分值（含专业术语命中更易过阈）
+    min_threshold = 9.0 if scored[0][1] else 14.0
+    if best_score < min_threshold:
+        return []
+
+    results: list[tuple[int, str]] = []
+    for sc, phrases, art in scored[:top_k]:
+        if sc < max(min_threshold, best_score * 0.62):
+            break
+        kw_tag = "、".join(phrases[:2]) if phrases else "条文主题匹配"
+        results.append((art["id"], f"锚定{art['article_no']}（{kw_tag}）"))
+    return results
+
+
 # 财政部实施问答 -> 对应准则编号（0 表示基本准则，'small' 表示小企业会计准则，'ppp' 特殊处理）
 MOF_QA_MAP: dict[str, list[int | str]] = {
     "存货准则": [1],
@@ -86,7 +233,7 @@ MOF_QA_MAP: dict[str, list[int | str]] = {
     "股份支付准则": [11],
     "债务重组准则": [12],
     "收入准则": [14],
-    "PPP会计处理": [14, "interp:14"],
+    "PPP会计处理": ["interp:14"],
     "政府补助准则": [16],
     "借款费用准则": [17],
     "外币折算准则": [19],
@@ -163,6 +310,18 @@ CURATED_CROSS_DOMAIN: list[tuple[str, str, int, str]] = [
     ("audit_csa:1502", "reg:audit_1", 58, "监管衔接：非无保留意见准则与证监会审计类第1号指引"),
     ("audit_csa:1141", "law:criminal_12", 52, "法审衔接：财务舞弊审计应对与刑法背信/舞弊追责"),
 ]
+
+# L5 财政部官方《企业会计准则应用案例》专题 -> 对应核心准则
+MOF_CASE_MAP: dict[str, list[int | str]] = {
+    "股份支付准则应用案例": [11],
+    "收入准则应用案例": [14],
+    "PPP会计处理应用案例": [14, "interp:14"],
+    "所得税准则应用案例": [18],
+    "外币折算准则应用案例": [19],
+    "企业合并准则应用案例": [20],
+    "租赁准则应用案例": [21],
+    "金融工具准则应用案例": [22, 23, 24, 37],
+}
 
 # L5 案例关键词兜底规则（供未来新增案例自动归属）
 CASE_KEYWORD_RULES: list[tuple[list[str], str, str]] = [
@@ -380,35 +539,97 @@ def rebuild_links(db_path: Path) -> dict:
         if rep_id and rep_id in doc_by_id:
             add_link(d["id"], rep_id, "superseded_by", 98, f"效力沿革：已被《{doc_by_id[rep_id]['title']}》替代", link_type="supersedes", dedup_undirected=True)
 
-    # 1.2 应用指南 -> 同号企业会计准则
+    # 预构建全部核心会计准则的条文级语义索引（供同准则家族指南/问答/官方案例下沉）
+    std_term_indices: dict[int, dict | None] = {}
+    for sd_id in set(cas_std_by_num.values()):
+        std_term_indices[sd_id] = build_standard_term_index(arts_by_doc.get(sd_id, []))
+    if "small_cas" in key_to_doc:
+        sc_id = key_to_doc["small_cas"]
+        std_term_indices[sc_id] = build_standard_term_index(arts_by_doc.get(sc_id, []))
+
+    # 1.2 应用指南 -> 同号企业会计准则（分节精准下沉至具体条文 + 文档保底）
     for d in docs:
         if d["domain"] == "accounting" and "应用指南" in d["title"] and d["id"] not in (89, 90):
+            target_std_id = None
+            base_lbl = "核心配套：《应用指南汇编2024》实务指南与例题"
+            sc = 96 if d["status"] == "in_force" else 88
             if "原保险合同" in d["title"] and 25 in cas_std_by_num:
-                add_link(d["id"], cas_std_by_num[25], "companion", 93, "核心配套：2024汇编原保险合同应用指南（适用未执行新保险准则企业）", link_type="guidance", dedup_undirected=True)
+                target_std_id = cas_std_by_num[25]
+                base_lbl = "核心配套：2024汇编原保险合同应用指南"
+                sc = 93
             elif "基本准则" in d["title"] and "可持续" not in d["title"] and 0 in cas_std_by_num:
-                add_link(d["id"], cas_std_by_num[0], "companion", 96, "核心配套：《应用指南汇编2024》基本准则详解", link_type="guidance", dedup_undirected=True)
+                target_std_id = cas_std_by_num[0]
+                base_lbl = "核心配套：《应用指南汇编2024》基本准则详解"
             elif "可持续披露准则——基本准则" in d["title"]:
                 for sd in docs:
                     if sd["doc_type"] == "standard" and "可持续披露准则——基本准则" in sd["title"]:
-                        add_link(d["id"], sd["id"], "companion", 96, "核心配套：可持续披露基本准则官方应用指南", link_type="guidance", dedup_undirected=True)
+                        target_std_id = sd["id"]
+                        base_lbl = "核心配套：可持续披露基本准则官方应用指南"
+                        break
             else:
                 m = re.search(r"企业会计准则第0*(\d+)号", d["title"])
                 if m and int(m.group(1)) in cas_std_by_num:
-                    num = int(m.group(1))
-                    lbl = "核心配套：《应用指南汇编2024》实务指南与例题" if d["status"] == "in_force" else "对应旧版应用指南（2006版）"
-                    sc = 96 if d["status"] == "in_force" else 88
-                    add_link(d["id"], cas_std_by_num[num], "companion", sc, lbl, link_type="guidance", dedup_undirected=True)
+                    target_std_id = cas_std_by_num[int(m.group(1))]
+                    if d["status"] != "in_force":
+                        base_lbl = "对应旧版应用指南（2006版）"
 
-    # 1.3 法律 <-> 实施条例
-    for reg_key, law_key, desc in (
-        ("tax:vat_reg", "tax:vat", "核心配套：增值税法国务院实施条例"),
-        ("tax:cit_reg", "tax:cit", "核心配套：企业所得税法国务院实施条例"),
-        ("tax:iit_reg", "tax:iit", "核心配套：个人所得税法国务院实施条例"),
+            if not target_std_id:
+                continue
+            # 始终保留 1 条文档级首条总配套，确保全貌层不漏连
+            add_link(d["id"], target_std_id, "companion", sc, base_lbl, link_type="guidance", dedup_undirected=True)
+            # 2024 现行指南分节语义下沉至具体条文
+            if d["status"] == "in_force" and target_std_id in std_term_indices:
+                for sec in arts_by_doc.get(d["id"], []):
+                    if sec["seq"] == 0 and len(arts_by_doc.get(d["id"], [])) > 2:
+                        continue
+                    hits = match_child_to_standard_articles(
+                        sec["heading"] or "",
+                        sec["text_raw"] or "",
+                        std_term_indices.get(target_std_id),
+                        art_num_map[target_std_id],
+                        top_k=2,
+                    )
+                    for to_aid, reason in hits:
+                        add_link(
+                            d["id"],
+                            target_std_id,
+                            "companion",
+                            96,
+                            f"指南详解（{sec['article_no'] or ''}{('·' + sec['heading'][:16]) if sec['heading'] else ''}）：{reason}",
+                            from_art=sec["id"],
+                            to_art=to_aid,
+                            link_type="guidance",
+                        )
+
+    # 1.3 法律 <-> 实施条例（解析「XX法第X条所称」实现逐条精准 L1 下沉）
+    for reg_key, law_key, law_short, desc in (
+        ("tax:vat_reg", "tax:vat", "增值税法", "核心配套：增值税法国务院实施条例"),
+        ("tax:cit_reg", "tax:cit", "企业所得税法", "核心配套：企业所得税法国务院实施条例"),
+        ("tax:iit_reg", "tax:iit", "个人所得税法", "核心配套：个人所得税法国务院实施条例"),
     ):
         if reg_key in key_to_doc and law_key in key_to_doc:
-            add_link(key_to_doc[reg_key], key_to_doc[law_key], "companion", 96, desc, link_type="guidance", dedup_undirected=True)
+            reg_id, law_id = key_to_doc[reg_key], key_to_doc[law_key]
+            add_link(reg_id, law_id, "companion", 96, desc, link_type="guidance", dedup_undirected=True)
+            law_cite_re = re.compile(rf"{re.escape(law_short)}第([一二三四五六七八九十百千0-9]+)条")
+            for ra in arts_by_doc.get(reg_id, []):
+                rtxt = ra["text_raw"] or ""
+                seen_law_nums: set[int] = set()
+                for lm in law_cite_re.finditer(rtxt):
+                    lnum = cn_to_int(lm.group(1))
+                    if lnum and lnum in art_num_map[law_id] and lnum not in seen_law_nums:
+                        seen_law_nums.add(lnum)
+                        add_link(
+                            reg_id,
+                            law_id,
+                            "companion",
+                            96,
+                            f"实施条例细化：{ra['article_no'] or ''}解释{law_short}第{lnum}条",
+                            from_art=ra["id"],
+                            to_art=art_num_map[law_id][lnum],
+                            link_type="guidance",
+                        )
 
-    # 1.4 财政部实施问答 -> 对应准则
+    # 1.4 财政部实施问答 -> 对应准则（单题精准下沉至具体条文 + 文档保底）
     for d in docs:
         if "实施问答" not in d["title"]:
             continue
@@ -425,6 +646,26 @@ def rebuild_links(db_path: Path) -> dict:
                         tdid = key_to_doc.get(tgt)
                     if tdid:
                         add_link(d["id"], tdid, "companion", 94, "核心配套：财政部会计司官方实施问答", link_type="guidance", dedup_undirected=True)
+                        if tdid in std_term_indices:
+                            for qa in arts_by_doc.get(d["id"], []):
+                                hits = match_child_to_standard_articles(
+                                    qa["heading"] or "",
+                                    qa["text_raw"] or "",
+                                    std_term_indices.get(tdid),
+                                    art_num_map[tdid],
+                                    top_k=1,
+                                )
+                                for to_aid, reason in hits:
+                                    add_link(
+                                        d["id"],
+                                        tdid,
+                                        "companion",
+                                        94,
+                                        f"实施问答（{qa['article_no'] or ''}）：{reason}",
+                                        from_art=qa["id"],
+                                        to_art=to_aid,
+                                        link_type="guidance",
+                                    )
                         matched_any = True
                 if matched_any:
                     break
@@ -597,20 +838,43 @@ def rebuild_links(db_path: Path) -> dict:
             )
 
     # ==========================================================
-    # L4: 跨域实务衔接（45–59 分，单向去重且不覆盖 L1–L3）
+    # L4: 跨域实务衔接（45–59 分，含高频核验条对条锚点）
     # ==========================================================
+    CURATED_ARTICLE_CROSS: list[tuple[str, int, str, int, int, str]] = [
+        ("cas:14", 4, "tax:vat", 28, 58, "税会条对条：收入控制权转移确认时点 ↔ 增值税纳税义务发生时间"),
+        ("cas:14", 4, "tax:cit", 6, 56, "税会条对条：会计收入确认 ↔ 企业所得税收入总额口径"),
+        ("cas:14", 34, "tax:vat", 7, 56, "税会条对条：主要责任人/代理人（总额/净额） ↔ 增值税价外销售额"),
+        ("cas:4", 14, "tax:cit", 11, 56, "税会条对条：固定资产会计折旧 ↔ 企业所得税折旧税前扣除"),
+        ("cas:4", 14, "tax:cit_reg", 60, 56, "税会条对条：会计折旧年限 ↔ 企业所得税法实施条例最低折旧年限"),
+        ("cas:6", 7, "tax:cit", 30, 56, "税会条对条：内部研发研究/开发阶段划分 ↔ 研发费用加计扣除"),
+        ("cas:6", 7, "tax:cit_reg", 95, 56, "税会条对条：无形资产研发支出 ↔ 研发费用加计扣除实施口径"),
+        ("cas:16", 1, "tax:cit_reg", 26, 54, "税会条对条：政府补助会计处理 ↔ 企税不征税收入（财政拨款）"),
+        ("cas:18", 7, "tax:cit", 5, 58, "税会条对条：资产负债账面价值与计税基础暂时性差异 ↔ 应纳税所得额"),
+        ("cas:36", 1, "tax:admin", 36, 54, "税会条对条：关联方披露 ↔ 关联企业独立交易原则与特别纳税调整"),
+    ]
+    exact_cross_pairs: set[tuple[int, int]] = set()
+    for k1, a1_no, k2, a2_no, sc, note in CURATED_ARTICLE_CROSS:
+        d1, d2 = key_to_doc.get(k1), key_to_doc.get(k2)
+        if not d1 or not d2 or d1 == d2:
+            continue
+        fa = art_num_map[d1].get(a1_no)
+        ta = art_num_map[d2].get(a2_no)
+        if fa and ta:
+            add_link(d1, d2, "cross_domain", sc, note, from_art=fa, to_art=ta, link_type="thematic")
+            exact_cross_pairs.add((min(d1, d2), max(d1, d2)))
+
     for k1, k2, sc, note in CURATED_CROSS_DOMAIN:
         d1 = key_to_doc.get(k1)
         d2 = key_to_doc.get(k2)
         if not d1 or not d2 or d1 == d2:
             continue
         pair = (min(d1, d2), max(d1, d2))
-        if pair in high_tier_pairs:
+        if pair in high_tier_pairs or pair in exact_cross_pairs:
             continue
         add_link(d1, d2, "cross_domain", sc, note, link_type="thematic", dedup_undirected=True)
 
     # ==========================================================
-    # L5: 实务案例与官方解读自动挂接（25–44 分，支持未来增量重跑）
+    # L5: 实务案例与官方解读自动挂接（25–44 分，含单篇官方案例下沉至具体条文）
     # ==========================================================
     for d in docs:
         if d["doc_type"] not in ("case", "interpretation"):
@@ -619,18 +883,57 @@ def rebuild_links(db_path: Path) -> dict:
         rel_k = "applies_to" if d["doc_type"] == "case" else "explains"
         base_label = "实务案例涉及" if d["doc_type"] == "case" else "官方解读对应"
 
-        # 1) 显式引用匹配（按条精准挂接）
         matched_targets: set[int] = set()
+        case_pair_cnt: Counter[int] = Counter()
+
+        # 0) 财政部官方《企业会计准则应用案例》专题精准挂接主准则（单篇案例下沉至具体条文 + 文档保底）
+        if d["doc_type"] == "case":
+            for kw, targets in MOF_CASE_MAP.items():
+                if kw in d["title"]:
+                    for tgt in targets:
+                        tdid = cas_std_by_num.get(tgt) if isinstance(tgt, int) else key_to_doc.get(tgt)
+                        if tdid:
+                            add_link(fdid, tdid, "applies_to", 44, "财政部会计司官方准则应用案例汇编", link_type="applies_to", dedup_undirected=True)
+                            matched_targets.add(tdid)
+                            case_pair_cnt[tdid] += 1
+                            if tdid in std_term_indices:
+                                for ca in arts_by_doc.get(fdid, []):
+                                    hits = match_child_to_standard_articles(
+                                        ca["heading"] or "",
+                                        ca["text_raw"] or "",
+                                        std_term_indices.get(tdid),
+                                        art_num_map[tdid],
+                                        top_k=1,
+                                    )
+                                    for to_aid, reason in hits:
+                                        short_h = (ca["heading"] or "").split("——")[-1][:24]
+                                        add_link(
+                                            fdid,
+                                            tdid,
+                                            "applies_to",
+                                            44,
+                                            f"官方案例（{ca['article_no'] or ''}·{short_h}）：{reason}",
+                                            from_art=ca["id"],
+                                            to_art=to_aid,
+                                            link_type="applies_to",
+                                        )
+                    break
+
+        # 1) 显式引用匹配（按条精准挂接，每对文档最多保留 4 条代表性条文引用）
         for a in arts_by_doc.get(fdid, []):
             txt = f"{d['title']} {a['heading'] or ''} {a['text_raw'] or ''}"
             for m in full_cite_re.finditer(txt):
                 tdid = resolve_alias(m.group(1).strip())
-                if not tdid or tdid == fdid:
+                if not tdid or tdid == fdid or tdid in (89, 90):
+                    continue
+                if case_pair_cnt[tdid] >= 4:
                     continue
                 t_art_no = cn_to_int(m.group(2)) if m.group(2) else None
                 has_exact = bool(t_art_no and t_art_no in art_num_map[tdid])
+                if tdid == key_to_doc.get("cas:0") and not has_exact:
+                    continue
                 to_art_id = art_num_map[tdid][t_art_no] if has_exact else first_art_by_doc.get(tdid)
-                sc = 40 if d["doc_type"] == "interpretation" else (38 if has_exact else 34)
+                sc = 40 if d["doc_type"] == "interpretation" else (42 if has_exact else 36)
                 add_link(
                     fdid,
                     tdid,
@@ -642,6 +945,7 @@ def rebuild_links(db_path: Path) -> dict:
                     link_type=rel_k,
                 )
                 matched_targets.add(tdid)
+                case_pair_cnt[tdid] += 1
 
         # 2) 案例关键词自动兜底（针对未写全称书名号的案例）
         if d["doc_type"] == "case":

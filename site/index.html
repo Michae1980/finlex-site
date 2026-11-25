@@ -499,6 +499,35 @@
     .article-source-note a { color: var(--primary); text-decoration: none; font-weight: 500; }
     .article-source-note a:hover { text-decoration: underline; }
 
+    /* 单条法条内嵌「默认折叠」关联抽屉（克制不抢正文视觉） */
+    .article-head-actions { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; }
+    .art-link-btn {
+      border: 1px solid var(--border); background: #f8fafc; color: var(--ink-secondary);
+      padding: 2px 8px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 500;
+      cursor: pointer; white-space: nowrap; transition: all 0.14s ease;
+    }
+    .art-link-btn:hover { border-color: var(--primary-border); color: var(--primary); background: var(--primary-soft); }
+    .art-link-btn.open { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); font-weight: 600; }
+    .art-links-drawer {
+      margin-top: 10px; padding: 9px 11px; border-radius: 8px;
+      background: #f8fafc; border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .art-link-row {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+      padding: 6px 8px; border-radius: 6px; background: var(--surface);
+      border: 1px solid var(--border); border-left-width: 3px;
+      font-size: 12px; line-height: 1.45;
+    }
+    .art-link-row.tl-l1 { border-left-color: #059669; }
+    .art-link-row.tl-l2 { border-left-color: #2563eb; }
+    .art-link-row.tl-l3 { border-left-color: #94a3b8; }
+    .art-link-row.tl-l4 { border-left-color: #d97706; }
+    .art-link-row.tl-l5 { border-left-color: #e11d48; border-left-style: dashed; }
+    .art-link-main { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .art-link-title { font-weight: 600; color: var(--ink); font-size: 12px; }
+    .art-link-note { color: var(--ink-muted); font-size: 11px; }
+
     .strength-filter-bar {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
       background: var(--surface-subtle); padding: 4px; border-radius: 10px; border: 1px solid var(--border);
@@ -912,6 +941,9 @@
       activeTab: "detail",       // "detail" | "relations"
       strengthFilter: "all",     // "all" | "strong" | "strong_medium" | "weak"
       inDocQuery: "",
+      onlyLinkedArticles: false,
+      expandedArtLinks: new Set(),
+      expandedArtLinksAll: new Set(),
       articleRenderLimit: 80,
       zoom: 1.0,
       activePath: null,
@@ -1834,7 +1866,10 @@
 
           <div class="section-label">
             <span>正文条文（共 ${d.article_count} 条）</span>
-            <span id="articleMatchCount" style="font-weight:400;"></span>
+            <span style="display:inline-flex;align-items:center;gap:8px;font-weight:400;">
+              <span id="articleMatchCount"></span>
+              <button type="button" class="mini-btn" id="onlyLinkedArtsBtn" style="display:none" onclick="toggleOnlyLinkedArticles()"></button>
+            </span>
           </div>
           <div class="in-doc-controls">
             <input class="in-doc-search" id="inDocSearchInput" type="search" value="${escapeHTML(state.inDocQuery)}" placeholder="在本文件条文中检索关键词或条号..." />
@@ -2032,23 +2067,92 @@
         }
         filtered = hits;
       }
-      if (countEl) countEl.textContent = parsed.groups.length ? `匹配 ${filtered.length}/${articles.length} 条` : "";
+      const linkedTotal = articles.filter(a => Array.isArray(a.links) && a.links.length > 0).length;
+      const linkedBtn = document.getElementById("onlyLinkedArtsBtn");
+      if (linkedBtn) {
+        if (linkedTotal > 0 && articles.length >= 6) {
+          linkedBtn.style.display = "inline-flex";
+          linkedBtn.classList.toggle("primary", state.onlyLinkedArticles);
+          linkedBtn.textContent = state.onlyLinkedArticles
+            ? `✓ 仅看有关联条文（${linkedTotal}/${articles.length}）`
+            : `🔗 仅看有关联条文（${linkedTotal}/${articles.length}）`;
+        } else {
+          linkedBtn.style.display = "none";
+        }
+      }
+
+      if (state.onlyLinkedArticles && linkedTotal > 0) {
+        filtered = filtered.filter(({ a }) => Array.isArray(a.links) && a.links.length > 0);
+      }
+      if (countEl) countEl.textContent = (parsed.groups.length || state.onlyLinkedArticles) ? `显示 ${filtered.length}/${articles.length} 条` : "";
 
       const slice = filtered.slice(0, state.articleRenderLimit);
       const bottomSourceHTML = (doc.source_kind === "third_party" && doc.source_url)
         ? `<div class="article-source-note">信息来源：<a href="${escapeHTML(doc.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(doc.source_name)} — ${escapeHTML(doc.title)} ↗</a></div>`
         : "";
-      box.innerHTML = slice.map(({ a, idx }) => `
+      box.innerHTML = slice.map(({ a, idx }) => {
+        const aLinks = Array.isArray(a.links) ? a.links : [];
+        const isOpen = state.expandedArtLinks.has(a.id);
+        const showAllLinks = state.expandedArtLinksAll.has(a.id);
+        const shownLinks = showAllLinks ? aLinks : aLinks.slice(0, 5);
+        const linksDrawerHTML = (isOpen && aLinks.length)
+          ? `<div class="art-links-drawer">
+              ${shownLinks.map(lk => {
+                const td = docById[lk.doc_id];
+                if (!td) return "";
+                const tCls = (lk.tier || "L3").toLowerCase();
+                const tArt = lk.target_art_no || "正文";
+                return `<div class="art-link-row tl-${tCls}">
+                  <div class="art-link-main">
+                    <div class="art-link-title">
+                      <span class="tier-tag t-${tCls}" style="margin-right:5px;">${escapeHTML(lk.tier || "L3")}</span>
+                      ${escapeHTML(td.display_title || td.title)}
+                      ${tArt ? `<span style="font-weight:400;color:var(--ink-muted);margin-left:4px;">${escapeHTML(tArt)}</span>` : ""}
+                    </div>
+                    ${lk.note ? `<div class="art-link-note">${escapeHTML(lk.note)}</div>` : ""}
+                  </div>
+                  <button type="button" class="mini-btn primary" onclick="jumpToDocArticle(${td.id}, ${lk.target_seq || 0})">定位</button>
+                </div>`;
+              }).join("")}
+              ${(!showAllLinks && aLinks.length > 5) ? `<div style="text-align:right;"><button type="button" class="mini-btn" onclick="expandAllArtLinks(${doc.id}, ${a.id})">展开其余 ${aLinks.length - 5} 条关联</button></div>` : ""}
+            </div>`
+          : "";
+        return `
         <div class="article-card" id="art-card-${idx}">
           <div class="article-head">
             <span class="article-no">${highlightText(a.no || `第${a.seq}条`, q)}${a.heading ? ` · ${highlightText(a.heading, q)}` : ""}</span>
-            <button class="mini-btn" onclick="copyCitation(${doc.id}, '${escapeHTML(a.no).replace(/'/g, "\\'")}')">📋 复制引用</button>
+            <span class="article-head-actions">
+              ${aLinks.length ? `<button type="button" class="art-link-btn ${isOpen ? "open" : ""}" onclick="toggleArtLinks(${doc.id}, ${a.id})">🔗 关联 ${aLinks.length}</button>` : ""}
+              <button class="mini-btn" onclick="copyCitation(${doc.id}, '${escapeHTML(a.no).replace(/'/g, "\\'")}')">📋 复制引用</button>
+            </span>
           </div>
           <div class="article-text">${highlightText(a.text, q)}</div>
+          ${linksDrawerHTML}
         </div>
-      `).join("") + (filtered.length > state.articleRenderLimit
+      `;
+      }).join("") + (filtered.length > state.articleRenderLimit
         ? `<div style="text-align:center;margin:10px 0;"><button class="toggle-btn active" onclick="expandMoreArticles(${doc.id})">展开更多条文（剩余 ${filtered.length - state.articleRenderLimit} 条）</button></div>`
         : "") + bottomSourceHTML;
+    }
+
+    function toggleArtLinks(docId, artId) {
+      if (state.expandedArtLinks.has(artId)) state.expandedArtLinks.delete(artId);
+      else state.expandedArtLinks.add(artId);
+      const d = docById[docId];
+      if (d) renderArticlesList(d, docArticlesCache[docId] || []);
+    }
+
+    function expandAllArtLinks(docId, artId) {
+      state.expandedArtLinksAll.add(artId);
+      const d = docById[docId];
+      if (d) renderArticlesList(d, docArticlesCache[docId] || []);
+    }
+
+    function toggleOnlyLinkedArticles() {
+      state.onlyLinkedArticles = !state.onlyLinkedArticles;
+      state.articleRenderLimit = 80;
+      const d = docById[state.selectedDocId];
+      if (d) renderArticlesList(d, docArticlesCache[d.id] || []);
     }
 
     function expandMoreArticles(docId) {
@@ -2061,6 +2165,9 @@
       state.selectedDocId = id;
       // 若当前有全库检索词且该文档正文命中，自动带入抽屉内条文搜索实现精准高亮定位
       state.inDocQuery = (state.searchQuery.trim() && fulltextHitMap[id]) ? state.searchQuery.trim() : "";
+      state.onlyLinkedArticles = false;
+      state.expandedArtLinks.clear();
+      state.expandedArtLinksAll.clear();
       state.articleRenderLimit = 80;
       state.selectedEdgeId = null;
       updateView(false);
@@ -2070,6 +2177,9 @@
     function jumpToDoc(id) {
       state.selectedDocId = id;
       state.inDocQuery = "";
+      state.onlyLinkedArticles = false;
+      state.expandedArtLinks.clear();
+      state.expandedArtLinksAll.clear();
       state.articleRenderLimit = 80;
       state.activeTab = "detail";
       if (!currentView.coreIds.has(id)) {

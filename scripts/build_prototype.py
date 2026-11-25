@@ -663,6 +663,67 @@ def build_from_db(db_path: Path) -> dict:
         encoding="utf-8",
     )
 
+    # 构建单条法条级精准关联（直接嵌入各文档的 doc_<id>.js，保持首屏 index.js 体积零增加）
+    art_links_raw: dict[int, list[dict]] = defaultdict(list)
+    doc_art_counts = {did: len(al) for did, al in articles_by_doc.items()}
+    for row in raw_links:
+        fd = row["from_doc_id"]
+        td = row["to_doc_id"]
+        if fd not in doc_ids_set or td not in doc_ids_set or fd == td:
+            continue
+        f_aid = row["from_article_id"]
+        t_aid = row["to_article_id"]
+        f_seq = int(row["from_seq"] or 0)
+        t_seq = int(row["to_seq"] or 0)
+        score = int(row["score"] or 60)
+        tier = row["tier"] or "L3"
+        rel_kind = row["rel_kind"] or "cites"
+        note, _ = clean_text(row["note"])
+
+        # 多条法规的首条（seq=0）跳过纯文档级 seq=0 <-> seq=0 泛化兜底边（已在顶部全貌胶囊条呈现）
+        is_generic_root = (f_seq == 0 and t_seq == 0)
+        if not (is_generic_root and doc_art_counts.get(fd, 0) >= 5):
+            art_links_raw[f_aid].append(
+                {
+                    "doc_id": td,
+                    "tier": tier,
+                    "score": score,
+                    "rel_kind": rel_kind,
+                    "target_seq": t_seq,
+                    "target_art_no": (row["to_art_no"] or "").strip(),
+                    "dir": "out",
+                    "note": note,
+                }
+            )
+        if not (is_generic_root and doc_art_counts.get(td, 0) >= 5):
+            art_links_raw[t_aid].append(
+                {
+                    "doc_id": fd,
+                    "tier": tier,
+                    "score": score,
+                    "rel_kind": rel_kind,
+                    "target_seq": f_seq,
+                    "target_art_no": (row["from_art_no"] or "").strip(),
+                    "dir": "in",
+                    "note": note,
+                }
+            )
+
+    for did, art_list in articles_by_doc.items():
+        for a in art_list:
+            raw_al = art_links_raw.get(a["id"])
+            if not raw_al:
+                continue
+            # 按 (doc_id, target_seq) 去重取最高分，按分值降序最多保留 12 条高价值条文关联
+            best_al: dict[tuple[int, int], dict] = {}
+            for item in raw_al:
+                k = (item["doc_id"], item["target_seq"])
+                if k not in best_al or item["score"] > best_al[k]["score"]:
+                    best_al[k] = item
+            sorted_al = sorted(best_al.values(), key=lambda x: (-x["score"], x["doc_id"], x["target_seq"]))[:12]
+            if sorted_al:
+                a["links"] = sorted_al
+
     for doc_id in doc_ids_set:
         doc_payload = {"id": doc_id, "articles": articles_by_doc.get(doc_id, [])}
         doc_js_path = DOCS_DIR / f"doc_{doc_id}.js"
