@@ -53,8 +53,10 @@ DOC_TYPE_META = [
 
 STATUS_META = [
     {"id": "in_force", "label": "现行有效"},
-    {"id": "superseded", "label": "已有新版替代"},
-    {"id": "pending", "label": "待补充电子原文"},
+    {"id": "will_replace", "label": "现行·即将替代"},
+    {"id": "upcoming", "label": "尚未生效"},
+    {"id": "outdated", "label": "非最新版"},
+    {"id": "pending", "label": "占位待补"},
 ]
 
 # 问题域权威权重（参考 finlex/docs/04-交叉联想设计.md，数值越小权威越高）
@@ -388,6 +390,39 @@ def build_from_db(db_path: Path) -> dict:
         compact_text = re.sub(r"\s+", " ", text_clean)
         fulltext_rows.append([row["document_id"], art_no, heading_clean, compact_text])
 
+    # 预先建立文档查找表与企业会计准则最新版本年份映射（用于自动识别 2006 旧版应用指南冲突）
+    raw_doc_map = {r["id"]: r for r in raw_docs}
+    today_iso = dt.date.today().isoformat()
+    cas_latest_std: dict[int, dict] = {}
+    for r in raw_docs:
+        if r["domain"] == "accounting" and r["doc_type"] == "standard" and "企业会计准则第" in (r["title"] or ""):
+            m_num = re.search(r"第0*(\d+)号", r["title"])
+            if m_num:
+                num = int(m_num.group(1))
+                dno_m = re.search(r"〔(\d{4})〕", r["doc_no"] or "")
+                pub_y = (r["pub_date"] or "")[:4]
+                eff_y = (r["effective_date"] or "")[:4]
+                rev_y = dno_m.group(1) if dno_m else (pub_y if pub_y >= "2014" else eff_y)
+                prev = cas_latest_std.get(num)
+                if not prev or rev_y > prev["year"]:
+                    cas_latest_std[num] = {
+                        "year": rev_y,
+                        "doc_no": (r["doc_no"] or "").strip(),
+                        "title": (r["title"] or "").strip(),
+                    }
+
+    def detect_date_warning(r: sqlite3.Row) -> str:
+        pdate = (r["pub_date"] or "").strip()
+        edate = (r["effective_date"] or "").strip()
+        dno = (r["doc_no"] or "").strip()
+        if not pdate or not edate:
+            return "发布或生效日期缺失，待核校（正文为现行版）"
+        if pdate in ("2026-09-14", "2026-09-15"):
+            return "发布日期疑似为批量入库日期，待核校（正文为现行版）"
+        if ("2014" in dno and pdate < "2014") or ("2017" in dno and pdate < "2017") or (pdate == "2008-06-18" and edate >= "2014"):
+            return "发布日期元数据与修订版次不符，待核校（正文已为修订版）"
+        return ""
+
     documents: list[dict] = []
     doc_ids_set: set[int] = set()
     topic_labels: dict[str, str] = {}
@@ -400,9 +435,57 @@ def build_from_db(db_path: Path) -> dict:
         summary, h2 = clean_text(row["summary"])
         privacy_redactions += h1 + h2
 
+        pub_date_str = (row["pub_date"] or "").strip()
+        eff_date_str = (row["effective_date"] or "").strip()
+        doc_no_str = (row["doc_no"] or "").strip()
+        rep_id = row["replaced_by_doc_id"]
+        rep_row = raw_doc_map.get(rep_id) if rep_id else None
+
         eff_status = row["status"] or "in_force"
-        if row["replaced_by_doc_id"] is not None:
-            eff_status = "superseded"
+        version_level = ""
+        version_note = ""
+
+        # 1. 占位总目录条目（无具体条文正文）
+        if doc_id in (89, 90) or eff_status == "pending":
+            eff_status = "pending"
+            version_level = "stub"
+            version_note = "占位说明：本条仅含收录/获取说明，不含具体应用指南条文"
+        # 2. 尚未生效的已发布新版（effective_date > today）
+        elif eff_date_str and eff_date_str > today_iso:
+            eff_status = "upcoming"
+            version_level = "upcoming"
+            version_note = f"尚未生效：将于 {eff_date_str} 起施行，当前过渡期仍适用现行旧版"
+        # 3. 已有替代新版（区分「新版尚未生效→现行·即将替代」与「新版已生效→非最新版」）
+        elif rep_row is not None:
+            rep_eff = (rep_row["effective_date"] or "").strip()
+            rep_title = (rep_row["title"] or "").strip()
+            if rep_eff and rep_eff > today_iso:
+                eff_status = "will_replace"
+                version_level = "will_replace"
+                version_note = f"现行有效（即将替代）：已发布新版《{rep_title}》，将于 {rep_eff} 起施行"
+            else:
+                eff_status = "outdated"
+                version_level = "conflict"
+                version_note = f"非最新版：已被《{rep_title}》替代"
+        # 4. 2006版企业会计准则分则应用指南（财会〔2006〕18号）核查
+        elif row["domain"] == "accounting" and "应用指南" in title and "财会〔2006〕18号" in doc_no_str:
+            eff_status = "outdated"
+            m_num = re.search(r"第0*(\d+)号", title)
+            std_info = cas_latest_std.get(int(m_num.group(1))) if m_num else None
+            if std_info and std_info["year"] >= "2014":
+                version_level = "conflict"
+                dno_tag = f"（{std_info['doc_no']}）" if std_info["doc_no"] else ""
+                version_note = f"非最新版（与新准则冲突）：本指南为2006旧版，对应准则已于{std_info['year']}年修订{dno_tag}，请以《应用指南汇编2024》及财政部实施问答为准"
+            else:
+                version_level = "stale"
+                version_note = "非最新版：本指南为2006年版，财政部已出版《企业会计准则应用指南汇编2024》并吸收历年准则解释修订"
+        # 5. 特殊修订动态提示（税收征管法修订草案已初审但2015版仍现行有效）
+        elif doc_id == 76:
+            eff_status = "in_force"
+            version_level = "info"
+            version_note = "2015版现行有效；修订草案已于2026年11月经全国人大常委会初审，尚未通过施行"
+
+        date_warning = detect_date_warning(row)
 
         source_url, source_kind = sanitize_url(row["source_url"])
         arts = articles_by_doc.get(doc_id, [])
@@ -420,12 +503,15 @@ def build_from_db(db_path: Path) -> dict:
             "display_title": display_title,
             "series_badge": series_badge,
             "revision_badge": revision_badge,
-            "doc_no": (row["doc_no"] or "").strip() or "待核实",
+            "doc_no": doc_no_str or "待核实",
             "issuer": (row["issuer"] or "").strip() or "待核实",
-            "pub_date": (row["pub_date"] or "").strip() or "待核实",
-            "effective_date": (row["effective_date"] or "").strip() or "待核实",
+            "pub_date": pub_date_str or "待核实",
+            "effective_date": eff_date_str or "待核实",
             "status": eff_status,
-            "replaced_by_doc_id": row["replaced_by_doc_id"],
+            "version_level": version_level,
+            "version_note": version_note,
+            "date_warning": date_warning,
+            "replaced_by_doc_id": rep_id,
             "source_name": (row["source_name"] or "").strip() or (row["issuer"] or "官方渠道"),
             "source_url": source_url,
             "source_kind": source_kind,
