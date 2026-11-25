@@ -436,6 +436,33 @@
     .chip a { color: var(--primary); text-decoration: none; font-weight: 500; }
     .chip a:hover { text-decoration: underline; }
 
+    /* 全貌快捷胶囊条（Tab 1 头部下方，克制呈现 L1-L5 计数与 L1 核心配套直达） */
+    .overview-strip {
+      margin-top: 10px; padding: 10px 14px; border-radius: var(--radius-md);
+      background: #f8fafc; border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .overview-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .overview-label { font-size: 11.5px; font-weight: 600; color: var(--ink-muted); flex-shrink: 0; margin-right: 2px; }
+    .overview-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      border: 1px solid var(--border); background: var(--surface); color: var(--ink-secondary);
+      padding: 2px 9px; border-radius: var(--radius-pill); font-size: 11.5px; font-weight: 500;
+      cursor: pointer; transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
+    }
+    .overview-pill:hover { border-color: var(--primary-border); color: var(--primary); background: var(--primary-soft); }
+    .overview-pill .dot { width: 6px; height: 6px; }
+    .overview-quick {
+      display: inline-flex; align-items: center; gap: 4px;
+      border: 1px solid #cbd5e1; border-left: 2.5px solid #059669;
+      background: var(--surface); color: var(--ink);
+      padding: 2px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 500;
+      cursor: pointer; max-width: 240px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
+    }
+    .overview-quick:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+    .rel-group-title.flash-group { background: var(--primary-soft); color: var(--primary); transition: background 0.3s ease; }
+
     .warn-banner {
       background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-ink);
       border-radius: var(--radius-md); padding: 10px 14px; font-size: 12.5px; margin-bottom: 12px;
@@ -914,11 +941,145 @@
         .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
 
+    // 财税审高频简称与标准编号同义扩展词典
+    const SEARCH_SYNONYMS = {
+      "长投": ["长期股权投资"],
+      "固资": ["固定资产"],
+      "无资": ["无形资产"],
+      "非货": ["非货币性资产交换"],
+      "投房": ["投资性房地产"],
+      "合报": ["合并财务报表"],
+      "现流": ["现金流量表"],
+      "现流表": ["现金流量表"],
+      "股支": ["股份支付"],
+      "债重": ["债务重组"],
+      "政补": ["政府补助"],
+      "职薪": ["职工薪酬"],
+      "金工": ["金融工具"],
+      "企税": ["企业所得税"],
+      "个税": ["个人所得税"],
+      "增税": ["增值税"],
+      "土增": ["土地增值税"],
+      "土增税": ["土地增值税"],
+      "印花": ["印花税"],
+      "征管法": ["税收征收管理法"],
+      "专票": ["增值税专用发票", "专用发票"],
+      "普票": ["普通发票"],
+      "加计扣除": ["研发费用"],
+      "留抵": ["留抵退税", "留抵税额"],
+      "注会法": ["注册会计师法"],
+      "非标": ["非无保留意见", "非标准审计"],
+      "底稿": ["审计工作底稿"],
+      "内控": ["内部控制"],
+      "联方": ["关联方"],
+      "esg": ["可持续披露", "可持续信息披露"],
+      "小企业": ["小企业会计准则"],
+      "总额法": ["主要责任人"],
+      "净额法": ["代理人"],
+      "政府会计": ["政府会计准则", "政府会计制度"],
+      "民间非营利": ["民间非营利组织会计制度"]
+    };
+
+    let _cachedQueryRaw = null;
+    let _cachedQueryParsed = null;
+
+    function parseSearchQuery(rawQuery) {
+      const raw = String(rawQuery || "").trim();
+      if (raw === _cachedQueryRaw && _cachedQueryParsed) return _cachedQueryParsed;
+      if (!raw) {
+        _cachedQueryRaw = "";
+        _cachedQueryParsed = { raw: "", groups: [], allMask: 0, flatVariants: [], highlightRegex: null, expandedHints: [] };
+        return _cachedQueryParsed;
+      }
+
+      // 将 "CAS 14"、"CSA 1141"、"解释 18" 合并为单个词组，再按空白分词实现多词 AND 检索
+      const normalized = raw
+        .replace(/\b(cas|csa)\s+(\d{1,4})\b/gi, "$1$2")
+        .replace(/解释\s*第?\s*(\d{1,2})\s*号?/g, "解释$1");
+
+      const tokens = normalized.split(/\s+/).filter(Boolean).slice(0, 12);
+      const groups = [];
+      const expandedHints = [];
+      const allVariantSet = new Set();
+
+      tokens.forEach(tok => {
+        const lower = tok.toLowerCase();
+        const vSet = new Set([lower]);
+
+        const casMatch = lower.match(/^cas0*(\d{1,2})$/);
+        if (casMatch) {
+          const n = casMatch[1];
+          vSet.add(`cas${n}`);
+          vSet.add(`cas ${n}`);
+          vSet.add(`第${n}号`);
+          vSet.add(`企业会计准则第${n}号`);
+          expandedHints.push(`${tok}→第${n}号`);
+        }
+
+        const csaMatch = lower.match(/^csa(\d{4})$/);
+        if (csaMatch) {
+          const n = csaMatch[1];
+          vSet.add(`csa ${n}`);
+          vSet.add(`第${n}号`);
+          vSet.add(`审计准则第${n}号`);
+          expandedHints.push(`${tok}→审计第${n}号`);
+        }
+
+        const expMatch = lower.match(/^解释(\d{1,2})$/);
+        if (expMatch) {
+          const n = expMatch[1];
+          vSet.add(`解释第${n}号`);
+          vSet.add(`企业会计准则解释第${n}号`);
+          expandedHints.push(`${tok}→解释第${n}号`);
+        }
+
+        if (SEARCH_SYNONYMS[lower]) {
+          SEARCH_SYNONYMS[lower].forEach(syn => vSet.add(syn.toLowerCase()));
+          expandedHints.push(`${tok}→${SEARCH_SYNONYMS[lower][0]}`);
+        }
+
+        const variants = [...vSet];
+        variants.forEach(v => allVariantSet.add(v));
+        groups.push({ raw: tok, variants });
+      });
+
+      const flatVariants = [...allVariantSet].sort((a, b) => b.length - a.length);
+      const highlightRegex = flatVariants.length
+        ? new RegExp(`(${flatVariants.map(v => escapeHTML(v).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`, "gi")
+        : null;
+      const allMask = groups.length ? ((1 << groups.length) - 1) : 0;
+
+      _cachedQueryRaw = raw;
+      _cachedQueryParsed = { raw, groups, allMask, flatVariants, highlightRegex, expandedHints };
+      return _cachedQueryParsed;
+    }
+
+    function getMatchMask(haystackLower, groups) {
+      let mask = 0;
+      for (let g = 0; g < groups.length; g++) {
+        const variants = groups[g].variants;
+        for (let k = 0; k < variants.length; k++) {
+          if (haystackLower.includes(variants[k])) {
+            mask |= (1 << g);
+            break;
+          }
+        }
+      }
+      return mask;
+    }
+
+    function countBits(n) {
+      let c = 0;
+      while (n) { n &= (n - 1); c += 1; }
+      return c;
+    }
+
     function highlightText(text, q) {
       const safe = escapeHTML(text);
       if (!q) return safe;
-      const escQ = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      return safe.replace(new RegExp(`(${escQ})`, "gi"), "<mark>$1</mark>");
+      const parsed = parseSearchQuery(q);
+      if (!parsed.highlightRegex) return safe;
+      return safe.replace(parsed.highlightRegex, "<mark>$1</mark>");
     }
 
     function hasValidDocNo(d) {
@@ -926,33 +1087,72 @@
     }
 
     function extractSnippet(text, q) {
-      const idx = text.toLowerCase().indexOf(q.toLowerCase());
-      if (idx < 0) return text.slice(0, 96) + (text.length > 96 ? "…" : "");
-      const start = Math.max(0, idx - 26);
-      const end = Math.min(text.length, idx + q.length + 58);
+      const parsed = typeof q === "string" ? parseSearchQuery(q) : q;
+      const lower = text.toLowerCase();
+      let bestIdx = -1;
+      let matchLen = 0;
+      const variants = parsed && parsed.flatVariants ? parsed.flatVariants : [];
+      for (let i = 0; i < variants.length; i++) {
+        const idx = lower.indexOf(variants[i]);
+        if (idx >= 0 && (bestIdx < 0 || idx < bestIdx)) {
+          bestIdx = idx;
+          matchLen = variants[i].length;
+        }
+      }
+      if (bestIdx < 0) return text.slice(0, 96) + (text.length > 96 ? "…" : "");
+      const start = Math.max(0, bestIdx - 26);
+      const end = Math.min(text.length, bestIdx + matchLen + 58);
       return (start > 0 ? "…" : "") + text.slice(start, end) + (end < text.length ? "…" : "");
     }
 
-    function computeFulltextHits(qLower) {
+    function computeFulltextHits(parsed, metaMaskByDoc) {
       const map = {};
-      if (!qLower || !fulltextRows) return map;
+      if (!parsed || !parsed.groups.length || !fulltextRows) return map;
+      const groups = parsed.groups;
+      const allMask = parsed.allMask;
       for (let i = 0; i < fulltextRows.length; i++) {
         const [docId, artNo, heading, text] = fulltextRows[i];
-        const hitInText = text.toLowerCase().includes(qLower);
-        const hitInHead = heading && heading.toLowerCase().includes(qLower);
-        if (hitInText || hitInHead) {
-          if (!map[docId]) {
-            const snippetSrc = hitInText ? text : heading;
-            map[docId] = {
-              count: 1,
-              artNo: artNo || "条文",
-              snippet: `${artNo ? artNo + "：" : ""}${extractSnippet(snippetSrc, qLower)}`
-            };
-          } else {
-            map[docId].count += 1;
+        const textLower = text.toLowerCase();
+        const headLower = heading ? heading.toLowerCase() : "";
+        const noLower = artNo ? artNo.toLowerCase() : "";
+        const artMask = getMatchMask(`${noLower} ${headLower} ${textLower}`, groups);
+        if (!artMask) continue;
+
+        const metaMask = metaMaskByDoc[docId] || 0;
+        const neededBodyMask = (allMask & (~metaMask)) || allMask;
+        const hitNeeded = (artMask & neededBodyMask) === neededBodyMask;
+        const hitAll = artMask === allMask;
+        const artScore = (hitAll ? 100 : 0) + (hitNeeded ? 50 : 0) + countBits(artMask & neededBodyMask) * 10 + countBits(artMask);
+
+        let rec = map[docId];
+        if (!rec) {
+          const snippetSrc = getMatchMask(textLower, groups) ? text : (heading || text);
+          rec = map[docId] = {
+            unionMask: artMask,
+            neededCount: hitNeeded ? 1 : 0,
+            cooccurCount: hitAll ? 1 : 0,
+            anyCount: 1,
+            count: 1,
+            bestScore: artScore,
+            artNo: artNo || "条文",
+            snippet: `${artNo ? artNo + "：" : ""}${extractSnippet(snippetSrc, parsed)}`
+          };
+        } else {
+          rec.unionMask |= artMask;
+          rec.anyCount += 1;
+          if (hitNeeded) rec.neededCount += 1;
+          if (hitAll) rec.cooccurCount += 1;
+          if (artScore > rec.bestScore) {
+            const snippetSrc = getMatchMask(textLower, groups) ? text : (heading || text);
+            rec.bestScore = artScore;
+            rec.artNo = artNo || "条文";
+            rec.snippet = `${artNo ? artNo + "：" : ""}${extractSnippet(snippetSrc, parsed)}`;
           }
         }
       }
+      Object.values(map).forEach(rec => {
+        rec.count = rec.neededCount > 0 ? rec.neededCount : rec.anyCount;
+      });
       return map;
     }
 
@@ -1077,34 +1277,43 @@
     function updateView(autoFit = false) {
       let matched = filterByTopic(filterByStatus(filterByType(filterByDomain(DATA.documents))));
       const q = state.searchQuery.trim();
-      const qLower = q.toLowerCase();
+      const parsedQ = parseSearchQuery(q);
+      const hasQ = parsedQ.groups.length > 0;
 
-      fulltextHitMap = qLower ? computeFulltextHits(qLower) : {};
-
-      if (qLower) {
-        matched = matched.filter(d => {
-          const metaHit =
-            d.title.toLowerCase().includes(qLower) ||
-            (d.series_badge || "").toLowerCase().includes(qLower) ||
-            (d.display_title || "").toLowerCase().includes(qLower) ||
-            (hasValidDocNo(d) && d.doc_no.toLowerCase().includes(qLower)) ||
-            d.issuer.toLowerCase().includes(qLower) ||
-            (d.summary || "").toLowerCase().includes(qLower) ||
-            (d.first_preview || "").toLowerCase().includes(qLower);
-          return metaHit || Boolean(fulltextHitMap[d.id]);
+      const metaMaskByDoc = {};
+      const titleScoreByDoc = {};
+      if (hasQ) {
+        matched.forEach(d => {
+          const titleHay = `${d.title} ${d.series_badge || ""} ${d.display_title || ""} ${hasValidDocNo(d) ? d.doc_no : ""}`.toLowerCase();
+          const metaHay = `${titleHay} ${d.issuer || ""} ${d.summary || ""} ${d.first_preview || ""}`.toLowerCase();
+          metaMaskByDoc[d.id] = getMatchMask(metaHay, parsedQ.groups);
+          titleScoreByDoc[d.id] = countBits(getMatchMask(titleHay, parsedQ.groups));
         });
       }
 
-      // 排序：非案例优先 -> 检索时标题/文号命中优先 + 正文命中条数 -> 权威权重 -> 现行有效 -> 关联度
+      fulltextHitMap = hasQ ? computeFulltextHits(parsedQ, metaMaskByDoc) : {};
+
+      if (hasQ) {
+        matched = matched.filter(d => {
+          const mMask = metaMaskByDoc[d.id] || 0;
+          const ftMask = fulltextHitMap[d.id]?.unionMask || 0;
+          return (mMask | ftMask) === parsedQ.allMask;
+        });
+      }
+
+      // 排序：非案例优先 -> 检索时标题/文号命中词组数优先 -> 权威权重 -> 正文同条共现/命中条数 -> 现行有效 -> 关联度
       matched = matched.slice().sort((a, b) => {
         if (a.is_case !== b.is_case) return a.is_case ? 1 : -1;
-        if (qLower) {
-          const aTitle = a.title.toLowerCase().includes(qLower) || (a.series_badge || "").toLowerCase().includes(qLower) || a.doc_no.toLowerCase().includes(qLower) ? 1 : 0;
-          const bTitle = b.title.toLowerCase().includes(qLower) || (b.series_badge || "").toLowerCase().includes(qLower) || b.doc_no.toLowerCase().includes(qLower) ? 1 : 0;
+        if (hasQ) {
+          const aTitle = titleScoreByDoc[a.id] || 0;
+          const bTitle = titleScoreByDoc[b.id] || 0;
           if (aTitle !== bTitle) return bTitle - aTitle;
         }
         if (a.authority_rank !== b.authority_rank) return a.authority_rank - b.authority_rank;
-        if (qLower) {
+        if (hasQ) {
+          const aCo = fulltextHitMap[a.id]?.cooccurCount || 0;
+          const bCo = fulltextHitMap[b.id]?.cooccurCount || 0;
+          if (aCo !== bCo) return bCo - aCo;
           const aCnt = fulltextHitMap[a.id]?.count || 0;
           const bCnt = fulltextHitMap[b.id]?.count || 0;
           if (aCnt !== bCnt) return bCnt - aCnt;
@@ -1129,7 +1338,7 @@
       document.getElementById("tableModeBtn").classList.toggle("active", state.viewMode === "table");
       document.getElementById("graphModeBtn").classList.toggle("active", isGraph);
 
-      const hasFilter = state.domainFilter !== "all" || state.typeFilter !== "all" || state.statusFilter !== "all" || state.topicFilter !== "all" || Boolean(q);
+      const hasFilter = state.domainFilter !== "all" || state.typeFilter !== "all" || state.statusFilter !== "all" || state.topicFilter !== "all" || hasQ;
       document.getElementById("resetBtn").classList.toggle("active", hasFilter);
 
       document.getElementById("focusOnlyBtn").style.display = isGraph ? "inline-flex" : "none";
@@ -1153,18 +1362,20 @@
       if (state.topicFilter !== "all") crumbs.push(TOPIC_LABELS[state.topicFilter]);
       if (state.statusFilter !== "all") crumbs.push(STATUS_LABELS[state.statusFilter]);
       const scope = crumbs.length ? crumbs.join(" · ") : "全库法规";
-      const totalArtHits = Object.values(fulltextHitMap).reduce((s, x) => s + x.count, 0);
-      const hitNote = qLower && fulltextRows ? ` · 正文 ${totalArtHits} 条` : "";
+      const matchedIds = new Set(matched.map(d => d.id));
+      const totalArtHits = Object.entries(fulltextHitMap).reduce((s, [did, x]) => s + (matchedIds.has(Number(did)) ? x.count : 0), 0);
+      const hitNote = hasQ && fulltextRows ? ` · 正文 ${totalArtHits} 条` : "";
+      const synNote = parsedQ.expandedHints.length ? ` · 已扩展 ${parsedQ.expandedHints.slice(0, 2).join("、")}` : "";
       document.getElementById("statsSubtitle").textContent =
-        `${scope} · ${matched.length}/${DATA.meta.document_count} 份${hitNote}`;
+        `${scope} · ${matched.length}/${DATA.meta.document_count} 份${hitNote}${synNote}`;
 
       currentView.matchedDocs = matched;
       currentView.coreIds = coreIds;
 
       if (state.viewMode === "list") {
         document.getElementById("viewBadge").textContent = `卡片：权威序 ${matched.length} 份`;
-        document.getElementById("layoutHint").textContent = qLower
-          ? "已优先展示匹配条文预览，点击任意卡片直接定位至命中条款"
+        document.getElementById("layoutHint").textContent = hasQ
+          ? "已支持多词空格 AND 检索与简称扩展，点击卡片直接高亮命中条款"
           : "无摘要文件自动展示首条正文预览；案例恒置底并标注非规范依据";
         renderListView(matched);
       } else if (state.viewMode === "table") {
@@ -1548,6 +1759,45 @@
             ? `<a href="${escapeHTML(d.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(d.source_name)}（官网原文 ↗）</a>`
             : (d.source_kind === "user_submitted" ? `<span>用户补充，非官方案例</span>` : `<span>${escapeHTML(d.source_name)}（官网链接待补充）</span>`));
 
+        const relNow = getDirectEdges(d.id, DATA.doc_links);
+        const allRel = [...relNow.upstream, ...relNow.downstream].sort((a, b) => (b.edge.score || 60) - (a.edge.score || 60) || (b.edge.count || 0) - (a.edge.count || 0));
+        const tierBuckets = { L1: [], L2: [], L3: [], L4: [], L5: [] };
+        allRel.forEach(item => {
+          const tk = classifyEdgeVisual(item.edge).toUpperCase();
+          if (tierBuckets[tk]) tierBuckets[tk].push(item);
+        });
+        const TIER_META = [
+          { key: "L1", label: "L1 配套", color: "#059669" },
+          { key: "L2", label: "L2 修补", color: "#2563eb" },
+          { key: "L3", label: "L3 引用", color: "#64748b" },
+          { key: "L4", label: "L4 衔接", color: "#d97706" },
+          { key: "L5", label: "L5 案例", color: "#e11d48" }
+        ];
+        const tierPillsHTML = TIER_META
+          .filter(t => tierBuckets[t.key].length > 0)
+          .map(t => `<button type="button" class="overview-pill" onclick="openRelationsTier('${t.key}')"><span class="dot" style="background:${t.color}"></span>${t.label} ${tierBuckets[t.key].length}</button>`)
+          .join("");
+        const l1QuickHTML = tierBuckets.L1.length
+          ? `<div class="overview-row">
+              <span class="overview-label">核心配套直达</span>
+              ${tierBuckets.L1.slice(0, 3).map(item => {
+                const td = item.doc;
+                const lbl = td.display_title || td.title;
+                return `<button type="button" class="overview-quick" title="${escapeHTML(td.title)}" onclick="jumpToDoc(${td.id})">${escapeHTML(lbl)}</button>`;
+              }).join("")}
+              ${tierBuckets.L1.length > 3 ? `<button type="button" class="mini-btn" onclick="openRelationsTier('L1')">+${tierBuckets.L1.length - 3} 项</button>` : ""}
+            </div>`
+          : "";
+        const overviewStripHTML = allRel.length
+          ? `<div class="overview-strip">
+              <div class="overview-row">
+                <span class="overview-label">全貌速览</span>
+                ${tierPillsHTML}
+              </div>
+              ${l1QuickHTML}
+            </div>`
+          : "";
+
         body.innerHTML = `
           ${pathBanner}
           ${d.is_case ? `<div class="warn-banner"><strong>案例参考，非规范依据：</strong>本条为实务案例摘要，仅供理解参考，不作为规范性法律或准则依据。</div>` : ""}
@@ -1580,6 +1830,7 @@
             </div>
             ${d.summary ? `<div style="margin-top:9px; padding-top:8px; border-top:1px dashed var(--border); font-size:12.5px; color:var(--ink-secondary);"><strong>摘要：</strong>${escapeHTML(d.summary)}</div>` : ""}
           </div>
+          ${overviewStripHTML}
 
           <div class="section-label">
             <span>正文条文（共 ${d.article_count} 条）</span>
@@ -1637,10 +1888,10 @@
           else groups.L3.items.push(item);
         });
 
-        const renderGroup = (grp) => {
+        const renderGroup = ([tierKey, grp]) => {
           if (!grp.items.length) return "";
           return `
-            <div class="rel-group-title">
+            <div class="rel-group-title" id="rel-group-${tierKey}">
               <span>${grp.title}</span>
               <span class="pill type-pill">${grp.items.length}</span>
             </div>
@@ -1680,7 +1931,7 @@
           `;
         };
 
-        const groupsHTML = Object.values(groups).map(renderGroup).join("");
+        const groupsHTML = Object.entries(groups).map(renderGroup).join("");
         body.innerHTML = `
           ${pathBanner}
           <div class="hero-card">
@@ -1702,6 +1953,25 @@
     function setStrengthFilter(val) {
       state.strengthFilter = val;
       renderDrawer();
+    }
+
+    function openRelationsTier(tierKey) {
+      state.activeTab = "relations";
+      state.strengthFilter = "all";
+      if (getEffectiveDevice() === "mobile") {
+        state.mobilePane = "relations";
+        applyDeviceMode(false);
+      }
+      renderDrawer();
+      if (state.viewMode === "graph") renderGraphView();
+      setTimeout(() => {
+        const target = document.getElementById(`rel-group-${tierKey}`);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          target.classList.add("flash-group");
+          setTimeout(() => target.classList.remove("flash-group"), 1400);
+        }
+      }, 40);
     }
 
     function populateArticleToc(doc, articles) {
@@ -1743,12 +2013,26 @@
         return;
       }
       const q = state.inDocQuery.trim();
-      const qLower = q.toLowerCase();
+      const parsed = parseSearchQuery(q);
       const indexed = articles.map((a, idx) => ({ a, idx }));
-      const filtered = qLower
-        ? indexed.filter(({ a }) => a.no.toLowerCase().includes(qLower) || a.heading.toLowerCase().includes(qLower) || a.text.toLowerCase().includes(qLower))
-        : indexed;
-      if (countEl) countEl.textContent = qLower ? `匹配 ${filtered.length}/${articles.length} 条` : "";
+      let filtered = indexed;
+      if (parsed.groups.length) {
+        const scored = indexed.map(item => {
+          const hay = `${item.a.no || ""} ${item.a.heading || ""} ${item.a.text || ""}`.toLowerCase();
+          return { ...item, mask: getMatchMask(hay, parsed.groups) };
+        });
+        // 优先匹配全部词组；若为跨字段多词查询（如「CAS14 总额法」），自动退化到正文实际出现的词组集合
+        let hits = scored.filter(x => x.mask === parsed.allMask);
+        if (!hits.length && parsed.groups.length > 1) {
+          const bodyPresentMask = scored.reduce((m, x) => m | x.mask, 0);
+          if (bodyPresentMask) {
+            hits = scored.filter(x => (x.mask & bodyPresentMask) === bodyPresentMask);
+            if (!hits.length) hits = scored.filter(x => x.mask !== 0);
+          }
+        }
+        filtered = hits;
+      }
+      if (countEl) countEl.textContent = parsed.groups.length ? `匹配 ${filtered.length}/${articles.length} 条` : "";
 
       const slice = filtered.slice(0, state.articleRenderLimit);
       const bottomSourceHTML = (doc.source_kind === "third_party" && doc.source_url)
@@ -2118,7 +2402,7 @@
     }
 
     const totalArtFmt = (DATA.meta.article_count || 0).toLocaleString("en-US");
-    searchInputEl.placeholder = `全库检索法规标题、文号或 ${totalArtFmt} 条正文...`;
+    searchInputEl.placeholder = `检索法规、简称或多词组合（如 CAS14 总额法 / 长投 权益法），覆盖 ${totalArtFmt} 条正文...`;
     document.getElementById("ftBadge").title = `点击搜索框自动加载全库 ${totalArtFmt} 条条文正文索引`;
     initPaneResizer();
     restoreStateFromURL();
