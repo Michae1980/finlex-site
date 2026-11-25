@@ -359,16 +359,20 @@ def build_from_db(db_path: Path) -> dict:
         """
     ).fetchall()
 
+    link_cols = {r[1] for r in cur.execute("PRAGMA table_info(article_links)").fetchall()}
+    score_expr = "COALESCE(l.score, 60)" if "score" in link_cols else "60"
+    tier_expr = "COALESCE(l.tier, 'L3')" if "tier" in link_cols else "'L3'"
     raw_links = cur.execute(
-        """
+        f"""
         SELECT l.id, l.from_article_id, l.to_article_id, l.link_type,
                l.note, l.strength, l.rel_kind,
-               a1.document_id AS from_doc_id, a1.article_no AS from_art_no,
-               a2.document_id AS to_doc_id, a2.article_no AS to_art_no
+               {score_expr} AS score, {tier_expr} AS tier,
+               a1.document_id AS from_doc_id, a1.article_no AS from_art_no, a1.seq AS from_seq,
+               a2.document_id AS to_doc_id, a2.article_no AS to_art_no, a2.seq AS to_seq
         FROM article_links l
         JOIN articles a1 ON l.from_article_id = a1.id
         JOIN articles a2 ON l.to_article_id = a2.id
-        ORDER BY l.id ASC
+        ORDER BY {score_expr} DESC, l.id ASC
         """
     ).fetchall()
     conn.close()
@@ -532,8 +536,9 @@ def build_from_db(db_path: Path) -> dict:
         topic_labels[tid] = tlabel
         documents.append(doc_obj)
 
-    # 聚合条文级关联边为文档级图谱边，保留精确的条文对引用明细
+    # 聚合条文级关联边为文档级图谱边，保留五层分级、0-100 相关性分值与精确条文跳转索引
     strength_order = {"strong": 3, "medium": 2, "weak": 1}
+    tier_order = {"L1": 5, "L2": 4, "L3": 3, "L4": 2, "L5": 1}
     edge_map: dict[tuple[int, int, str], dict] = {}
     dangling_links = 0
 
@@ -547,6 +552,8 @@ def build_from_db(db_path: Path) -> dict:
             continue
         rel_kind = row["rel_kind"] or "cites"
         strength = row["strength"] or "medium"
+        score = int(row["score"] or 60)
+        tier = row["tier"] or "L3"
         note, h_note = clean_text(row["note"])
         privacy_redactions += h_note
 
@@ -558,10 +565,16 @@ def build_from_db(db_path: Path) -> dict:
                 "to_doc_id": td,
                 "rel_kind": rel_kind,
                 "strength": strength,
+                "score": score,
+                "tier": tier,
                 "count": 0,
                 "pairs": [],
             }
         edge = edge_map[key]
+        if score > edge["score"]:
+            edge["score"] = score
+        if tier_order.get(tier, 0) > tier_order.get(edge["tier"], 0):
+            edge["tier"] = tier
         if strength_order.get(strength, 0) > strength_order.get(edge["strength"], 0):
             edge["strength"] = strength
         edge["count"] += 1
@@ -570,6 +583,9 @@ def build_from_db(db_path: Path) -> dict:
                 {
                     "from_art_no": (row["from_art_no"] or "").strip(),
                     "to_art_no": (row["to_art_no"] or "").strip(),
+                    "from_seq": int(row["from_seq"] or 0),
+                    "to_seq": int(row["to_seq"] or 0),
+                    "score": score,
                     "strength": strength,
                     "note": note,
                 }
@@ -587,13 +603,15 @@ def build_from_db(db_path: Path) -> dict:
                     "to_doc_id": rep_id,
                     "rel_kind": "superseded_by",
                     "strength": "strong",
+                    "score": 98,
+                    "tier": "L1",
                     "count": 1,
-                    "pairs": [{"from_art_no": "全文", "to_art_no": "全文", "strength": "strong", "note": "效力沿革：已被新版本替代"}],
+                    "pairs": [{"from_art_no": "全文", "to_art_no": "全文", "from_seq": 0, "to_seq": 0, "score": 98, "strength": "strong", "note": "效力沿革：已被新版本替代"}],
                 }
 
     doc_links = sorted(
         edge_map.values(),
-        key=lambda e: (-strength_order.get(e["strength"], 0), -e["count"], e["from_doc_id"], e["to_doc_id"]),
+        key=lambda e: (-e["score"], -e["count"], e["from_doc_id"], e["to_doc_id"]),
     )
 
     in_deg: Counter[int] = Counter()

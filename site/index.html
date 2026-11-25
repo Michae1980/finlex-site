@@ -321,33 +321,47 @@
     .lane-header.focus-center-lane { background: var(--primary-soft); border-color: var(--primary-border); color: #1d4ed8; }
 
     .graph-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-    .edge-path { fill: none; stroke: #94a3b8; stroke-width: 1.7; opacity: 0.34; transition: stroke 0.18s ease, opacity 0.18s ease, stroke-width 0.18s ease; }
+    .edge-path { fill: none; stroke: #94a3b8; stroke-width: 1.5; opacity: 0.3; transition: stroke 0.18s ease, opacity 0.18s ease, stroke-width 0.18s ease; }
     .edge-path.dashed { stroke-dasharray: 5 4; }
     .edge-path.dimmed { opacity: 0.08; }
-    .edge-path.highlight-primary { stroke: var(--primary); stroke-width: 2.8; opacity: 1; }
-    .edge-path.highlight-strong { stroke: var(--strong); stroke-width: 2.6; opacity: 1; }
-    .edge-path.highlight-medium { stroke: var(--medium); stroke-width: 2.5; opacity: 1; stroke-dasharray: 5 4; }
-    .edge-path.highlight-version { stroke: var(--version); stroke-width: 2.6; opacity: 1; }
-    .edge-path.highlight-weak { stroke: var(--weak); stroke-width: 2.2; opacity: 0.9; stroke-dasharray: 4 4; }
+    .edge-path.highlight-primary { stroke: var(--primary); stroke-width: 2.6; opacity: 1; }
+    .edge-path.highlight-l1 { stroke: #059669; stroke-width: 2.4; opacity: 0.92; }
+    .edge-path.highlight-l2 { stroke: #2563eb; stroke-width: 2.0; opacity: 0.85; }
+    .edge-path.highlight-l3 { stroke: #64748b; stroke-width: 1.5; opacity: 0.65; }
+    .edge-path.highlight-l4 { stroke: #d97706; stroke-width: 1.6; opacity: 0.78; stroke-dasharray: 5 4; }
+    .edge-path.highlight-l5 { stroke: #e11d48; stroke-width: 1.4; opacity: 0.72; stroke-dasharray: 3 4; }
     .edge-path.highlight-path { stroke: #e11d48; stroke-width: 3.1; opacity: 1; stroke-dasharray: 7 4; }
 
     .graph-node {
       position: absolute; width: 296px; background: var(--surface);
-      border: 1.5px solid var(--border-strong); border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border); border-radius: var(--radius-lg);
       padding: 10px 13px; box-shadow: var(--shadow-sm); cursor: pointer;
       transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, opacity 0.18s ease;
       user-select: none; z-index: 3;
     }
-    .graph-node.bridge-node { border-style: dashed; background: #f8fafc; opacity: 0.92; }
+    .graph-node.bridge-node { border-style: dashed; background: #fbfcfe; opacity: 0.94; }
     .graph-node.is-case { border-style: dashed; background: #fffdfa; }
     .graph-node:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary); z-index: 8; opacity: 1; }
-    .graph-node.selected { border-color: var(--primary); border-width: 2px; border-style: solid; background: var(--primary-soft); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.16); z-index: 7; opacity: 1; }
-    .graph-node.rel-strong { border-color: var(--strong); background: var(--strong-soft); z-index: 5; opacity: 1; }
-    .graph-node.rel-medium { border-color: var(--medium); background: var(--medium-soft); z-index: 5; opacity: 1; }
-    .graph-node.rel-version { border-color: var(--version); background: var(--version-soft); z-index: 5; opacity: 1; }
-    .graph-node.rel-weak { border-color: var(--weak); background: var(--weak-soft); z-index: 5; opacity: 1; }
+    .graph-node.selected { border-color: var(--primary); border-width: 2px; border-style: solid; background: var(--primary-soft); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14); z-index: 7; opacity: 1; }
+    /* 克制版 L1-L5 视觉层级：纯白底色 + 左侧 3px 细色条，不喧宾夺主 */
+    .graph-node.rel-l1 { border-color: #cbd5e1; border-left: 3.5px solid #059669; z-index: 5; opacity: 1; }
+    .graph-node.rel-l2 { border-color: #cbd5e1; border-left: 3.5px solid #2563eb; z-index: 5; opacity: 1; }
+    .graph-node.rel-l3 { border-color: #e2e8f0; border-left: 3px solid #94a3b8; z-index: 4; opacity: 0.96; }
+    .graph-node.rel-l4 { border-color: #e2e8f0; border-left: 3px solid #d97706; z-index: 4; opacity: 0.94; }
+    .graph-node.rel-l5 { border-color: #e2e8f0; border-left: 3px dashed #e11d48; z-index: 4; opacity: 0.9; }
     .graph-node.rel-path { border-color: #e11d48; background: #fff1f2; box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.14); z-index: 6; opacity: 1; }
     .graph-node.dimmed { opacity: 0.18; }
+    .tier-tag { font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 5px; border: 1px solid transparent; flex-shrink: 0; white-space: nowrap; }
+    .tier-tag.t-l1 { color: #047857; background: #ecfdf5; border-color: #a7f3d0; }
+    .tier-tag.t-l2 { color: #1d4ed8; background: #eff6ff; border-color: #bfdbfe; }
+    .tier-tag.t-l3 { color: #475569; background: #f8fafc; border-color: #cbd5e1; }
+    .tier-tag.t-l4 { color: #b45309; background: #fffbeb; border-color: #fde68a; }
+    .tier-tag.t-l5 { color: #be123c; background: #fff1f2; border-color: #fecdd3; }
+    .rel-card.tier-l1 { border-left: 3px solid #059669; }
+    .rel-card.tier-l2 { border-left: 3px solid #2563eb; }
+    .rel-card.tier-l3 { border-left: 3px solid #94a3b8; }
+    .rel-card.tier-l4 { border-left: 3px solid #d97706; }
+    .rel-card.tier-l5 { border-left: 3px dashed #e11d48; }
 
     .node-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
     .node-title {
@@ -661,13 +675,14 @@
 
         <div class="legend-bar">
           <div class="legend">
-            <span class="legend-item"><span class="dot" style="background:var(--primary)"></span>当前选中</span>
-            <span class="legend-item"><span class="dot" style="background:var(--strong)"></span>直接依据（强）</span>
-            <span class="legend-item"><span class="dot" style="background:var(--medium)"></span>跨域衔接（中）</span>
-            <span class="legend-item"><span class="dot" style="background:var(--version)"></span>效力沿革</span>
-            <span class="legend-item"><span class="dot" style="background:var(--weak)"></span>解读 / 案例（弱·参考）</span>
+            <span class="legend-item"><span class="dot" style="background:var(--primary)"></span>当前聚焦</span>
+            <span class="legend-item"><span class="dot" style="background:#059669"></span>L1 核心配套</span>
+            <span class="legend-item"><span class="dot" style="background:#2563eb"></span>L2 修补解答</span>
+            <span class="legend-item"><span class="dot" style="background:#64748b"></span>L3 条文引用</span>
+            <span class="legend-item"><span class="dot" style="background:#d97706"></span>L4 跨域衔接（虚线）</span>
+            <span class="legend-item"><span class="dot" style="background:#e11d48"></span>L5 案例参考（点线）</span>
           </div>
-          <span id="layoutHint" style="color:var(--ink-muted)">点击任意法规查看原文条文与五组关联依据</span>
+          <span id="layoutHint" style="color:var(--ink-muted)">各列按重要度从上到下排列，点击任意卡片查看原文与全貌</span>
         </div>
 
         <div class="list-scroll" id="listScroll">
@@ -706,16 +721,19 @@
                   <marker id="arrow-primary" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                     <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#2563eb" />
                   </marker>
-                  <marker id="arrow-strong" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <marker id="arrow-l1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                     <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#059669" />
                   </marker>
-                  <marker id="arrow-medium" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <marker id="arrow-l2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                    <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#2563eb" />
+                  </marker>
+                  <marker id="arrow-l3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#64748b" />
+                  </marker>
+                  <marker id="arrow-l4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
                     <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#d97706" />
                   </marker>
-                  <marker id="arrow-version" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                    <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#7c3aed" />
-                  </marker>
-                  <marker id="arrow-weak" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <marker id="arrow-l5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                     <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#e11d48" />
                   </marker>
                 </defs>
@@ -787,9 +805,10 @@
     const TOPIC_LABELS = Object.fromEntries(DATA.taxonomy.topics.map(x => [x.id, x.label]));
 
     const REL_KIND_LABELS = {
-      cites: "正文引用", thematic: "专题配套",
-      supersedes: "替代旧版", superseded_by: "被新版替代",
-      applies_to: "案例适用（参考）", explains: "官方解读"
+      companion: "核心配套", amends: "修补 / 解释",
+      cites: "条文引用", cross_domain: "跨域衔接", thematic: "专题配套",
+      supersedes: "替代旧版", superseded_by: "效力沿革",
+      applies_to: "案例参考", explains: "官方解读"
     };
     const STRENGTH_LABELS = { strong: "强", medium: "中", weak: "弱" };
 
@@ -1010,11 +1029,16 @@
       return { upstream, downstream };
     }
 
+    const TIER_SHORT_LABELS = { l1: "L1 核心", l2: "L2 修补", l3: "L3 引用", l4: "L4 衔接", l5: "L5 参考" };
     function classifyEdgeVisual(edge) {
-      if (edge.rel_kind === "supersedes" || edge.rel_kind === "superseded_by") return "version";
-      if (edge.rel_kind === "applies_to" || edge.rel_kind === "explains" || edge.strength === "weak") return "weak";
-      if (edge.strength === "strong") return "strong";
-      return "medium";
+      const t = (edge.tier || "").toLowerCase();
+      if (["l1", "l2", "l3", "l4", "l5"].includes(t)) return t;
+      const sc = edge.score || 60;
+      if (sc >= 90) return "l1";
+      if (sc >= 75) return "l2";
+      if (sc >= 60) return "l3";
+      if (sc >= 45) return "l4";
+      return "l5";
     }
 
     function findShortestPath(startId, endId) {
@@ -1257,16 +1281,20 @@
       if (state.focusOnly && state.selectedDocId && docById[state.selectedDocId]) {
         const selId = state.selectedDocId;
         const rel = getDirectEdges(selId, DATA.doc_links);
+        const byScore = (a, b) => (b.edge.score || 60) - (a.edge.score || 60) || (b.edge.count || 0) - (a.edge.count || 0);
         const leftIds = [], rightIds = [];
         const seen = new Set([selId]);
+        const MAX_SIDE = 10;
 
-        rel.upstream.forEach(item => {
+        rel.upstream.slice().sort(byScore).forEach(item => {
+          if (leftIds.length >= MAX_SIDE) return;
           if (!seen.has(item.doc.id)) {
             seen.add(item.doc.id); leftIds.push(item.doc.id);
             if (!coreIds.has(item.doc.id)) bridgeIds.add(item.doc.id);
           }
         });
-        rel.downstream.forEach(item => {
+        rel.downstream.slice().sort(byScore).forEach(item => {
+          if (rightIds.length >= MAX_SIDE) return;
           if (!seen.has(item.doc.id)) {
             seen.add(item.doc.id); rightIds.push(item.doc.id);
             if (!coreIds.has(item.doc.id)) bridgeIds.add(item.doc.id);
@@ -1298,8 +1326,7 @@
         cols.forEach((col, cIdx) => {
           const x = cols.length === 1 ? Math.max(padX, Math.floor((stageW - NODE_W) / 2)) : padX + cIdx * (NODE_W + gapX);
           lanes.push({ x, label: col.label, isFocusCenter: col.isCenter, isBridgeLane: false });
-          const colH = col.ids.length * ROW_GAP;
-          const startY = 54 + Math.max(0, Math.floor((totalH - colH) / 2));
+          const startY = 54;
           col.ids.forEach((did, rIdx) => { positions[did] = { x, y: startY + rIdx * ROW_GAP }; });
         });
 
@@ -1405,9 +1432,10 @@
 
       const selId = state.selectedDocId;
       const directEdges = selId ? getDirectEdges(selId, currentView.visibleEdges) : { upstream: [], downstream: [] };
-      const neighborClass = {};
+      const neighborTier = {};
       [...directEdges.upstream, ...directEdges.downstream].forEach(item => {
-        neighborClass[item.doc.id] = classifyEdgeVisual(item.edge);
+        const t = classifyEdgeVisual(item.edge);
+        if (!neighborTier[item.doc.id] || t < neighborTier[item.doc.id]) neighborTier[item.doc.id] = t;
       });
       const directEdgeIds = new Set([...directEdges.upstream, ...directEdges.downstream].map(x => x.edge.id));
 
@@ -1416,12 +1444,12 @@
         const toPos = currentView.positions[e.to_doc_id];
         if (!fromPos || !toPos) return;
         const vis = classifyEdgeVisual(e);
-        let cls = vis === "medium" || vis === "weak" ? "edge-path dashed" : "edge-path";
+        let cls = (vis === "l4" || vis === "l5") ? "edge-path dashed" : "edge-path";
         let marker = "url(#arrow-default)";
         let showPill = false;
 
         if (state.activePath) {
-          if (state.activePath.edgeIds.has(e.id)) { cls += " highlight-path"; marker = "url(#arrow-weak)"; showPill = true; }
+          if (state.activePath.edgeIds.has(e.id)) { cls += " highlight-path"; marker = "url(#arrow-l5)"; showPill = true; }
           else cls += " dimmed";
         } else if (state.selectedEdgeId === e.id && state.activeTab === "relations") {
           cls += " highlight-primary"; marker = "url(#arrow-primary)"; showPill = true;
@@ -1443,7 +1471,7 @@
           pill.className = `edge-pill ${state.selectedEdgeId === e.id ? "selected" : ""}`;
           pill.style.left = `${curve.mx}px`;
           pill.style.top = `${curve.my}px`;
-          pill.textContent = `${REL_KIND_LABELS[e.rel_kind] || e.rel_kind} · ${STRENGTH_LABELS[e.strength] || e.strength}${e.count > 1 ? ` (${e.count})` : ""}`;
+          pill.textContent = `${vis.toUpperCase()} ${REL_KIND_LABELS[e.rel_kind] || e.rel_kind}${e.count > 1 ? ` (${e.count})` : ""}`;
           pill.onclick = (ev) => { ev.stopPropagation(); state.selectedEdgeId = e.id; state.activeTab = "relations"; renderGraphView(); renderDrawer(); };
           nodeLayer.appendChild(pill);
         }
@@ -1453,17 +1481,14 @@
         const pos = currentView.positions[d.id];
         if (!pos) return;
         const isBridge = currentView.bridgeIds.has(d.id);
+        const nTier = neighborTier[d.id];
         let cls = "graph-node";
         if (isBridge) cls += " bridge-node";
         if (d.is_case) cls += " is-case";
         if (state.activePath) cls += state.activePath.nodeIds.has(d.id) ? " rel-path" : " dimmed";
         else if (d.id === selId) cls += " selected";
-        else if (selId && neighborClass[d.id]) cls += ` rel-${neighborClass[d.id]}`;
+        else if (selId && nTier) cls += ` rel-${nTier}`;
         else if (selId) cls += " dimmed";
-
-        const subParts = [];
-        if (hasValidDocNo(d)) subParts.push(d.doc_no);
-        subParts.push(d.issuer);
 
         const card = document.createElement("div");
         card.className = cls;
@@ -1474,10 +1499,13 @@
         if (d.series_badge) nodeSubParts.push(d.series_badge);
         if (hasValidDocNo(d)) nodeSubParts.push(d.doc_no);
         else if (!d.series_badge) nodeSubParts.push(d.issuer);
+        const badgeHTML = (d.id !== selId && nTier)
+          ? `<span class="tier-tag t-${nTier}">${TIER_SHORT_LABELS[nTier] || nTier.toUpperCase()}</span>`
+          : `<span class="node-badge">${d.article_count}条</span>`;
         card.innerHTML = `
           <div class="node-head">
             <div class="node-title" title="${escapeHTML(d.title)}">${escapeHTML(nodeShort)}</div>
-            <span class="node-badge">${isBridge ? "跨域桥梁" : `${d.article_count}条`}</span>
+            ${badgeHTML}
           </div>
           <div class="node-sub">${escapeHTML(nodeSubParts.join(" · "))}</div>
           <div class="node-foot">
@@ -1579,35 +1607,34 @@
           }
         });
       } else {
-        // Tab 2: 五组关联网络 + 强/中/弱强度筛选
+        // Tab 2: 五层「法规全貌」关联网络 + 0-100 重要性分值筛选与条文直达跳转
         const rel = getDirectEdges(d.id, DATA.doc_links);
-        const allItems = [...rel.upstream, ...rel.downstream];
-        const strongCnt = allItems.filter(x => x.edge.strength === "strong").length;
-        const medCnt = allItems.filter(x => x.edge.strength === "medium").length;
-        const weakCnt = allItems.filter(x => x.edge.strength === "weak").length;
+        const allItems = [...rel.upstream, ...rel.downstream].sort((a, b) => (b.edge.score || 60) - (a.edge.score || 60) || (b.edge.count || 0) - (a.edge.count || 0));
+        const coreCnt = allItems.filter(x => (x.edge.score || 60) >= 75).length;
+        const citeCnt = allItems.filter(x => (x.edge.score || 60) >= 60).length;
+        const refCnt = allItems.filter(x => (x.edge.score || 60) < 60).length;
 
         const filteredItems = allItems.filter(x => {
-          if (state.strengthFilter === "strong") return x.edge.strength === "strong";
-          if (state.strengthFilter === "strong_medium") return x.edge.strength === "strong" || x.edge.strength === "medium";
-          if (state.strengthFilter === "weak") return x.edge.strength === "weak";
+          const sc = x.edge.score || 60;
+          if (state.strengthFilter === "strong") return sc >= 75;
+          if (state.strengthFilter === "strong_medium") return sc >= 60;
+          if (state.strengthFilter === "weak") return sc < 60;
           return true;
         });
 
         const groups = {
-          authority: { title: "直接依据（同域强规范引用 / 配套）", items: [] },
-          bridge: { title: "关联规定（跨域衔接 / 主题关联）", items: [] },
-          interpretation: { title: "官方解读", items: [] },
-          case: { title: "相关案例（参考，非规范依据）", items: [] },
-          version: { title: "效力沿革（版本替代链）", items: [] }
+          L1: { title: "L1 核心落地配套（90–100分 · 指南 / 实施问答 / 实施条例 / 效力沿革）", items: [] },
+          L2: { title: "L2 正式修补与权威解答（75–89分 · 准则解释 / 监管指引 / 司法解释）", items: [] },
+          L3: { title: "L3 条文级精准引用（60–74分 · 正文显式引用）", items: [] },
+          L4: { title: "L4 跨域实务衔接（45–59分 · 会—税—审—商衔接）", items: [] },
+          L5: { title: "L5 实务案例与官方解读（参考，非规范依据）", items: [] }
         };
 
         filteredItems.forEach(item => {
           const e = item.edge, target = item.doc;
-          if (e.rel_kind === "supersedes" || e.rel_kind === "superseded_by") groups.version.items.push(item);
-          else if (target.doc_type === "case" || e.rel_kind === "applies_to") groups.case.items.push(item);
-          else if (target.doc_type === "interpretation" || e.rel_kind === "explains") groups.interpretation.items.push(item);
-          else if (e.strength === "strong" && target.domain === d.domain) groups.authority.items.push(item);
-          else groups.bridge.items.push(item);
+          const tier = e.tier || (target.doc_type === "case" || target.doc_type === "interpretation" ? "L5" : ((e.score || 60) >= 90 ? "L1" : ((e.score || 60) >= 75 ? "L2" : ((e.score || 60) >= 60 ? "L3" : "L4"))));
+          if (groups[tier]) groups[tier].items.push(item);
+          else groups.L3.items.push(item);
         });
 
         const renderGroup = (grp) => {
@@ -1620,14 +1647,21 @@
             ${grp.items.map(item => {
               const td = item.doc, e = item.edge;
               const isSelEdge = state.selectedEdgeId === e.id;
-              const pairsHTML = (e.pairs || []).slice(0, 4).map(p =>
-                `<div>• ${item.dir === "out" ? `本文件 ${escapeHTML(p.from_art_no || "条文")} → 目标 ${escapeHTML(p.to_art_no || "条文")}` : `对方 ${escapeHTML(p.from_art_no || "条文")} → 本文件 ${escapeHTML(p.to_art_no || "条文")}`}${p.note ? `（${escapeHTML(p.note)}）` : ""}</div>`
-              ).join("");
+              const sc = e.score || 60;
+              const pairsHTML = (e.pairs || []).slice(0, 4).map(p => {
+                const targetSeq = item.dir === "out" ? (p.to_seq || 0) : (p.from_seq || 0);
+                const targetArtLabel = item.dir === "out" ? (p.to_art_no || "条文") : (p.from_art_no || "条文");
+                const desc = item.dir === "out"
+                  ? `本文件 ${escapeHTML(p.from_art_no || "条文")} → 目标 ${escapeHTML(p.to_art_no || "条文")}`
+                  : `对方 ${escapeHTML(p.from_art_no || "条文")} → 本文件 ${escapeHTML(p.to_art_no || "条文")}`;
+                return `<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px;"><span>• ${desc}${p.note ? `（${escapeHTML(p.note)}）` : ""}</span><button class="mini-btn" style="padding:1px 6px;font-size:10.5px;" onclick="jumpToDocArticle(${td.id}, ${targetSeq})">定位${escapeHTML(targetArtLabel.slice(0, 8))}</button></div>`;
+              }).join("");
+              const tCls = classifyEdgeVisual(e);
               return `
-                <div class="rel-card" style="${isSelEdge ? "border-color:var(--primary);background:var(--primary-soft);" : ""}">
+                <div class="rel-card tier-${tCls}" style="${isSelEdge ? "border-color:var(--primary);background:var(--primary-soft);" : ""}">
                   <div class="rel-card-top">
                     <strong style="font-size:13px;line-height:1.4;">${escapeHTML(td.title)}</strong>
-                    <span class="pill type-pill">${REL_KIND_LABELS[e.rel_kind] || e.rel_kind} · ${STRENGTH_LABELS[e.strength]}</span>
+                    <span class="tier-tag t-${tCls}" style="flex-shrink:0;">${REL_KIND_LABELS[e.rel_kind] || e.rel_kind} · ${sc}分</span>
                   </div>
                   <div class="meta-row" style="margin-top:0;">
                     <span class="pill dom-${td.domain}">${DOMAIN_LABELS[td.domain]}</span>
@@ -1650,17 +1684,17 @@
         body.innerHTML = `
           ${pathBanner}
           <div class="hero-card">
-            <div style="font-size:11.5px;color:var(--ink-muted);margin-bottom:4px;">当前主文档关联总览</div>
+            <div style="font-size:11.5px;color:var(--ink-muted);margin-bottom:4px;">法规全貌关联总览</div>
             <h2 class="hero-title">${escapeHTML(d.title)}</h2>
-            <div style="font-size:12px;color:var(--ink-secondary);">共 <strong>${allItems.length}</strong> 份关联（强 ${strongCnt} · 中 ${medCnt} · 弱 ${weakCnt}）</div>
+            <div style="font-size:12px;color:var(--ink-secondary);">共 <strong>${allItems.length}</strong> 份关联（核心配套/修补 ${coreCnt} · 条文引用 ${citeCnt - coreCnt} · 跨域与案例 ${refCnt}）</div>
           </div>
-          <div class="strength-filter-bar" role="group" aria-label="按关联强度筛选">
-            <button class="strength-btn ${state.strengthFilter === "all" ? "active" : ""}" onclick="setStrengthFilter('all')">全部 (${allItems.length})</button>
-            <button class="strength-btn ${state.strengthFilter === "strong" ? "active" : ""}" onclick="setStrengthFilter('strong')">仅强 (${strongCnt})</button>
-            <button class="strength-btn ${state.strengthFilter === "strong_medium" ? "active" : ""}" onclick="setStrengthFilter('strong_medium')">强+中 (${strongCnt + medCnt})</button>
-            <button class="strength-btn ${state.strengthFilter === "weak" ? "active" : ""}" onclick="setStrengthFilter('weak')">仅弱 (${weakCnt})</button>
+          <div class="strength-filter-bar" role="group" aria-label="按重要度筛选">
+            <button class="strength-btn ${state.strengthFilter === "all" ? "active" : ""}" onclick="setStrengthFilter('all')">全貌 (${allItems.length})</button>
+            <button class="strength-btn ${state.strengthFilter === "strong" ? "active" : ""}" onclick="setStrengthFilter('strong')">核心 ≥75 (${coreCnt})</button>
+            <button class="strength-btn ${state.strengthFilter === "strong_medium" ? "active" : ""}" onclick="setStrengthFilter('strong_medium')">含引用 ≥60 (${citeCnt})</button>
+            <button class="strength-btn ${state.strengthFilter === "weak" ? "active" : ""}" onclick="setStrengthFilter('weak')">衔接/案例 (${refCnt})</button>
           </div>
-          ${groupsHTML || `<div class="empty-state" style="min-height:150px;">当前强度筛选下暂无关联文档。</div>`}
+          ${groupsHTML || `<div class="empty-state" style="min-height:150px;">当前筛选层级下暂无关联文档。</div>`}
         `;
       }
     }
@@ -1760,6 +1794,27 @@
         syncCascadingDropdowns();
       }
       updateView(true);
+    }
+
+    function jumpToDocArticle(id, targetSeq) {
+      jumpToDoc(id);
+      loadDocArticles(id, (arts) => {
+        if (state.selectedDocId !== id || state.activeTab !== "detail") return;
+        let idx = arts.findIndex(a => a.seq === targetSeq);
+        if (idx < 0) idx = 0;
+        if (idx >= state.articleRenderLimit) {
+          state.articleRenderLimit = idx + 20;
+          renderArticlesList(docById[id], arts);
+        }
+        setTimeout(() => {
+          const card = document.getElementById(`art-card-${idx}`);
+          if (card) {
+            card.scrollIntoView({ behavior: "smooth", block: "center" });
+            card.classList.add("flash-target");
+            setTimeout(() => card.classList.remove("flash-target"), 1800);
+          }
+        }, 60);
+      });
     }
 
     function openInGraph(id) {
