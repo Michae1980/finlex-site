@@ -450,6 +450,13 @@
     .article-no { font-size: 13.5px; font-weight: 600; color: var(--primary); }
     .article-text { font-size: 14.5px; color: var(--ink); white-space: pre-wrap; line-height: 1.8; word-break: break-word; }
     .article-text mark { background: #fef08a; padding: 0 2px; border-radius: 3px; }
+    .article-source-note {
+      margin-top: 16px; padding: 11px 14px; border-radius: var(--radius-md);
+      background: #f8fafc; border: 1px dashed var(--border-strong);
+      font-size: 12px; color: var(--ink-muted); line-height: 1.6;
+    }
+    .article-source-note a { color: var(--primary); text-decoration: none; font-weight: 500; }
+    .article-source-note a:hover { text-decoration: underline; }
 
     .strength-filter-bar {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
@@ -569,9 +576,9 @@
 
         <div class="hero-search" role="search">
           <span class="hero-search-icon" aria-hidden="true">🔍</span>
-          <input class="hero-search-input" id="searchInput" type="search" placeholder="全库检索法规标题、文号或 5,417 条正文..." />
+          <input class="hero-search-input" id="searchInput" type="search" placeholder="全库检索法规标题、文号或条文正文..." />
           <button class="search-clear-btn" id="searchClearBtn" type="button" title="清空搜索" style="display:none">×</button>
-          <span class="ft-badge" id="ftBadge" title="点击搜索框自动加载全库 5,417 条条文正文索引">正文按需索引</span>
+          <span class="ft-badge" id="ftBadge" title="点击搜索框自动加载全库条文正文索引">正文按需索引</span>
         </div>
 
         <div class="device-controls">
@@ -732,7 +739,7 @@
         </div>
         <div class="drawer-body" id="drawerBody"></div>
         <div class="drawer-footer">
-          <span>本站内容仅供参考，不构成法律意见、涉税鉴证或审计结论。</span>
+          <span>本站内容整理自公开互联网资料，仅供参考，如有侵权请联系删除。</span>
           <button class="mini-btn" id="footerComplianceBtn">合规边界</button>
         </div>
       </aside>
@@ -748,20 +755,20 @@
   <div class="modal-backdrop" id="complianceModal" role="dialog" aria-modal="true" aria-labelledby="complianceModalTitle">
     <div class="modal-card">
       <div class="modal-head">
-        <h3 id="complianceModalTitle">免责声明、合规边界与引用规范</h3>
+        <h3 id="complianceModalTitle">免责声明、合规边界与信息来源</h3>
         <button class="mini-btn" id="closeModalBtn">关闭</button>
       </div>
       <div class="warn-banner">
-        <strong>免责声明：</strong>本站内容仅供参考，不构成法律意见、涉税鉴证、审计结论或申报建议；申报与纳税义务以官方发布文本及主管机关口径为准。
+        <strong>免责声明与侵权说明：</strong>本站内容整理自官方公开渠道及公开互联网资料，仅供参考，不构成法律意见、涉税鉴证、审计结论或申报建议；如有侵权，请联系删除。
       </div>
       <p style="font-size:13px; color:var(--ink-secondary); margin:8px 0;">
         <strong>合规红线：</strong>不出具审计报告、不做涉税鉴证、不做代理记账、不承诺节税金额。案例在全站恒标「参考，非规范依据」。
       </p>
       <p style="font-size:13px; color:var(--ink-secondary); margin:8px 0;">
-        <strong>标准引用格式：</strong><code>《文件名》（文号）第X条</code>，并附官网原文链接。正文每条条文右侧提供一键复制标准引用按钮。
+        <strong>标准引用格式：</strong><code>《文件名》（文号）第X条</code>，正式引用请以官方发布文本及主管机关口径为准。正文每条条文右侧提供一键复制标准引用按钮。
       </p>
       <p style="font-size:13px; color:var(--ink-secondary); margin:8px 0;">
-        <strong>官方来源渠道：</strong>财政部（mof.gov.cn）、全国人大（npc.gov.cn）、国务院（gov.cn）、国家税务总局（chinatax.gov.cn）、中国注册会计师协会（cicpa.org.cn）等官方公开文本。
+        <strong>主要信息来源：</strong>财政部（mof.gov.cn）、全国人大（npc.gov.cn）、国务院（gov.cn）、国家税务总局（chinatax.gov.cn）、中国注册会计师协会（cicpa.org.cn）及公开互联网整理资料（完整文章底部标注具体来源链接）。
       </p>
     </div>
   </div>
@@ -1507,9 +1514,11 @@
       }
 
       if (state.activeTab === "detail") {
-        const sourceHTML = d.source_url
-          ? `<a href="${escapeHTML(d.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(d.source_name)}（官网原文 ↗）</a>`
-          : (d.source_kind === "user_submitted" ? `<span>用户补充，非官方案例</span>` : `<span>${escapeHTML(d.source_name)}（官网链接待补充）</span>`);
+        const sourceHTML = d.source_kind === "third_party"
+          ? `<span>${escapeHTML(d.issuer)}（汇编出版文本，文末附信息来源）</span>`
+          : (d.source_url
+            ? `<a href="${escapeHTML(d.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(d.source_name)}（官网原文 ↗）</a>`
+            : (d.source_kind === "user_submitted" ? `<span>用户补充，非官方案例</span>` : `<span>${escapeHTML(d.source_name)}（官网链接待补充）</span>`));
 
         body.innerHTML = `
           ${pathBanner}
@@ -1708,6 +1717,9 @@
       if (countEl) countEl.textContent = qLower ? `匹配 ${filtered.length}/${articles.length} 条` : "";
 
       const slice = filtered.slice(0, state.articleRenderLimit);
+      const bottomSourceHTML = (doc.source_kind === "third_party" && doc.source_url)
+        ? `<div class="article-source-note">信息来源：<a href="${escapeHTML(doc.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(doc.source_name)} — ${escapeHTML(doc.title)} ↗</a></div>`
+        : "";
       box.innerHTML = slice.map(({ a, idx }) => `
         <div class="article-card" id="art-card-${idx}">
           <div class="article-head">
@@ -1718,7 +1730,7 @@
         </div>
       `).join("") + (filtered.length > state.articleRenderLimit
         ? `<div style="text-align:center;margin:10px 0;"><button class="toggle-btn active" onclick="expandMoreArticles(${doc.id})">展开更多条文（剩余 ${filtered.length - state.articleRenderLimit} 条）</button></div>`
-        : "");
+        : "") + bottomSourceHTML;
     }
 
     function expandMoreArticles(docId) {
@@ -2050,6 +2062,9 @@
       });
     }
 
+    const totalArtFmt = (DATA.meta.article_count || 0).toLocaleString("en-US");
+    searchInputEl.placeholder = `全库检索法规标题、文号或 ${totalArtFmt} 条正文...`;
+    document.getElementById("ftBadge").title = `点击搜索框自动加载全库 ${totalArtFmt} 条条文正文索引`;
     initPaneResizer();
     restoreStateFromURL();
     syncCascadingDropdowns();

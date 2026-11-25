@@ -256,6 +256,8 @@ def sanitize_url(raw_url: str | None) -> tuple[str | None, str]:
     if val.lower() == "user-submitted":
         return None, "user_submitted"
     if val.startswith("http://") or val.startswith("https://"):
+        if "maoyanqing.com" in val.lower():
+            return val, "third_party"
         return val, "official"
     return None, "official_pending"
 
@@ -287,9 +289,12 @@ SERIES_PATTERNS = [
     (re.compile(r"^中国注册会计师审阅准则第(\d+)号——(.+)$"), lambda m: (f"审阅准则 第{m.group(1)}号", m.group(2))),
     (re.compile(r"^中国注册会计师相关服务准则第(\d+)号——(.+)$"), lambda m: (f"相关服务 第{m.group(1)}号", m.group(2))),
     (re.compile(r"^企业会计准则第0*(\d+)号——(.+?)应用指南$"), lambda m: (f"会计指南 第{m.group(1)}号", m.group(2))),
+    (re.compile(r"^企业会计准则——(.+?)应用指南$"), lambda m: ("会计指南", m.group(1))),
     (re.compile(r"^企业会计准则第0*(\d+)号——(.+)$"), lambda m: (f"会计准则 第{m.group(1)}号", m.group(2))),
     (re.compile(r"^企业会计准则——(.+)$"), lambda m: ("会计准则", m.group(1))),
     (re.compile(r"^企业会计准则解释第(\d+)号$"), lambda m: (f"准则解释 第{m.group(1)}号", f"企业会计准则解释第{m.group(1)}号")),
+    (re.compile(r"^企业会计准则实施问答——(.+)$"), lambda m: ("实施问答", m.group(1))),
+    (re.compile(r"^(.+?)实施问答$"), lambda m: ("实施问答", m.group(1))),
     (re.compile(r"^企业内部控制配套指引——(.+)$"), lambda m: ("内控配套指引", m.group(1))),
     (re.compile(r"^企业可持续披露准则第(\d+)号——(.+)$"), lambda m: (f"可持续披露 第{m.group(1)}号", m.group(2))),
     (re.compile(r"^发布通知——(.+)$"), lambda m: ("发布通知", m.group(1))),
