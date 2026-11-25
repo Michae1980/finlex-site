@@ -4,10 +4,11 @@ FinLex 静态站点（site/ PWA）与数据校验脚本（零第三方依赖，�
 
 检查项：
 1. PWA 必备静态资源齐全（index.html / manifest.webmanifest / sw.js / icon.svg / icon-192.png / icon-512.png）；
-2. data/index.js 与 data/fulltext.js 结构合法，全部文档对应 data/docs/doc_<id>.js 分片齐全；
-3. 悬空关联边为 0；
-4. 案例摘要与非规范依据标识合规；
-5. 全站文本（HTML/JS/JSON）零本机路径隐私泄漏。
+2. data/index.js 与按领域切分的 data/ft/ft_*.js 分片结构合法且行数完整，全部文档对应 data/docs/doc_<id>.js 分片齐全；
+3. 单分片体积门禁（任意全文分片不得超过 2,048 KB）；
+4. 悬空关联边为 0；
+5. 案例摘要与非规范依据标识合规；
+6. 全站文本（HTML/JS/JSON）零本机路径隐私泄漏。
 """
 
 from __future__ import annotations
@@ -29,7 +30,6 @@ REQUIRED_FILES = [
     "icon-192.png",
     "icon-512.png",
     "data/index.js",
-    "data/fulltext.js",
 ]
 
 
@@ -70,6 +70,7 @@ def main() -> int:
     index_data = parse_js_json(SITE_DIR / "data" / "index.js", "window.FINLEX_INDEX = ", ";")
     docs = index_data.get("documents", [])
     links = index_data.get("doc_links", [])
+    meta = index_data.get("meta", {})
     doc_ids = {d["id"] for d in docs}
 
     # 校验每份文档的分片文件存在且案例摘要合规
@@ -91,19 +92,44 @@ def main() -> int:
     if dangling:
         errors.append(f"检测到 {dangling} 条悬空关联边")
 
-    # 校验 fulltext.js
-    ft_rows = parse_js_json(SITE_DIR / "data" / "fulltext.js", "window.__finlexFulltextLoaded(", ");")
-    if not isinstance(ft_rows, list) or len(ft_rows) == 0:
-        errors.append("site/data/fulltext.js 为空或格式非法")
+    # 校验分片式全文语料（data/ft/ft_*.js）
+    ft_shards = meta.get("ft_shards", [])
+    total_ft_rows = 0
+    max_ft_kb = 0.0
+    ft_scan_paths: list[Path] = []
+    if not ft_shards:
+        errors.append("index.js meta.ft_shards 为空，缺少全文检索分片清单")
+    else:
+        for sh in ft_shards:
+            fpath = SITE_DIR / "data" / sh["file"]
+            if not fpath.exists():
+                errors.append(f"缺少全文检索分片：site/data/{sh['file']}")
+                continue
+            ft_scan_paths.append(fpath)
+            kb = round(fpath.stat().st_size / 1024, 1)
+            if kb > max_ft_kb:
+                max_ft_kb = kb
+            if kb > 2048:
+                warnings.append(f"全文检索分片过大（{kb} KB > 2048 KB）：{sh['file']}")
+            prefix = f'window.__finlexFtShardLoaded("{sh["id"]}",'
+            rows = parse_js_json(fpath, prefix, ");")
+            if not isinstance(rows, list):
+                errors.append(f"全文分片格式非法：{sh['file']}")
+            else:
+                total_ft_rows += len(rows)
 
-    # 隐私扫描（扫描 HTML / manifest / sw / index.js / fulltext.js 及抽样或全量 docs）
+    expected_arts = int(meta.get("article_count", 0))
+    if expected_arts and total_ft_rows != expected_arts:
+        errors.append(f"全文分片总条数（{total_ft_rows}）与文档条文总数（{expected_arts}）不一致")
+
+    # 隐私扫描（HTML / manifest / sw / index.js / 全部分片）
     privacy_leaks = 0
     scan_targets = [
         SITE_DIR / "index.html",
         SITE_DIR / "manifest.webmanifest",
         SITE_DIR / "sw.js",
         SITE_DIR / "data" / "index.js",
-        SITE_DIR / "data" / "fulltext.js",
+        *ft_scan_paths,
         *sorted((SITE_DIR / "data" / "docs").glob("doc_*.js")),
     ]
     for path in scan_targets:
@@ -116,7 +142,10 @@ def main() -> int:
     summary = {
         "site_dir": "site/",
         "documents": len(docs),
-        "articles_in_fulltext": len(ft_rows),
+        "articles_in_fulltext": total_ft_rows,
+        "ft_shards": len(ft_shards),
+        "ft_max_shard_kb": max_ft_kb,
+        "index_js_kb": round((SITE_DIR / "data" / "index.js").stat().st_size / 1024, 1),
         "doc_links": len(links),
         "missing_shards": missing_shards,
         "dangling_links": dangling,

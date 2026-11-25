@@ -136,7 +136,9 @@ def main() -> int:
             "articles": db_stats["articles"],
             "doc_links": db_stats["doc_links"],
             "index_js_kb": db_stats["index_js_kb"],
-            "fulltext_js_kb": db_stats["fulltext_js_kb"],
+            "ft_shards": db_stats["ft_shards"],
+            "ft_total_kb": db_stats["ft_total_kb"],
+            "ft_max_shard_kb": db_stats["ft_max_shard_kb"],
         }
         if db_stats
         else None,

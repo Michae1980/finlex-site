@@ -683,6 +683,15 @@
             <label for="statusSelect">状态</label>
             <select id="statusSelect"></select>
           </div>
+          <div class="select-field" id="sortField" title="切换卡片与台账列表排列顺序">
+            <label for="sortSelect">排序</label>
+            <select id="sortSelect">
+              <option value="taxonomy">体系编号序</option>
+              <option value="degree">关联热度</option>
+              <option value="date">最新生效/发布</option>
+              <option value="articles">条文体量</option>
+            </select>
+          </div>
           <button class="toggle-btn" id="resetBtn">重置</button>
         </div>
       </div>
@@ -872,32 +881,59 @@
     const docArticlesCache = {};
     const docLoadCallbacks = {};
 
-    // 全库 5,417 条条文按需加载引擎（零 CORS，支持 file:// 双击）
-    let fulltextRows = null;
-    let fulltextLoading = false;
+    // 按领域 + 单片 ~1.2MB 分片式按需全文检索引擎（零 CORS，支持 file:// 双击与渐进出结果）
+    const FT_SHARDS = (DATA.meta && Array.isArray(DATA.meta.ft_shards)) ? DATA.meta.ft_shards : [];
+    const ftLoadedIds = new Set();
+    const ftLoadingIds = new Set();
+    let fulltextRows = [];
     let fulltextHitMap = {}; // docId -> { count, artNo, snippet }
 
-    window.__finlexFulltextLoaded = function(rows) {
-      fulltextRows = rows || [];
-      fulltextLoading = false;
+    function updateFtBadge() {
       const badge = document.getElementById("ftBadge");
-      badge.textContent = `✓ ${fulltextRows.length} 条正文已就绪`;
-      badge.classList.add("ready");
+      if (!badge) return;
+      const totalShards = FT_SHARDS.length;
+      if (!totalShards) return;
+      if (ftLoadedIds.size >= totalShards) {
+        badge.textContent = `✓ ${fulltextRows.length.toLocaleString("en-US")} 条正文已就绪`;
+        badge.classList.add("ready");
+      } else if (ftLoadingIds.size > 0) {
+        badge.textContent = `加载正文分片 ${ftLoadedIds.size}/${totalShards}...`;
+      } else if (ftLoadedIds.size > 0) {
+        badge.textContent = `✓ 已载入 ${fulltextRows.length.toLocaleString("en-US")} 条正文`;
+        badge.classList.add("ready");
+      }
+    }
+
+    window.__finlexFtShardLoaded = function(shardId, rows) {
+      ftLoadingIds.delete(shardId);
+      if (!ftLoadedIds.has(shardId)) {
+        ftLoadedIds.add(shardId);
+        if (Array.isArray(rows) && rows.length) {
+          for (let i = 0; i < rows.length; i++) fulltextRows.push(rows[i]);
+        }
+      }
+      updateFtBadge();
       if (state.searchQuery.trim()) updateView(false);
     };
 
-    function ensureFulltextLoaded() {
-      if (fulltextRows || fulltextLoading) return;
-      fulltextLoading = true;
-      const badge = document.getElementById("ftBadge");
-      badge.textContent = "加载正文索引中...";
-      const s = document.createElement("script");
-      s.src = "./data/fulltext.js";
-      s.onerror = () => {
-        fulltextLoading = false;
-        badge.textContent = "正文索引加载失败";
-      };
-      document.body.appendChild(s);
+    function ensureFulltextLoaded(domainScope = state.domainFilter) {
+      const targets = (!domainScope || domainScope === "all")
+        ? FT_SHARDS
+        : FT_SHARDS.filter(sh => sh.domain === domainScope);
+      let started = false;
+      targets.forEach(sh => {
+        if (ftLoadedIds.has(sh.id) || ftLoadingIds.has(sh.id)) return;
+        ftLoadingIds.add(sh.id);
+        started = true;
+        const s = document.createElement("script");
+        s.src = `./data/${sh.file}`;
+        s.onerror = () => {
+          ftLoadingIds.delete(sh.id);
+          updateFtBadge();
+        };
+        document.body.appendChild(s);
+      });
+      if (started) updateFtBadge();
     }
 
     window.__finlexDocLoaded = function(docId, payload) {
@@ -930,6 +966,7 @@
       typeFilter: "all",
       statusFilter: "all",
       topicFilter: "all",
+      sortMode: "taxonomy",     // "taxonomy" | "degree" | "date" | "articles"
       searchQuery: "",
       viewMode: "list",          // "list" | "table" | "graph"
       focusOnly: true,
@@ -1139,7 +1176,7 @@
 
     function computeFulltextHits(parsed, metaMaskByDoc) {
       const map = {};
-      if (!parsed || !parsed.groups.length || !fulltextRows) return map;
+      if (!parsed || !parsed.groups.length || !fulltextRows.length) return map;
       const groups = parsed.groups;
       const allMask = parsed.allMask;
       for (let i = 0; i < fulltextRows.length; i++) {
@@ -1197,6 +1234,7 @@
 
     function setDomainFilter(val) {
       state.domainFilter = val;
+      if (state.searchQuery.trim() || ftLoadedIds.size > 0) ensureFulltextLoaded(val);
       syncCascadingDropdowns();
       updateView(true);
     }
@@ -1333,16 +1371,71 @@
         });
       }
 
-      // 排序：非案例优先 -> 检索时标题/文号命中词组数优先 -> 权威权重 -> 正文同条共现/命中条数 -> 现行有效 -> 关联度
+      const SORT_LABELS = { taxonomy: "体系编号序", degree: "关联热度", date: "最新生效", articles: "条文体量" };
+      const stRank = { in_force: 0, will_replace: 1, upcoming: 2, outdated: 3, pending: 4 };
+      const docDateKey = (d) => {
+        const ed = (d.effective_date && d.effective_date !== "待核实") ? d.effective_date : "";
+        const pd = (d.pub_date && d.pub_date !== "待核实") ? d.pub_date : "";
+        return ed || pd || "0000-00-00";
+      };
+      const getTaxonomyKey = (d) => {
+        const t = d.title || "";
+        let sub = 5, num = 99999;
+        if (d.domain === "accounting" && d.doc_type === "standard") {
+          if (t.includes("基本准则") && !t.includes("可持续")) { sub = 1; num = 0; }
+          else if (t.includes("小企业会计准则")) { sub = 2; num = 0; }
+          else if (t.includes("可持续披露")) {
+            const m = t.match(/第0*(\d+)号/);
+            sub = 3; num = m ? Number(m[1]) : 0;
+          } else {
+            const m = t.match(/企业会计准则第0*(\d+)号/);
+            if (m) { sub = 1; num = Number(m[1]); }
+          }
+        } else if (d.domain === "accounting" && d.doc_type === "guidance") {
+          if (t.includes("应用指南")) {
+            sub = 1;
+            if (t.includes("基本准则") && !t.includes("可持续")) num = 0;
+            else if (t.includes("可持续")) num = 900;
+            else {
+              const m = t.match(/第0*(\d+)号/);
+              num = m ? Number(m[1]) + (t.includes("原保险合同") ? 0.5 : 0) : 999;
+            }
+          } else if (t.includes("准则解释第")) {
+            sub = 2;
+            const m = t.match(/解释第0*(\d+)号/);
+            num = m ? Number(m[1]) : 999;
+          } else if (t.includes("实施问答")) {
+            sub = 3; num = d.id;
+          } else {
+            sub = 4; num = d.id;
+          }
+        } else if (d.domain === "audit" && d.doc_type === "standard") {
+          const m = t.match(/第0*(\d+)号/);
+          sub = 1; num = m ? Number(m[1]) : 99999;
+        } else if (d.domain === "audit" && d.doc_type === "guidance") {
+          if (t.includes("问题解答")) {
+            sub = 1;
+            const m = t.match(/第0*(\d+)号/);
+            num = m ? Number(m[1]) : 999;
+          } else {
+            sub = 2;
+            const m = t.match(/第0*(\d+)号/);
+            num = m ? Number(m[1]) : 999;
+          }
+        } else {
+          const m = t.match(/第0*(\d+)号/);
+          sub = 1; num = m ? Number(m[1]) : 99999;
+        }
+        return [sub, num];
+      };
+
+      // 排序：有检索词时优先按相关度；平时按所选 sortMode（默认体系编号序）
       matched = matched.slice().sort((a, b) => {
         if (a.is_case !== b.is_case) return a.is_case ? 1 : -1;
         if (hasQ) {
           const aTitle = titleScoreByDoc[a.id] || 0;
           const bTitle = titleScoreByDoc[b.id] || 0;
           if (aTitle !== bTitle) return bTitle - aTitle;
-        }
-        if (a.authority_rank !== b.authority_rank) return a.authority_rank - b.authority_rank;
-        if (hasQ) {
           const aCo = fulltextHitMap[a.id]?.cooccurCount || 0;
           const bCo = fulltextHitMap[b.id]?.cooccurCount || 0;
           if (aCo !== bCo) return bCo - aCo;
@@ -1350,9 +1443,32 @@
           const bCnt = fulltextHitMap[b.id]?.count || 0;
           if (aCnt !== bCnt) return bCnt - aCnt;
         }
-        const stRank = { in_force: 0, will_replace: 1, upcoming: 2, outdated: 3, pending: 4 };
-        const sa = stRank[a.status] ?? 5, sb = stRank[b.status] ?? 5;
-        if (sa !== sb) return sa - sb;
+        if (state.sortMode === "degree") {
+          if (b.total_degree !== a.total_degree) return b.total_degree - a.total_degree;
+          if (a.authority_rank !== b.authority_rank) return a.authority_rank - b.authority_rank;
+          return a.id - b.id;
+        }
+        if (state.sortMode === "date") {
+          const da = docDateKey(a), db = docDateKey(b);
+          if (db !== da) return db.localeCompare(da);
+          if (a.authority_rank !== b.authority_rank) return a.authority_rank - b.authority_rank;
+          return a.id - b.id;
+        }
+        if (state.sortMode === "articles") {
+          if (b.article_count !== a.article_count) return b.article_count - a.article_count;
+          if (a.authority_rank !== b.authority_rank) return a.authority_rank - b.authority_rank;
+          return a.id - b.id;
+        }
+        // 默认 taxonomy：权威层级 -> 同系列自然编号升序 -> 现行有效 -> 最新生效日降序
+        if (a.authority_rank !== b.authority_rank) return a.authority_rank - b.authority_rank;
+        const [saSub, saNum] = getTaxonomyKey(a);
+        const [sbSub, sbNum] = getTaxonomyKey(b);
+        if (saSub !== sbSub) return saSub - sbSub;
+        if (saNum !== sbNum) return saNum - sbNum;
+        const sta = stRank[a.status] ?? 5, stb = stRank[b.status] ?? 5;
+        if (sta !== stb) return sta - stb;
+        const da = docDateKey(a), db = docDateKey(b);
+        if (db !== da) return db.localeCompare(da);
         return b.total_degree - a.total_degree || a.id - b.id;
       });
 
@@ -1370,7 +1486,13 @@
       document.getElementById("tableModeBtn").classList.toggle("active", state.viewMode === "table");
       document.getElementById("graphModeBtn").classList.toggle("active", isGraph);
 
-      const hasFilter = state.domainFilter !== "all" || state.typeFilter !== "all" || state.statusFilter !== "all" || state.topicFilter !== "all" || hasQ;
+      const sortSel = document.getElementById("sortSelect");
+      if (sortSel) {
+        sortSel.value = state.sortMode;
+        document.getElementById("sortField").classList.toggle("active-filter", state.sortMode !== "taxonomy");
+      }
+
+      const hasFilter = state.domainFilter !== "all" || state.typeFilter !== "all" || state.statusFilter !== "all" || state.topicFilter !== "all" || state.sortMode !== "taxonomy" || hasQ;
       document.getElementById("resetBtn").classList.toggle("active", hasFilter);
 
       document.getElementById("focusOnlyBtn").style.display = isGraph ? "inline-flex" : "none";
@@ -1396,7 +1518,7 @@
       const scope = crumbs.length ? crumbs.join(" · ") : "全库法规";
       const matchedIds = new Set(matched.map(d => d.id));
       const totalArtHits = Object.entries(fulltextHitMap).reduce((s, [did, x]) => s + (matchedIds.has(Number(did)) ? x.count : 0), 0);
-      const hitNote = hasQ && fulltextRows ? ` · 正文 ${totalArtHits} 条` : "";
+      const hitNote = hasQ && fulltextRows.length ? ` · 正文 ${totalArtHits} 条` : "";
       const synNote = parsedQ.expandedHints.length ? ` · 已扩展 ${parsedQ.expandedHints.slice(0, 2).join("、")}` : "";
       document.getElementById("statsSubtitle").textContent =
         `${scope} · ${matched.length}/${DATA.meta.document_count} 份${hitNote}${synNote}`;
@@ -1404,8 +1526,9 @@
       currentView.matchedDocs = matched;
       currentView.coreIds = coreIds;
 
+      const sortTag = hasQ ? "相关度" : (SORT_LABELS[state.sortMode] || "体系编号序");
       if (state.viewMode === "list") {
-        document.getElementById("viewBadge").textContent = `卡片：权威序 ${matched.length} 份`;
+        document.getElementById("viewBadge").textContent = `卡片：${sortTag} ${matched.length} 份`;
         document.getElementById("layoutHint").textContent = hasQ
           ? "已支持多词空格 AND 检索与简称扩展，点击卡片直接高亮命中条款"
           : "无摘要文件自动展示首条正文预览；案例恒置底并标注非规范依据";
@@ -2271,6 +2394,7 @@
       if (state.typeFilter !== "all") p.set("type", state.typeFilter);
       if (state.statusFilter !== "all") p.set("status", state.statusFilter);
       if (state.topicFilter !== "all") p.set("topic", state.topicFilter);
+      if (state.sortMode !== "taxonomy") p.set("sort", state.sortMode);
       if (state.searchQuery.trim()) p.set("q", state.searchQuery.trim());
       if (state.viewMode !== "list") p.set("view", state.viewMode);
       if (!state.focusOnly) p.set("focus", "0");
@@ -2293,6 +2417,7 @@
       if (p.get("type")) state.typeFilter = p.get("type");
       if (p.get("status")) state.statusFilter = p.get("status");
       if (p.get("topic")) state.topicFilter = p.get("topic");
+      if (["taxonomy", "degree", "date", "articles"].includes(p.get("sort"))) state.sortMode = p.get("sort");
       if (p.get("q")) {
         state.searchQuery = p.get("q");
         document.getElementById("searchInput").value = state.searchQuery;
@@ -2405,6 +2530,7 @@
     document.getElementById("typeSelect").onchange = (e) => { state.typeFilter = e.target.value; syncCascadingDropdowns(); updateView(true); };
     document.getElementById("topicSelect").onchange = (e) => { state.topicFilter = e.target.value; syncCascadingDropdowns(); updateView(true); };
     document.getElementById("statusSelect").onchange = (e) => { state.statusFilter = e.target.value; updateView(true); };
+    document.getElementById("sortSelect").onchange = (e) => { state.sortMode = e.target.value; updateView(false); };
 
     const searchInputEl = document.getElementById("searchInput");
     const searchClearBtn = document.getElementById("searchClearBtn");
@@ -2426,7 +2552,7 @@
     };
 
     document.getElementById("resetBtn").onclick = () => {
-      state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
+      state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all"; state.sortMode = "taxonomy";
       state.searchQuery = ""; state.activePath = null; state.focusOnly = true; state.inDocQuery = "";
       searchInputEl.value = "";
       searchClearBtn.style.display = "none";

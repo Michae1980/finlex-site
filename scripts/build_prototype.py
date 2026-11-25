@@ -27,6 +27,8 @@ DEFAULT_DB = PROJECT_ROOT.parent / "finlex" / "backend" / "data" / "finlex.db"
 PROTOTYPE_DIR = PROJECT_ROOT / "prototype"
 DATA_DIR = PROTOTYPE_DIR / "data"
 DOCS_DIR = DATA_DIR / "docs"
+FT_DIR = DATA_DIR / "ft"
+FT_SHARD_MAX_BYTES = 1_200_000
 TEMPLATE_PATH = PROTOTYPE_DIR / "template.html"
 OUTPUT_HTML = PROTOTYPE_DIR / "index.html"
 
@@ -578,7 +580,8 @@ def build_from_db(db_path: Path) -> dict:
         if strength_order.get(strength, 0) > strength_order.get(edge["strength"], 0):
             edge["strength"] = strength
         edge["count"] += 1
-        if len(edge["pairs"]) < 12:
+        # 首屏 index.js 每条文档边仅保留 Top 4 代表性条文明细（完整条对条已嵌入 doc_<id>.js）
+        if len(edge["pairs"]) < 4:
             edge["pairs"].append(
                 {
                     "from_art_no": (row["from_art_no"] or "").strip(),
@@ -630,6 +633,64 @@ def build_from_db(db_path: Path) -> dict:
         if tid in topic_labels
     ]
 
+    # 按领域 + 单片 ~1.2MB 上限切分全文检索分片（彻底消除单体大文件，支持按领域按需加载与渐进流式出结果）
+    FT_DIR.mkdir(parents=True, exist_ok=True)
+    old_monolith = DATA_DIR / "fulltext.js"
+    if old_monolith.exists():
+        old_monolith.unlink()
+
+    dom_by_doc = {d["id"]: d["domain"] for d in documents}
+    rows_by_dom: dict[str, list[list]] = defaultdict(list)
+    for r in fulltext_rows:
+        rows_by_dom[dom_by_doc.get(r[0], "general")].append(r)
+
+    ft_shards_meta: list[dict] = []
+    written_ft_files: set[str] = set()
+    for dom in ("tax", "general", "audit", "accounting"):
+        dom_rows = rows_by_dom.get(dom, [])
+        if not dom_rows:
+            continue
+        chunk: list[list] = []
+        chunk_bytes = 0
+        shard_idx = 0
+
+        def flush_chunk(c_rows: list[list], idx: int) -> None:
+            shard_id = f"{dom}_{idx}"
+            fname = f"ft_{shard_id}.js"
+            fpath = FT_DIR / fname
+            payload_str = (
+                f'window.__finlexFtShardLoaded("{shard_id}",'
+                + json.dumps(c_rows, ensure_ascii=False, separators=(",", ":"))
+                + ");\n"
+            )
+            fpath.write_text(payload_str, encoding="utf-8")
+            written_ft_files.add(fname)
+            ft_shards_meta.append(
+                {
+                    "id": shard_id,
+                    "domain": dom,
+                    "file": f"ft/{fname}",
+                    "rows": len(c_rows),
+                    "kb": round(fpath.stat().st_size / 1024, 1),
+                }
+            )
+
+        for r in dom_rows:
+            r_bytes = len(json.dumps(r, ensure_ascii=False, separators=(",", ":")).encode("utf-8")) + 1
+            if chunk and chunk_bytes + r_bytes > FT_SHARD_MAX_BYTES:
+                flush_chunk(chunk, shard_idx)
+                shard_idx += 1
+                chunk = []
+                chunk_bytes = 0
+            chunk.append(r)
+            chunk_bytes += r_bytes
+        if chunk:
+            flush_chunk(chunk, shard_idx)
+
+    for stale in FT_DIR.glob("ft_*.js"):
+        if stale.name not in written_ft_files:
+            stale.unlink()
+
     index_payload = {
         "meta": {
             "built_at": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -638,6 +699,7 @@ def build_from_db(db_path: Path) -> dict:
             "raw_link_count": len(raw_links),
             "doc_link_count": len(doc_links),
             "connected_doc_count": sum(1 for d in documents if d["total_degree"] > 0),
+            "ft_shards": ft_shards_meta,
         },
         "taxonomy": {
             "domains": DOMAIN_META,
@@ -649,17 +711,11 @@ def build_from_db(db_path: Path) -> dict:
         "doc_links": doc_links,
     }
 
-    # 写出首屏索引、全库按需全文语料、按文档条文分片
+    # 写出首屏索引与按文档条文分片
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     index_js_path = DATA_DIR / "index.js"
     index_js_path.write_text(
         "window.FINLEX_INDEX = " + json.dumps(index_payload, ensure_ascii=False, separators=(",", ":")) + ";\n",
-        encoding="utf-8",
-    )
-
-    fulltext_js_path = DATA_DIR / "fulltext.js"
-    fulltext_js_path.write_text(
-        "window.__finlexFulltextLoaded(" + json.dumps(fulltext_rows, ensure_ascii=False, separators=(",", ":")) + ");\n",
         encoding="utf-8",
     )
 
@@ -724,18 +780,28 @@ def build_from_db(db_path: Path) -> dict:
             if sorted_al:
                 a["links"] = sorted_al
 
+    written_doc_files: set[str] = set()
     for doc_id in doc_ids_set:
         doc_payload = {"id": doc_id, "articles": articles_by_doc.get(doc_id, [])}
-        doc_js_path = DOCS_DIR / f"doc_{doc_id}.js"
+        fname = f"doc_{doc_id}.js"
+        doc_js_path = DOCS_DIR / fname
         doc_js_path.write_text(
             f"window.__finlexDocLoaded({doc_id}," + json.dumps(doc_payload, ensure_ascii=False, separators=(",", ":")) + ");\n",
             encoding="utf-8",
         )
+        written_doc_files.add(fname)
+
+    # 自动清理已删除文档遗留的旧分片文件
+    for stale_doc in DOCS_DIR.glob("doc_*.js"):
+        if stale_doc.name not in written_doc_files:
+            stale_doc.unlink()
 
     if TEMPLATE_PATH.exists():
         OUTPUT_HTML.write_text(TEMPLATE_PATH.read_text(encoding="utf-8"), encoding="utf-8")
 
     topic_counts = Counter(d["topic_label"] for d in documents)
+    ft_total_kb = round(sum(s["kb"] for s in ft_shards_meta), 1)
+    ft_max_kb = max((s["kb"] for s in ft_shards_meta), default=0.0)
     return {
         "documents": len(documents),
         "articles": index_payload["meta"]["article_count"],
@@ -746,7 +812,9 @@ def build_from_db(db_path: Path) -> dict:
         "privacy_redactions": privacy_redactions,
         "warnings": warnings,
         "index_js_kb": round(index_js_path.stat().st_size / 1024, 1),
-        "fulltext_js_kb": round(fulltext_js_path.stat().st_size / 1024, 1),
+        "ft_shards": len(ft_shards_meta),
+        "ft_total_kb": ft_total_kb,
+        "ft_max_shard_kb": ft_max_kb,
         "topic_distribution": dict(topic_counts.most_common()),
     }
 
