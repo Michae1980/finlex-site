@@ -96,7 +96,12 @@ AUTHORITY_RANK = {
 
 # 按纯业务主题归并（准则应用指南、审计问题解答均直接归入对应业务专题）
 TOPIC_RULES = [
-    # 国际准则（ISSB / IAASB / IESBA / OECD / IFRS Accounting）英文业务专题
+    # 国际准则（ESMA 执法案例 / ISSB / IAASB / IESBA / OECD / IFRS Accounting）英文业务专题
+    (
+        "intl_acc_cases",
+        "ESMA Enforcement Cases (Non-Authoritative)",
+        lambda d: d.get("framework") == "INTL" and d["doc_type"] == "case",
+    ),
     (
         "intl_acc_esg",
         "Sustainability Disclosure (ISSB)",
@@ -127,6 +132,11 @@ TOPIC_RULES = [
         "intl_tax_oecd",
         "International Tax (OECD Pillar Two & Treaties)",
         lambda d: d.get("framework") == "INTL" and d["domain"] == "tax",
+    ),
+    (
+        "intl_gen_gov",
+        "Corporate Governance, Internal Control & AML",
+        lambda d: d.get("framework") == "INTL" and d["domain"] == "general",
     ),
     (
         "intl_acc_guides",
@@ -657,15 +667,20 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
 
         # 方案 B：仅当显式传入 include_private=True 时，叠加本机 git-ignored 的 intl_data/private/*.json 官方段落全文
         private_overlay: dict[str, list[dict]] = {}
+        private_overlay_base: dict[str, list[dict]] = {}
         private_dir = INTL_DATA_DIR / "private"
         if include_private and private_dir.exists():
+            def _norm_base_code(c: str) -> str:
+                return re.sub(r"\s*\(revised[^)]*\)", "", c, flags=re.IGNORECASE).strip().upper()
             for pjf in sorted(private_dir.glob("*.json")):
                 pp = json.loads(pjf.read_text(encoding="utf-8"))
                 pcode = (pp.get("code") or "").strip()
                 if pcode and pp.get("articles"):
                     private_overlay[pcode] = pp["articles"]
+                    private_overlay_base[_norm_base_code(pcode)] = pp["articles"]
             for item in intl_raw_items:
-                p_arts = private_overlay.get(item.get("code", ""))
+                icode = item.get("code", "")
+                p_arts = private_overlay.get(icode) or private_overlay_base.get(_norm_base_code(icode))
                 if p_arts:
                     base_arts = item.get("articles", [])
                     ov = [a for a in base_arts if a.get("no") == "Overview"]
@@ -751,12 +766,15 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
             topic_labels[tid] = tlabel
             documents.append(doc_obj)
 
-            # 1) 国际准则内部引用边（Big4 实务指南归 L5 explains，IFRIC 议程决议归 L2 amends，其余归 L3 cites）
+            # 1) 国际准则内部引用边（实务案例归 L5 applies_to，Big4 指南归 L5 explains，IFRIC 议程决议归 L2 amends，其余归 L3 cites）
             src_code = item.get("code", "")
             for cited_code in item.get("cited_codes", []):
                 tdid = code_to_doc_id.get(cited_code)
                 if tdid and tdid != did:
-                    if dtype == "interpretation" or src_code.startswith("Big4 Guide"):
+                    if dtype == "case":
+                        rk_i, st_i, sc_i, tr_i = "applies_to", "weak", 40, "L5"
+                        nt_i = f"ESMA enforcement case applying {cited_code} (reference only)"
+                    elif dtype == "interpretation" or src_code.startswith("Big4 Guide"):
                         rk_i, st_i, sc_i, tr_i = "explains", "weak", 42, "L5"
                         nt_i = f"Big Four practical guide covering {cited_code}"
                     elif src_code == "IFRIC Agenda Decisions":
@@ -888,6 +906,11 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
             ("IESBA Code Part 5 (IESSA)", "IESBA Code Part 1–3", "companion", "strong", 90, "L1", "Sustainability assurance ethics & independence (Volume 2)"),
             ("OECD Pillar Two (GloBE)", "IAS 12", "cross_domain", "strong", 74, "L4", "Pillar Two 15% global minimum tax directly linked to IAS 12 deferred tax exception & disclosures"),
             ("OECD Transfer Pricing Guidelines", "OECD Model Tax Convention", "companion", "strong", 90, "L1", "Arm's length principle & transfer pricing companion to Article 9 of Model Tax Convention"),
+            ("COSO ERM (2017)", "COSO Internal Control (ICIF)", "companion", "strong", 90, "L1", "COSO governance suite: Enterprise Risk Management complementing Internal Control (ICIF)"),
+            ("COSO Internal Control (ICIF)", "ISA 315 (Revised 2019)", "cross_domain", "strong", 74, "L4", "COSO 5-component internal control framework directly aligned with ISA 315 control evaluation"),
+            ("G20/OECD Corporate Governance", "IFRS S1", "cross_domain", "strong", 72, "L4", "Chapter VI sustainability governance & resilience interoperable with IFRS S1"),
+            ("OECD MNE Guidelines (RBC)", "G20/OECD Corporate Governance", "companion", "strong", 88, "L1", "OECD corporate governance & responsible business conduct companion standards"),
+            ("FATF 40 Recommendations", "ISA 250 (Revised)", "cross_domain", "strong", 72, "L4", "FATF AML/CFT/DNFBP obligations interacting with auditor NOCLAR responsibilities"),
         ]
         for fc, tc, rk_c, st_c, sc_c, tr_c, nt_c in intl_curated_links:
             fd_c = code_to_doc_id.get(fc)

@@ -2002,7 +2002,12 @@
           m = c.match(/^ISRS\s+(\d+)/i);
           if (m) return [17, Number(m[1])];
           if (c.startsWith("IESBA")) return [18, c.includes("Part 5") ? 5 : (c.includes("Part 4B") ? 4 : (c.includes("Part 4A") ? 3 : 1))];
+          if (c.startsWith("OECD MNE")) return [21, 5];
           if (c.startsWith("OECD")) return [20, c.includes("Pillar Two") ? 1 : (c.includes("Model Tax") ? 2 : 3)];
+          if (c.startsWith("G20/OECD")) return [21, 1];
+          if (c.startsWith("COSO ICIF")) return [21, 2];
+          if (c.startsWith("COSO ERM")) return [21, 3];
+          if (c.startsWith("FATF")) return [21, 4];
           return [25, d.id];
         }
         if (d.domain === "accounting" && d.doc_type === "standard") {
