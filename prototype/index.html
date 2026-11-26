@@ -78,6 +78,7 @@
 
     /* 核心全局检索框（视觉主角） */
     .hero-search {
+      position: relative;
       flex: 1; max-width: 560px; min-width: 220px; height: 38px;
       display: flex; align-items: center; gap: 7px;
       padding: 0 8px 0 13px;
@@ -102,6 +103,41 @@
       font-size: 13px; line-height: 1; cursor: pointer; flex-shrink: 0;
     }
     .search-clear-btn:hover { background: #cbd5e1; color: var(--ink); }
+    .search-suggest-pop {
+      position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+      background: var(--surface); border: 1px solid var(--border-strong); border-radius: 11px;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14); z-index: 60;
+      display: none; overflow: hidden; max-height: 450px; overflow-y: auto;
+    }
+    .search-suggest-pop.open { display: block; }
+    .suggest-item {
+      padding: 8px 12px; border-bottom: 1px solid var(--border); cursor: pointer;
+      display: flex; flex-direction: column; gap: 3px; transition: background 0.12s ease;
+    }
+    .suggest-item:last-of-type { border-bottom: none; }
+    .suggest-item:hover, .suggest-item.active { background: var(--primary-soft); }
+    .suggest-item-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .suggest-item-title {
+      font-size: 13px; font-weight: 600; color: var(--ink); min-width: 0; flex: 1;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .suggest-item-title mark, .suggest-item-sub mark { background: #fef08a; padding: 0 2px; border-radius: 3px; color: var(--ink); }
+    .suggest-item-tags { display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .suggest-reason {
+      font-size: 10.5px; padding: 1px 6px; border-radius: var(--radius-pill);
+      background: #f1f5f9; color: var(--ink-secondary); border: 1px solid var(--border); white-space: nowrap;
+    }
+    .suggest-reason.fuzzy { background: #eef2ff; color: #3730a3; border-color: #c7d2fe; }
+    .suggest-reason.hit { background: #fef9c3; color: #854d0e; border-color: #fde047; }
+    .suggest-item-sub {
+      font-size: 11.5px; color: var(--ink-muted); line-height: 1.4;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .suggest-foot {
+      padding: 6px 12px; background: #f8fafc; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      font-size: 11px; color: var(--ink-muted);
+    }
     .ft-badge {
       font-size: 10.5px; color: var(--ink-muted); padding: 2px 8px;
       border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--border);
@@ -232,14 +268,28 @@
 
     .legend-bar {
       display: none; flex-wrap: wrap; align-items: center; justify-content: space-between;
-      gap: 8px; padding: 5px 14px;
-      background: rgba(248, 250, 252, 0.94); border-bottom: 1px solid var(--border);
+      gap: 8px; padding: 6px 14px;
+      background: rgba(248, 250, 252, 0.96); border-bottom: 1px solid var(--border);
       font-size: 11.5px; color: var(--ink-secondary);
     }
     .canvas-pane[data-view="graph"] .legend-bar { display: flex; }
-    .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
     .legend-item { display: inline-flex; align-items: center; gap: 5px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .graph-tier-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      border: 1px solid var(--border); background: var(--surface); color: var(--ink-secondary);
+      padding: 2px 8px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 500;
+      cursor: pointer; white-space: nowrap; transition: all 0.14s ease;
+    }
+    .graph-tier-pill:hover { border-color: var(--primary-border); color: var(--primary); }
+    .graph-tier-pill.active { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); font-weight: 600; }
+    .graph-tier-pill .dot { width: 6px; height: 6px; }
+    .graph-cat-select {
+      border: 1px solid var(--border-strong); border-radius: 7px; background: var(--surface);
+      color: var(--ink); font-size: 11.5px; padding: 2px 6px; outline: none; cursor: pointer;
+    }
+    .graph-cat-select.active-filter { background: var(--primary-soft); border-color: var(--primary); color: #1e40af; font-weight: 600; }
 
     /* 三视图显隐控制 */
     .list-scroll, .table-scroll, .graph-scroll { flex: 1; overflow: auto; display: none; }
@@ -417,6 +467,20 @@
     .drawer-tabs-left { display: flex; align-items: center; gap: 6px; }
     .drawer-tab { border: none; background: transparent; padding: 9px 16px; font-size: 13.5px; font-weight: 500; color: var(--ink-muted); cursor: pointer; border-bottom: 2px solid transparent; }
     .drawer-tab.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); background: var(--surface); border-radius: 8px 8px 0 0; }
+    .drawer-history-bar {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+      padding: 6px 16px; background: #f8fafc; border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .history-select {
+      flex: 1; min-width: 150px; max-width: 340px;
+      border: 1px solid var(--border-strong); border-radius: 6px;
+      background: var(--surface); color: var(--ink);
+      font-size: 11.5px; padding: 3px 8px; outline: none; cursor: pointer;
+    }
+    .history-select:focus { border-color: var(--primary); }
+    .mini-btn:disabled { opacity: 0.45; cursor: not-allowed; border-color: var(--border); color: var(--ink-muted); }
+    .mini-btn:disabled:hover { border-color: var(--border); color: var(--ink-muted); }
     .drawer-body { flex: 1; overflow-y: auto; padding: 18px 26px 28px; }
     .drawer-footer {
       border-top: 1px solid var(--border); background: #f8fafc;
@@ -461,6 +525,15 @@
       transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
     }
     .overview-quick:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+    .overview-framework {
+      display: inline-flex; align-items: center; gap: 4px;
+      border: 1px solid #c7d2fe; border-left: 2.5px solid #4f46e5;
+      background: var(--surface); color: #312e81;
+      padding: 2px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 500;
+      cursor: pointer; max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
+    }
+    .overview-framework:hover { border-color: #4f46e5; background: #eef2ff; }
     .rel-group-title.flash-group { background: var(--primary-soft); color: var(--primary); transition: background 0.3s ease; }
 
     .warn-banner {
@@ -468,6 +541,10 @@
       border-radius: var(--radius-md); padding: 10px 14px; font-size: 12.5px; margin-bottom: 12px;
     }
     .path-banner { background: #fff1f2; border: 1px solid #fda4af; color: #9f1239; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 12px; font-size: 12.5px; }
+    .framework-banner {
+      background: #eef2ff; border: 1px solid #c7d2fe; color: #312e81;
+      border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 12px; font-size: 12.5px; line-height: 1.55;
+    }
 
     .in-doc-controls {
       display: grid; grid-template-columns: 1fr 220px; gap: 8px;
@@ -644,11 +721,12 @@
           </div>
         </div>
 
-        <div class="hero-search" role="search">
+        <div class="hero-search" id="heroSearchWrap" role="search">
           <span class="hero-search-icon" aria-hidden="true">🔍</span>
-          <input class="hero-search-input" id="searchInput" type="search" placeholder="全库检索法规标题、文号或条文正文..." />
+          <input class="hero-search-input" id="searchInput" type="search" autocomplete="off" placeholder="全库检索法规标题、文号或条文正文..." />
           <button class="search-clear-btn" id="searchClearBtn" type="button" title="清空搜索" style="display:none">×</button>
           <span class="ft-badge" id="ftBadge" title="点击搜索框自动加载全库条文正文索引">正文按需索引</span>
+          <div class="search-suggest-pop" id="searchSuggestPop" role="listbox" aria-label="模糊检索建议"></div>
         </div>
 
         <div class="device-controls">
@@ -739,14 +817,7 @@
         </div>
 
         <div class="legend-bar">
-          <div class="legend">
-            <span class="legend-item"><span class="dot" style="background:var(--primary)"></span>当前聚焦</span>
-            <span class="legend-item"><span class="dot" style="background:#059669"></span>L1 核心配套</span>
-            <span class="legend-item"><span class="dot" style="background:#2563eb"></span>L2 修补解答</span>
-            <span class="legend-item"><span class="dot" style="background:#64748b"></span>L3 条文引用</span>
-            <span class="legend-item"><span class="dot" style="background:#d97706"></span>L4 跨域衔接（虚线）</span>
-            <span class="legend-item"><span class="dot" style="background:#e11d48"></span>L5 案例参考（点线）</span>
-          </div>
+          <div class="legend" id="graphLegendFilters"></div>
           <span id="layoutHint" style="color:var(--ink-muted)">各列按重要度从上到下排列，点击任意卡片查看原文与全貌</span>
         </div>
 
@@ -819,6 +890,13 @@
             <button class="drawer-tab" data-tab="relations">关联网络与依据分级</button>
           </div>
           <button class="toggle-btn desktop-or-tablet-only" id="readerExpandBtn" style="margin-bottom:5px;" title="隐藏左侧导航栏，全屏专注阅读法条原文">⤢ 专注阅读</button>
+        </div>
+        <div class="drawer-history-bar" id="drawerHistoryBar" aria-label="浏览记录与快捷返回">
+          <button type="button" class="mini-btn" id="navBackBtn" onclick="goBackDoc()" disabled title="暂无上一份浏览记录">← 返回</button>
+          <select class="history-select" id="recentDocsSelect" aria-label="最近浏览的法规" onchange="jumpToRecentDoc(this.value)">
+            <option value="">🕒 最近浏览（0 份）</option>
+          </select>
+          <button type="button" class="mini-btn primary" id="comparePrevBtn" onclick="checkRelationWithPrevDoc()" style="display:none" title="查看当前法规与上一份浏览法规之间的关联路径">⇄ 查与上份关联</button>
         </div>
         <div class="drawer-body" id="drawerBody"></div>
         <div class="drawer-footer">
@@ -913,7 +991,11 @@
         }
       }
       updateFtBadge();
-      if (state.searchQuery.trim()) updateView(false);
+      if (state.searchQuery.trim()) {
+        updateView(false, { keepSelected: true });
+        const pop = document.getElementById("searchSuggestPop");
+        if (pop && pop.classList.contains("open")) renderSearchSuggestions(state.searchQuery);
+      }
     };
 
     function ensureFulltextLoaded(domainScope = state.domainFilter) {
@@ -970,6 +1052,8 @@
       searchQuery: "",
       viewMode: "list",          // "list" | "table" | "graph"
       focusOnly: true,
+      graphTierFilter: "all",    // "all" | "l1" | "l2" | "l3" | "l4" | "l5"
+      graphTypeFilter: "all",    // "all" | "standard" | "guide" | "interp_qa" | "law_reg" | "rule_norm" | "case_interp"
       connectedOnly: true,       // 图谱模式下是否仅看有关联网络的文档
       layoutMode: "domain",      // "domain" | "type" | "topic"
       includeBridges: false,
@@ -984,6 +1068,10 @@
       articleRenderLimit: 80,
       zoom: 1.0,
       activePath: null,
+      activeFrameworkRel: null,
+      navHistory: [],
+      navIndex: -1,
+      recentDocIds: [],
       deviceMode: "auto",
       filtersOpen: false,
       drawerOpen: true,
@@ -1048,6 +1136,248 @@
       "政府会计": ["政府会计准则", "政府会计制度"],
       "民间非营利": ["民间非营利组织会计制度"]
     };
+
+    // 模糊概念家族扩展词典：用于下拉建议排序，帮用户从宽泛词（如“金融工具”）快速定位关联具体准则（如“套期会计”）
+    const FUZZY_TOPIC_HINTS = {
+      "金融工具": ["金融工具确认和计量", "金融资产转移", "套期会计", "金融工具列报", "金融工具", "套期", "预期信用损失"],
+      "金工": ["金融工具确认和计量", "金融资产转移", "套期会计", "金融工具列报"],
+      "套期": ["套期会计", "金融工具确认和计量", "金融工具列报"],
+      "收入": ["收入", "主要责任人", "合同资产", "合同负债", "履约义务", "可变对价", "增值税"],
+      "租赁": ["租赁", "使用权资产", "租赁负债", "售后租回"],
+      "合并": ["企业合并", "合并财务报表", "长期股权投资", "合营安排", "商誉"],
+      "长投": ["长期股权投资", "企业合并", "合并财务报表", "合营安排"],
+      "所得税": ["所得税", "企业所得税", "个人所得税", "递延所得税", "研发费用"],
+      "减值": ["资产减值", "金融工具确认和计量", "存货", "商誉"],
+      "存货": ["存货", "存货监盘", "特定项目获取审计证据"],
+      "固定资产": ["固定资产", "持有待售", "借款费用", "无形资产"],
+      "无形资产": ["无形资产", "研发费用", "资产减值"],
+      "股份支付": ["股份支付", "职工薪酬", "个人所得税"],
+      "关联方": ["关联方披露", "关联方", "资金占用", "税收征收管理法"],
+      "舞弊": ["舞弊", "职业怀疑", "风险评估", "内部控制", "函证"],
+      "审计意见": ["非无保留意见", "审计报告", "关键审计事项", "持续经营", "审计类第1号"],
+      "非标": ["非无保留意见", "审计报告", "审计类第1号"],
+      "增值税": ["增值税", "发票管理", "收入", "小规模纳税人"],
+      "可持续": ["可持续披露", "气候", "可持续信息鉴证"]
+    };
+
+    let activeSuggestList = [];
+    let activeSuggestIdx = -1;
+
+    function getBigrams(str) {
+      const s = String(str || "").toLowerCase().replace(/[\s《》—\-（）()·]/g, "");
+      const set = new Set();
+      if (s.length <= 1) { if (s) set.add(s); return set; }
+      for (let i = 0; i < s.length - 1; i++) set.add(s.slice(i, i + 2));
+      return set;
+    }
+
+    function computeFuzzySuggestions(rawQuery, limit = 8) {
+      const q = String(rawQuery || "").trim();
+      if (!q) return { items: [], total: 0 };
+      const qLower = q.toLowerCase();
+      const parsed = parseSearchQuery(q);
+      const qBigrams = getBigrams(q);
+
+      // 收集触发的模糊概念家族词
+      const fuzzyTerms = new Set();
+      Object.entries(FUZZY_TOPIC_HINTS).forEach(([k, arr]) => {
+        const kl = k.toLowerCase();
+        if (qLower.includes(kl) || (qLower.length >= 2 && kl.includes(qLower))) {
+          arr.forEach(t => fuzzyTerms.add(t.toLowerCase()));
+        }
+      });
+
+      const domainPool = filterByDomain(DATA.documents);
+      const scoreDocs = (pool) => {
+        const out = [];
+        for (let i = 0; i < pool.length; i++) {
+          const d = pool[i];
+          const titleL = (d.title || "").toLowerCase();
+          const dispL = (d.display_title || "").toLowerCase();
+          const badgeL = (d.series_badge || "").toLowerCase();
+          const docNoL = hasValidDocNo(d) ? d.doc_no.toLowerCase() : "";
+          const sumL = (d.summary || d.first_preview || "").toLowerCase();
+          const ft = fulltextHitMap[d.id];
+
+          let score = 0;
+          let reason = "";
+          let reasonCls = "";
+
+          // 1) 标题精确/子串命中
+          const titleMask = getMatchMask(`${titleL} ${dispL} ${badgeL} ${docNoL}`, parsed.groups);
+          if (titleL.includes(qLower) || dispL.includes(qLower)) {
+            score += 170;
+            if (dispL === qLower) score += 40;
+            reason = "标题匹配";
+          } else if (titleMask > 0) {
+            const hits = countBits(titleMask);
+            score += hits * 85 + (titleMask === parsed.allMask ? 45 : 0);
+            reason = "标题匹配";
+          }
+
+          // 2) 概念家族模糊扩展命中（如搜“金融工具”带出“套期会计”）
+          if (fuzzyTerms.size > 0) {
+            let fTitleHit = false, fSumHit = false;
+            for (const ftTerm of fuzzyTerms) {
+              if (titleL.includes(ftTerm) || dispL.includes(ftTerm)) { fTitleHit = true; break; }
+              if (sumL.includes(ftTerm)) fSumHit = true;
+            }
+            if (fTitleHit) {
+              score += 78;
+              if (!reason) { reason = "相关准则"; reasonCls = "fuzzy"; }
+            } else if (fSumHit) {
+              score += 24;
+              if (!reason) { reason = "相关概念"; reasonCls = "fuzzy"; }
+            }
+          }
+
+          // 3) 正文全文命中
+          if (ft && ft.count > 0) {
+            score += Math.min(58, ft.count * 4) + (ft.cooccurCount ? 22 : 0);
+            if (!reason) { reason = `正文 ${ft.count} 条`; reasonCls = "hit"; }
+          }
+
+          // 4) 摘要命中
+          if (sumL.includes(qLower)) {
+            score += 36;
+            if (!reason) { reason = "摘要匹配"; }
+          }
+
+          // 5) 字符二元组模糊重合（兜底容错，支持不精确输入）
+          if (qBigrams.size > 0 && score < 80) {
+            const tBigrams = getBigrams(d.display_title || d.title);
+            let overlap = 0;
+            qBigrams.forEach(bg => { if (tBigrams.has(bg)) overlap += 1; });
+            const ratio = overlap / qBigrams.size;
+            if (ratio >= 0.45) {
+              score += Math.round(ratio * 60);
+              if (!reason) { reason = "模糊匹配"; reasonCls = "fuzzy"; }
+            }
+          }
+
+          if (score <= 0) continue;
+
+          // 权威层级加权：正本准则/法律优先于指南、问答与案例
+          if (!d.is_case && d.authority_rank <= 2) score += 22;
+          else if (!d.is_case && d.authority_rank <= 4) score += 10;
+          if (d.status === "in_force") score += 6;
+          if (d.status === "outdated") score -= 18;
+
+          out.push({
+            doc: d,
+            score,
+            reason: reason || "相关匹配",
+            reasonCls,
+            snippet: getDocSnippet(d, q)
+          });
+        }
+        out.sort((a, b) => b.score - a.score || a.doc.authority_rank - b.doc.authority_rank || b.doc.total_degree - a.doc.total_degree);
+        return out;
+      };
+
+      let ranked = scoreDocs(domainPool);
+      if (ranked.length < 5 && state.domainFilter !== "all") {
+        const allRanked = scoreDocs(DATA.documents);
+        const seen = new Set(ranked.map(x => x.doc.id));
+        allRanked.forEach(item => {
+          if (!seen.has(item.doc.id)) { ranked.push(item); seen.add(item.doc.id); }
+        });
+      }
+      return { items: ranked.slice(0, limit), total: ranked.length };
+    }
+
+    function renderSearchSuggestions(rawQuery) {
+      const pop = document.getElementById("searchSuggestPop");
+      if (!pop) return;
+      const q = String(rawQuery || "").trim();
+      if (!q) { closeSearchSuggestions(); return; }
+      const { items, total } = computeFuzzySuggestions(q, 8);
+      activeSuggestList = items;
+      activeSuggestIdx = -1;
+      if (!items.length) {
+        pop.innerHTML = `<div class="suggest-foot"><span>未找到与「${escapeHTML(q)}」相关的法规，可尝试精简关键词。</span></div>`;
+        pop.classList.add("open");
+        return;
+      }
+      const rowsHTML = items.map((item, idx) => {
+        const d = item.doc;
+        const domShort = DOMAIN_SHORT[d.domain] || DOMAIN_LABELS[d.domain] || "";
+        const typeLbl = TYPE_LABELS[d.doc_type] || d.doc_type;
+        return `
+          <div class="suggest-item" role="option" data-idx="${idx}" onmousedown="event.preventDefault(); pickSearchSuggestion(${d.id})">
+            <div class="suggest-item-top">
+              <span class="suggest-item-title" title="${escapeHTML(d.title)}">${highlightText(d.title, q)}</span>
+              <span class="suggest-item-tags">
+                <span class="pill dom-${d.domain}">${escapeHTML(domShort)}</span>
+                <span class="pill type-pill">${escapeHTML(typeLbl)}</span>
+                <span class="suggest-reason ${item.reasonCls}">${escapeHTML(item.reason)}</span>
+              </span>
+            </div>
+            <div class="suggest-item-sub">${highlightText(item.snippet, q)}</div>
+          </div>
+        `;
+      }).join("");
+      pop.innerHTML = `${rowsHTML}
+        <div class="suggest-foot">
+          <span>模糊联想前 ${items.length} 条（共 ${total} 份相关 · ↑↓ 选择，回车直达）</span>
+          <button type="button" class="mini-btn" onmousedown="event.preventDefault(); viewAllSearchInList()">在卡片列表查看全部 →</button>
+        </div>`;
+      pop.classList.add("open");
+    }
+
+    function updateSuggestHighlight() {
+      const pop = document.getElementById("searchSuggestPop");
+      if (!pop) return;
+      pop.querySelectorAll(".suggest-item").forEach((el, idx) => {
+        const on = idx === activeSuggestIdx;
+        el.classList.toggle("active", on);
+        if (on) el.scrollIntoView({ block: "nearest" });
+      });
+    }
+
+    function closeSearchSuggestions() {
+      const pop = document.getElementById("searchSuggestPop");
+      if (pop) pop.classList.remove("open");
+      activeSuggestIdx = -1;
+    }
+
+    function pickSearchSuggestion(docId) {
+      const id = Number(docId);
+      if (!id || !docById[id]) return;
+      closeSearchSuggestions();
+      const d = docById[id];
+      // 若所选法规不在当前筛选范围内，自动放宽对应筛选以确保左右同步展示
+      if (state.domainFilter !== "all" && d.domain !== state.domainFilter) state.domainFilter = "all";
+      if (state.typeFilter !== "all" && d.doc_type !== state.typeFilter) state.typeFilter = "all";
+      if (state.topicFilter !== "all" && d.topic_id !== state.topicFilter) state.topicFilter = "all";
+      if (state.statusFilter !== "all" && d.status !== state.statusFilter) state.statusFilter = "all";
+      syncCascadingDropdowns();
+      state.selectedDocId = id;
+      recordDocVisit(id);
+      state.selectedEdgeId = null;
+      state.activePath = null;
+      state.activeFrameworkRel = null;
+      const cpBtn = document.getElementById("clearPathBtn");
+      if (cpBtn) cpBtn.style.display = "none";
+      state.onlyLinkedArticles = false;
+      state.expandedArtLinks.clear();
+      state.expandedArtLinksAll.clear();
+      state.articleRenderLimit = 80;
+      state.inDocQuery = (state.searchQuery.trim() && fulltextHitMap[id]) ? state.searchQuery.trim() : "";
+      if (state.viewMode === "graph" && d.total_degree === 0) state.connectedOnly = false;
+      updateView(state.viewMode === "graph", { keepSelected: true });
+      if (getEffectiveDevice() === "mobile") setMobilePane("detail");
+    }
+
+    function viewAllSearchInList() {
+      closeSearchSuggestions();
+      state.viewMode = "list";
+      state.readerExpanded = false;
+      if (getEffectiveDevice() === "mobile") state.mobilePane = "browse";
+      applySplitRatio();
+      updateView(false);
+      applyDeviceMode(false);
+    }
 
     let _cachedQueryRaw = null;
     let _cachedQueryParsed = null;
@@ -1311,6 +1641,105 @@
       return "l5";
     }
 
+    // 体系上位总纲关系（不入图谱连线以防总纲节点过载，但在信息与路径查询中明确告知）
+    const FRAMEWORK_GROUPS = (() => {
+      const groups = [];
+      const casBasic = DATA.documents.find(d => d.domain === "accounting" && d.doc_type === "standard" && d.title.includes("基本准则") && !d.title.includes("可持续") && !d.title.includes("应用指南"));
+      if (casBasic) {
+        const kids = DATA.documents.filter(d => d.domain === "accounting" && d.doc_type === "standard" && d.title.startsWith("企业会计准则第"));
+        groups.push({
+          key: "cas_basic",
+          umbrellaDoc: casBasic,
+          childDocs: kids,
+          childIds: new Set(kids.map(d => d.id)),
+          desc: "具体企业会计准则第一条均明示依据《企业会计准则——基本准则》制定",
+          domainFilter: "accounting",
+          typeFilter: "standard"
+        });
+      }
+      const esgBasic = DATA.documents.find(d => d.domain === "accounting" && d.doc_type === "standard" && d.title.includes("可持续披露准则——基本准则") && !d.title.includes("应用指南"));
+      if (esgBasic) {
+        const kids = DATA.documents.filter(d => d.domain === "accounting" && d.doc_type === "standard" && d.title.startsWith("企业可持续披露准则第"));
+        if (kids.length) {
+          groups.push({
+            key: "esg_basic",
+            umbrellaDoc: esgBasic,
+            childDocs: kids,
+            childIds: new Set(kids.map(d => d.id)),
+            desc: "具体可持续披露准则在可持续披露基本准则统一框架下制定",
+            domainFilter: "accounting",
+            typeFilter: "standard"
+          });
+        }
+      }
+      const auditBasic = DATA.documents.find(d => d.domain === "audit" && d.doc_type === "standard" && d.title.startsWith("中国注册会计师鉴证业务基本准则"));
+      if (auditBasic) {
+        const kids = DATA.documents.filter(d => d.domain === "audit" && d.doc_type === "standard" && (d.title.startsWith("中国注册会计师审计准则第") || d.title.startsWith("中国注册会计师其他鉴证业务准则第")));
+        if (kids.length) {
+          groups.push({
+            key: "audit_basic",
+            umbrellaDoc: auditBasic,
+            childDocs: kids,
+            childIds: new Set(kids.map(d => d.id)),
+            desc: "各项具体审计与鉴证准则均受《中国注册会计师鉴证业务基本准则》统领",
+            domainFilter: "audit",
+            typeFilter: "standard"
+          });
+        }
+      }
+      return groups;
+    })();
+
+    function getUmbrellaForDoc(docId) {
+      const id = Number(docId);
+      for (const g of FRAMEWORK_GROUPS) {
+        if (g.childIds.has(id)) return { umbrellaDoc: g.umbrellaDoc, group: g };
+      }
+      return null;
+    }
+
+    function getUmbrellaGroupForDoc(docId) {
+      const id = Number(docId);
+      return FRAMEWORK_GROUPS.find(g => g.umbrellaDoc.id === id) || null;
+    }
+
+    function getFrameworkPairRelation(docIdA, docIdB) {
+      const a = Number(docIdA), b = Number(docIdB);
+      if (!a || !b || a === b) return null;
+      for (const g of FRAMEWORK_GROUPS) {
+        if (g.umbrellaDoc.id === a && g.childIds.has(b)) return { umbrellaDoc: g.umbrellaDoc, childDoc: docById[b], group: g };
+        if (g.umbrellaDoc.id === b && g.childIds.has(a)) return { umbrellaDoc: g.umbrellaDoc, childDoc: docById[a], group: g };
+      }
+      return null;
+    }
+
+    function filterUmbrellaChildren(groupKey) {
+      const g = FRAMEWORK_GROUPS.find(x => x.key === groupKey);
+      if (!g) return;
+      state.viewMode = "list";
+      state.readerExpanded = false;
+      state.domainFilter = g.domainFilter;
+      state.typeFilter = g.typeFilter;
+      state.topicFilter = "all";
+      state.statusFilter = "all";
+      state.searchQuery = "";
+      document.getElementById("searchInput").value = "";
+      document.getElementById("searchClearBtn").style.display = "none";
+      if (getEffectiveDevice() === "mobile") state.mobilePane = "browse";
+      syncCascadingDropdowns();
+      applySplitRatio();
+      updateView(false);
+      applyDeviceMode(false);
+    }
+
+    function clearFrameworkOrPath() {
+      state.activePath = null;
+      state.activeFrameworkRel = null;
+      const btn = document.getElementById("clearPathBtn");
+      if (btn) btn.style.display = "none";
+      updateView(state.viewMode === "graph");
+    }
+
     function findShortestPath(startId, endId) {
       startId = Number(startId); endId = Number(endId);
       if (startId === endId) return { nodeIds: new Set([startId]), edgeIds: new Set(), orderedDocIds: [startId] };
@@ -1344,7 +1773,7 @@
       return `发布单位：${d.issuer} · 生效日：${d.effective_date}`;
     }
 
-    function updateView(autoFit = false) {
+    function updateView(autoFit = false, opts = {}) {
       let matched = filterByTopic(filterByStatus(filterByType(filterByDomain(DATA.documents))));
       const q = state.searchQuery.trim();
       const parsedQ = parseSearchQuery(q);
@@ -1477,8 +1906,26 @@
       const activePool = isGraph ? graphPool : matched;
       const coreIds = new Set(activePool.map(d => d.id));
 
-      if (activePool.length > 0 && (!state.selectedDocId || !coreIds.has(state.selectedDocId))) {
-        state.selectedDocId = isGraph ? (activePool.find(d => d.total_degree > 0) || activePool[0]).id : activePool[0].id;
+      if (activePool.length > 0) {
+        const topDoc = isGraph ? (activePool.find(d => d.total_degree > 0) || activePool[0]) : activePool[0];
+        if (opts.fromSearch && hasQ) {
+          if (state.selectedDocId !== topDoc.id) {
+            state.selectedDocId = topDoc.id;
+            state.selectedEdgeId = null;
+            state.activePath = null;
+            state.activeFrameworkRel = null;
+            const cpBtn = document.getElementById("clearPathBtn");
+            if (cpBtn) cpBtn.style.display = "none";
+            state.onlyLinkedArticles = false;
+            state.expandedArtLinks.clear();
+            state.expandedArtLinksAll.clear();
+            state.articleRenderLimit = 80;
+          }
+          state.inDocQuery = fulltextHitMap[state.selectedDocId] ? q : "";
+          if (isGraph) autoFit = true;
+        } else if (!opts.keepSelected && (!state.selectedDocId || !coreIds.has(state.selectedDocId))) {
+          state.selectedDocId = topDoc.id;
+        }
       }
 
       document.getElementById("canvasPane").dataset.view = state.viewMode;
@@ -1636,6 +2083,86 @@
       }).join("");
     }
 
+    const GRAPH_CAT_META = [
+      { id: "standard", label: "准则正文" },
+      { id: "guide", label: "应用指南" },
+      { id: "interp_qa", label: "解释 / 问答" },
+      { id: "law_reg", label: "法律 / 行政法规" },
+      { id: "rule_norm", label: "规章 / 规范性文件" },
+      { id: "case_interp", label: "实务案例 / 解读" }
+    ];
+    function classifyGraphCategory(d) {
+      if (d.doc_type === "standard") return "standard";
+      if (d.doc_type === "guidance") return (d.title || "").includes("应用指南") ? "guide" : "interp_qa";
+      if (d.doc_type === "law" || d.doc_type === "regulation") return "law_reg";
+      if (d.doc_type === "case" || d.doc_type === "interpretation") return "case_interp";
+      return "rule_norm";
+    }
+    function setGraphTierFilter(val) {
+      state.graphTierFilter = (state.graphTierFilter === val && val !== "all") ? "all" : val;
+      updateView(true);
+    }
+    function setGraphTypeFilter(val) {
+      state.graphTypeFilter = val;
+      updateView(true);
+    }
+    function resetGraphLocalFilters() {
+      state.graphTierFilter = "all";
+      state.graphTypeFilter = "all";
+      updateView(true);
+    }
+    function renderGraphLegendBar(isFocus, relItems) {
+      const el = document.getElementById("graphLegendFilters");
+      if (!el) return;
+      const TIER_DEF = [
+        { id: "l1", label: "L1 核心", color: "#059669" },
+        { id: "l2", label: "L2 修补", color: "#2563eb" },
+        { id: "l3", label: "L3 引用", color: "#64748b" },
+        { id: "l4", label: "L4 衔接", color: "#d97706" },
+        { id: "l5", label: "L5 案例", color: "#e11d48" }
+      ];
+      if (!isFocus) {
+        el.innerHTML = `<span class="legend-item"><span class="dot" style="background:var(--primary)"></span>当前聚焦</span>` +
+          TIER_DEF.map(t => `<span class="legend-item"><span class="dot" style="background:${t.color}"></span>${t.label}</span>`).join("");
+        return;
+      }
+      const uniqDocs = new Map();
+      const tierDocSets = { l1: new Set(), l2: new Set(), l3: new Set(), l4: new Set(), l5: new Set() };
+      relItems.forEach(item => {
+        uniqDocs.set(item.doc.id, item.doc);
+        const tk = classifyEdgeVisual(item.edge);
+        if (tierDocSets[tk]) tierDocSets[tk].add(item.doc.id);
+      });
+      // 计算当前层级筛选下的各类别数量
+      const afterTierDocs = new Map();
+      relItems.forEach(item => {
+        if (state.graphTierFilter === "all" || classifyEdgeVisual(item.edge) === state.graphTierFilter) {
+          afterTierDocs.set(item.doc.id, item.doc);
+        }
+      });
+      const catCounts = {};
+      afterTierDocs.forEach(doc => {
+        const c = classifyGraphCategory(doc);
+        catCounts[c] = (catCounts[c] || 0) + 1;
+      });
+
+      const pillsHTML = [
+        `<button type="button" class="graph-tier-pill ${state.graphTierFilter === "all" ? "active" : ""}" onclick="setGraphTierFilter('all')">全部 ${uniqDocs.size}</button>`,
+        ...TIER_DEF.filter(t => tierDocSets[t.id].size > 0).map(t =>
+          `<button type="button" class="graph-tier-pill ${state.graphTierFilter === t.id ? "active" : ""}" onclick="setGraphTierFilter('${t.id}')"><span class="dot" style="background:${t.color}"></span>${t.label} ${tierDocSets[t.id].size}</button>`
+        )
+      ].join("");
+
+      const catOptions = [`<option value="all">全部类别（${afterTierDocs.size}）</option>`]
+        .concat(GRAPH_CAT_META.filter(c => (catCounts[c.id] || 0) > 0).map(c =>
+          `<option value="${c.id}" ${state.graphTypeFilter === c.id ? "selected" : ""}>${c.label}（${catCounts[c.id]}）</option>`
+        )).join("");
+      const hasLocalFilter = state.graphTierFilter !== "all" || state.graphTypeFilter !== "all";
+      el.innerHTML = `${pillsHTML}
+        <select class="graph-cat-select ${state.graphTypeFilter !== "all" ? "active-filter" : ""}" aria-label="按关联法规类别筛选" onchange="setGraphTypeFilter(this.value)">${catOptions}</select>
+        ${hasLocalFilter ? `<button type="button" class="mini-btn" onclick="resetGraphLocalFilters()">清除图谱筛选</button>` : ""}`;
+    }
+
     function computeGraphLayout(matched, coreIds) {
       const bridgeIds = new Set();
       let visibleDocs = [];
@@ -1647,19 +2174,36 @@
       if (state.focusOnly && state.selectedDocId && docById[state.selectedDocId]) {
         const selId = state.selectedDocId;
         const rel = getDirectEdges(selId, DATA.doc_links);
+        const allRelItems = [...rel.upstream, ...rel.downstream];
         const byScore = (a, b) => (b.edge.score || 60) - (a.edge.score || 60) || (b.edge.count || 0) - (a.edge.count || 0);
+
+        // 若切换中心法规后原局部筛选无结果，自动恢复为全部避免空画布
+        const matchLocal = (item) =>
+          (state.graphTierFilter === "all" || classifyEdgeVisual(item.edge) === state.graphTierFilter) &&
+          (state.graphTypeFilter === "all" || classifyGraphCategory(item.doc) === state.graphTypeFilter);
+        if (allRelItems.length > 0 && !allRelItems.some(matchLocal)) {
+          if (state.graphTypeFilter !== "all" && allRelItems.some(item => state.graphTierFilter === "all" || classifyEdgeVisual(item.edge) === state.graphTierFilter)) {
+            state.graphTypeFilter = "all";
+          } else {
+            state.graphTierFilter = "all";
+            state.graphTypeFilter = "all";
+          }
+        }
+        renderGraphLegendBar(true, allRelItems);
+
         const leftIds = [], rightIds = [];
         const seen = new Set([selId]);
-        const MAX_SIDE = 10;
+        const isFiltered = state.graphTierFilter !== "all" || state.graphTypeFilter !== "all";
+        const MAX_SIDE = isFiltered ? 16 : 10;
 
-        rel.upstream.slice().sort(byScore).forEach(item => {
+        rel.upstream.filter(matchLocal).sort(byScore).forEach(item => {
           if (leftIds.length >= MAX_SIDE) return;
           if (!seen.has(item.doc.id)) {
             seen.add(item.doc.id); leftIds.push(item.doc.id);
             if (!coreIds.has(item.doc.id)) bridgeIds.add(item.doc.id);
           }
         });
-        rel.downstream.slice().sort(byScore).forEach(item => {
+        rel.downstream.filter(matchLocal).sort(byScore).forEach(item => {
           if (rightIds.length >= MAX_SIDE) return;
           if (!seen.has(item.doc.id)) {
             seen.add(item.doc.id); rightIds.push(item.doc.id);
@@ -1671,7 +2215,8 @@
         visibleDocs = DATA.documents.filter(d => activeIds.has(d.id));
         visibleEdges = DATA.doc_links.filter(e =>
           (e.from_doc_id === selId || e.to_doc_id === selId) &&
-          activeIds.has(e.from_doc_id) && activeIds.has(e.to_doc_id)
+          activeIds.has(e.from_doc_id) && activeIds.has(e.to_doc_id) &&
+          (state.graphTierFilter === "all" || classifyEdgeVisual(e) === state.graphTierFilter)
         );
 
         const cols = [];
@@ -1696,9 +2241,11 @@
           col.ids.forEach((did, rIdx) => { positions[did] = { x, y: startY + rIdx * ROW_GAP }; });
         });
 
+        const filterNote = isFiltered ? `（已筛选）` : "";
         document.getElementById("viewBadge").textContent = `聚焦：${docById[selId].title}`;
-        document.getElementById("layoutHint").textContent = `聚焦模式：展示 ${visibleDocs.length} 份直接关联文档与 ${visibleEdges.length} 条关系边`;
+        document.getElementById("layoutHint").textContent = `聚焦模式${filterNote}：展示 ${visibleDocs.length - 1} 份关联文档与 ${visibleEdges.length} 条关系边`;
       } else {
+        renderGraphLegendBar(false, []);
         if (state.includeBridges && coreIds.size < DATA.documents.length) {
           DATA.doc_links.forEach(e => {
             if (coreIds.has(e.from_doc_id) && !coreIds.has(e.to_doc_id)) bridgeIds.add(e.to_doc_id);
@@ -1884,6 +2431,7 @@
         `;
         card.onclick = () => {
           state.selectedDocId = d.id;
+          recordDocVisit(d.id);
           state.focusOnly = true;
           state.selectedEdgeId = null;
           state.activePath = null;
@@ -1900,12 +2448,28 @@
 
       const d = docById[state.selectedDocId] || currentView.matchedDocs[0] || DATA.documents[0];
       if (!d) { body.innerHTML = `<div class="empty-state">请选择一份法规查看详情。</div>`; return; }
+      if (state.navHistory.length === 0) recordDocVisit(d.id);
+      else renderNavHistoryBar();
 
       let pathBanner = "";
-      if (state.activePath) {
+      if (state.activeFrameworkRel) {
+        const fw = state.activeFrameworkRel;
+        pathBanner = `<div class="framework-banner">
+          <div><strong>🏛 体系上位总纲关系（1 级从属 · 未在图谱连线）</strong></div>
+          <div style="margin-top:4px;">《${escapeHTML(fw.childDoc.title)}》在《${escapeHTML(fw.umbrellaDoc.title)}》的统一框架下制定（${escapeHTML(fw.group.desc)}），二者属于强统领关系。为避免总纲节点牵出 ${fw.group.childDocs.length} 条连线导致图谱过载，本关系以架构说明呈现。</div>
+          <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:6px;">
+            <button type="button" class="mini-btn primary" onclick="jumpToDoc(${fw.umbrellaDoc.id})">查看总纲：${escapeHTML(fw.umbrellaDoc.display_title || fw.umbrellaDoc.title)}</button>
+            <button type="button" class="mini-btn" onclick="jumpToDoc(${fw.childDoc.id})">查看具体准则：${escapeHTML(fw.childDoc.display_title || fw.childDoc.title)}</button>
+            <button type="button" class="mini-btn" onclick="clearFrameworkOrPath()">关闭提示</button>
+          </div>
+        </div>`;
+      } else if (state.activePath) {
         const chain = state.activePath.orderedDocIds.map(id => `<button class="mini-btn" onclick="jumpToDoc(${id})">${escapeHTML(docById[id]?.title || id)}</button>`).join(" → ");
         pathBanner = `<div class="path-banner"><strong>法规关联路径（${state.activePath.orderedDocIds.length - 1} 跳）：</strong><div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">${chain}</div></div>`;
       }
+
+      const fwParent = getUmbrellaForDoc(d.id);
+      const fwGroup = getUmbrellaGroupForDoc(d.id);
 
       if (state.activeTab === "detail") {
         const sourceHTML = d.source_kind === "third_party"
@@ -1943,13 +2507,24 @@
               ${tierBuckets.L1.length > 3 ? `<button type="button" class="mini-btn" onclick="openRelationsTier('L1')">+${tierBuckets.L1.length - 3} 项</button>` : ""}
             </div>`
           : "";
-        const overviewStripHTML = allRel.length
+        const fwRowHTML = fwParent
+          ? `<div class="overview-row">
+              <span class="overview-label">上位总纲</span>
+              <button type="button" class="overview-framework" title="${escapeHTML(fwParent.umbrellaDoc.title)}" onclick="jumpToDoc(${fwParent.umbrellaDoc.id})">🏛 ${escapeHTML(fwParent.umbrellaDoc.display_title || fwParent.umbrellaDoc.title)}</button>
+              <span style="font-size:11px;color:var(--ink-muted)">架构统领 · 未挂图谱连线</span>
+            </div>`
+          : (fwGroup
+            ? `<div class="overview-row">
+                <span class="overview-label">体系统领</span>
+                <span style="font-size:11.5px;color:var(--ink-secondary)">总纲型准则，统领下位 <strong>${fwGroup.childDocs.length}</strong> 份具体准则（为保持图谱聚焦未展开连线）</span>
+                <button type="button" class="mini-btn" onclick="filterUmbrellaChildren('${fwGroup.key}')">查看全部 ${fwGroup.childDocs.length} 份</button>
+              </div>`
+            : "");
+        const overviewStripHTML = (allRel.length || fwRowHTML)
           ? `<div class="overview-strip">
-              <div class="overview-row">
-                <span class="overview-label">全貌速览</span>
-                ${tierPillsHTML}
-              </div>
+              ${allRel.length ? `<div class="overview-row"><span class="overview-label">全貌速览</span>${tierPillsHTML}</div>` : ""}
               ${l1QuickHTML}
+              ${fwRowHTML}
             </div>`
           : "";
 
@@ -2032,10 +2607,10 @@
         });
 
         const groups = {
-          L1: { title: "L1 核心落地配套（90–100分 · 指南 / 实施问答 / 实施条例 / 效力沿革）", items: [] },
-          L2: { title: "L2 正式修补与权威解答（75–89分 · 准则解释 / 监管指引 / 司法解释）", items: [] },
-          L3: { title: "L3 条文级精准引用（60–74分 · 正文显式引用）", items: [] },
-          L4: { title: "L4 跨域实务衔接（45–59分 · 会—税—审—商衔接）", items: [] },
+          L1: { title: "L1 核心落地配套（指南 / 实施问答 / 实施条例 / 效力沿革）", items: [] },
+          L2: { title: "L2 正式修补与权威解答（准则解释 / 监管指引 / 司法解释）", items: [] },
+          L3: { title: "L3 条文级精准引用（正文显式引用）", items: [] },
+          L4: { title: "L4 跨域实务衔接（会—税—审—商衔接）", items: [] },
           L5: { title: "L5 实务案例与官方解读（参考，非规范依据）", items: [] }
         };
 
@@ -2070,7 +2645,7 @@
                 <div class="rel-card tier-${tCls}" style="${isSelEdge ? "border-color:var(--primary);background:var(--primary-soft);" : ""}">
                   <div class="rel-card-top">
                     <strong style="font-size:13px;line-height:1.4;">${escapeHTML(td.title)}</strong>
-                    <span class="tier-tag t-${tCls}" style="flex-shrink:0;">${REL_KIND_LABELS[e.rel_kind] || e.rel_kind} · ${sc}分</span>
+                    <span class="tier-tag t-${tCls}" style="flex-shrink:0;">${tCls.toUpperCase()} ${REL_KIND_LABELS[e.rel_kind] || e.rel_kind}</span>
                   </div>
                   <div class="meta-row" style="margin-top:0;">
                     <span class="pill dom-${td.domain}">${DOMAIN_LABELS[td.domain]}</span>
@@ -2090,6 +2665,23 @@
         };
 
         const groupsHTML = Object.entries(groups).map(renderGroup).join("");
+        const fwRelCardHTML = fwParent
+          ? `<div class="framework-banner" style="margin-top:10px;margin-bottom:4px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <span><strong>🏛 体系上位总纲（架构统领 · 未挂图谱连线）：</strong>《${escapeHTML(fwParent.umbrellaDoc.title)}》</span>
+                <button type="button" class="mini-btn primary" onclick="jumpToDoc(${fwParent.umbrellaDoc.id})">查看总纲原文</button>
+              </div>
+              <div style="font-size:11.5px;margin-top:3px;opacity:0.9;">${escapeHTML(fwParent.group.desc)}。</div>
+            </div>`
+          : (fwGroup
+            ? `<div class="framework-banner" style="margin-top:10px;margin-bottom:4px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                  <span><strong>🏛 体系统领范围（总论型准则 · 未挂图谱连线）：</strong>统领全部 ${fwGroup.childDocs.length} 份具体准则</span>
+                  <button type="button" class="mini-btn primary" onclick="filterUmbrellaChildren('${fwGroup.key}')">在列表中查看全部 ${fwGroup.childDocs.length} 份</button>
+                </div>
+                <div style="font-size:11.5px;margin-top:3px;opacity:0.9;">为保持图谱与关联列表聚焦重点，此处仅列出直接配套指南、实施问答与上位授权法。</div>
+              </div>`
+            : "");
         body.innerHTML = `
           ${pathBanner}
           <div class="hero-card">
@@ -2097,10 +2689,11 @@
             <h2 class="hero-title">${escapeHTML(d.title)}</h2>
             <div style="font-size:12px;color:var(--ink-secondary);">共 <strong>${allItems.length}</strong> 份关联（核心配套/修补 ${coreCnt} · 条文引用 ${citeCnt - coreCnt} · 跨域与案例 ${refCnt}）</div>
           </div>
-          <div class="strength-filter-bar" role="group" aria-label="按重要度筛选">
+          ${fwRelCardHTML}
+          <div class="strength-filter-bar" role="group" aria-label="按依据层级筛选">
             <button class="strength-btn ${state.strengthFilter === "all" ? "active" : ""}" onclick="setStrengthFilter('all')">全貌 (${allItems.length})</button>
-            <button class="strength-btn ${state.strengthFilter === "strong" ? "active" : ""}" onclick="setStrengthFilter('strong')">核心 ≥75 (${coreCnt})</button>
-            <button class="strength-btn ${state.strengthFilter === "strong_medium" ? "active" : ""}" onclick="setStrengthFilter('strong_medium')">含引用 ≥60 (${citeCnt})</button>
+            <button class="strength-btn ${state.strengthFilter === "strong" ? "active" : ""}" onclick="setStrengthFilter('strong')">核心配套/修补 (${coreCnt})</button>
+            <button class="strength-btn ${state.strengthFilter === "strong_medium" ? "active" : ""}" onclick="setStrengthFilter('strong_medium')">含条文引用 (${citeCnt})</button>
             <button class="strength-btn ${state.strengthFilter === "weak" ? "active" : ""}" onclick="setStrengthFilter('weak')">衔接/案例 (${refCnt})</button>
           </div>
           ${groupsHTML || `<div class="empty-state" style="min-height:150px;">当前筛选层级下暂无关联文档。</div>`}
@@ -2284,8 +2877,139 @@
       if (d) renderArticlesList(d, docArticlesCache[docId] || []);
     }
 
+    function recordDocVisit(docId, opts = {}) {
+      const id = Number(docId);
+      if (!id || !docById[id]) return;
+      if (!opts.keepRecentOrder) {
+        state.recentDocIds = [id, ...state.recentDocIds.filter(x => x !== id)].slice(0, 15);
+      }
+      if (!opts.fromBack && state.navHistory[state.navIndex] !== id) {
+        state.navHistory = state.navHistory.slice(0, state.navIndex + 1);
+        state.navHistory.push(id);
+        if (state.navHistory.length > 40) state.navHistory.shift();
+        state.navIndex = state.navHistory.length - 1;
+      }
+      renderNavHistoryBar();
+    }
+
+    function getPreviousDistinctDocId() {
+      const cur = state.selectedDocId;
+      if (state.navIndex > 0 && state.navHistory[state.navIndex - 1] !== cur) {
+        return state.navHistory[state.navIndex - 1];
+      }
+      return state.recentDocIds.find(id => id !== cur) || null;
+    }
+
+    function renderNavHistoryBar() {
+      const backBtn = document.getElementById("navBackBtn");
+      const sel = document.getElementById("recentDocsSelect");
+      const cmpBtn = document.getElementById("comparePrevBtn");
+      if (!backBtn || !sel || !cmpBtn) return;
+
+      const canBack = state.navIndex > 0 && Boolean(docById[state.navHistory[state.navIndex - 1]]);
+      backBtn.disabled = !canBack;
+      if (canBack) {
+        const prevDoc = docById[state.navHistory[state.navIndex - 1]];
+        backBtn.title = `返回上一份：《${prevDoc.title}》`;
+      } else {
+        backBtn.title = "暂无上一份浏览记录";
+      }
+
+      const recent = state.recentDocIds.filter(id => docById[id]);
+      sel.innerHTML = `<option value="">🕒 最近浏览（${recent.length} 份）</option>` + recent.map((id, idx) => {
+        const d = docById[id];
+        const label = d.display_title || d.title;
+        const tag = id === state.selectedDocId ? "[当前] " : "";
+        return `<option value="${id}">${idx + 1}. ${tag}${escapeHTML(label)}</option>`;
+      }).join("");
+      sel.value = "";
+
+      const prevId = getPreviousDistinctDocId();
+      if (prevId && docById[prevId] && state.selectedDocId && docById[state.selectedDocId]) {
+        cmpBtn.style.display = "inline-flex";
+        cmpBtn.title = `查看《${docById[prevId].title}》与当前法规的关联路径`;
+      } else {
+        cmpBtn.style.display = "none";
+      }
+    }
+
+    function goBackDoc() {
+      if (state.navIndex <= 0) return;
+      state.navIndex -= 1;
+      const targetId = state.navHistory[state.navIndex];
+      if (!docById[targetId]) return;
+      state.selectedDocId = targetId;
+      state.inDocQuery = "";
+      state.onlyLinkedArticles = false;
+      state.expandedArtLinks.clear();
+      state.expandedArtLinksAll.clear();
+      state.articleRenderLimit = 80;
+      state.selectedEdgeId = null;
+      if (!currentView.coreIds.has(targetId)) {
+        state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
+        state.searchQuery = ""; document.getElementById("searchInput").value = "";
+        document.getElementById("searchClearBtn").style.display = "none";
+        syncCascadingDropdowns();
+      }
+      recordDocVisit(targetId, { fromBack: true, keepRecentOrder: true });
+      updateView(state.viewMode === "graph");
+    }
+
+    function jumpToRecentDoc(docIdStr) {
+      const sel = document.getElementById("recentDocsSelect");
+      if (sel) sel.value = "";
+      const id = Number(docIdStr);
+      if (!id || !docById[id] || id === state.selectedDocId) return;
+      jumpToDoc(id);
+    }
+
+    function checkRelationWithPrevDoc() {
+      const prevId = getPreviousDistinctDocId();
+      const curId = state.selectedDocId;
+      if (!prevId || !curId || prevId === curId || !docById[prevId] || !docById[curId]) return;
+      const fwRel = getFrameworkPairRelation(prevId, curId);
+      if (fwRel) {
+        state.activeFrameworkRel = fwRel;
+        state.activePath = null;
+        state.activeTab = "relations";
+        document.getElementById("clearPathBtn").style.display = "inline-block";
+        if (getEffectiveDevice() === "mobile") state.mobilePane = "relations";
+        renderDrawer();
+        applyDeviceMode(false);
+        return;
+      }
+      const res = findShortestPath(prevId, curId);
+      if (!res) {
+        alert(`《${docById[prevId].title}》与《${docById[curId].title}》之间暂无已收录的直接或间接关联路径。`);
+        return;
+      }
+      if (!currentView.coreIds.has(prevId) || !currentView.coreIds.has(curId)) {
+        state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
+        state.searchQuery = ""; document.getElementById("searchInput").value = "";
+        document.getElementById("searchClearBtn").style.display = "none";
+        syncCascadingDropdowns();
+      }
+      state.viewMode = "graph";
+      state.focusOnly = false;
+      state.readerExpanded = false;
+      state.connectedOnly = true;
+      state.activeFrameworkRel = null;
+      state.activePath = res;
+      state.activeTab = "relations";
+      document.getElementById("clearPathBtn").style.display = "inline-block";
+      if (getEffectiveDevice() === "mobile") state.mobilePane = "relations";
+      applySplitRatio();
+      updateView(true);
+      applyDeviceMode(false);
+      const sSel = document.getElementById("pathStart");
+      const eSel = document.getElementById("pathEnd");
+      if (sSel) sSel.value = String(prevId);
+      if (eSel) eSel.value = String(curId);
+    }
+
     function selectDoc(id) {
       state.selectedDocId = id;
+      recordDocVisit(id);
       // 若当前有全库检索词且该文档正文命中，自动带入抽屉内条文搜索实现精准高亮定位
       state.inDocQuery = (state.searchQuery.trim() && fulltextHitMap[id]) ? state.searchQuery.trim() : "";
       state.onlyLinkedArticles = false;
@@ -2299,6 +3023,7 @@
 
     function jumpToDoc(id) {
       state.selectedDocId = id;
+      recordDocVisit(id);
       state.inDocQuery = "";
       state.onlyLinkedArticles = false;
       state.expandedArtLinks.clear();
@@ -2308,6 +3033,7 @@
       if (!currentView.coreIds.has(id)) {
         state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
         state.searchQuery = ""; document.getElementById("searchInput").value = "";
+        document.getElementById("searchClearBtn").style.display = "none";
         syncCascadingDropdowns();
       }
       updateView(true);
@@ -2336,6 +3062,7 @@
 
     function openInGraph(id) {
       state.selectedDocId = id;
+      recordDocVisit(id);
       state.viewMode = "graph";
       state.focusOnly = true;
       state.selectedEdgeId = null;
@@ -2534,26 +3261,68 @@
 
     const searchInputEl = document.getElementById("searchInput");
     const searchClearBtn = document.getElementById("searchClearBtn");
-    searchInputEl.onfocus = () => ensureFulltextLoaded();
+    searchInputEl.onfocus = () => {
+      ensureFulltextLoaded();
+      if (searchInputEl.value.trim()) renderSearchSuggestions(searchInputEl.value);
+    };
     let searchTimer = null;
     searchInputEl.oninput = (e) => {
       ensureFulltextLoaded();
       state.searchQuery = e.target.value;
+      if (!state.searchQuery.trim()) {
+        state.inDocQuery = "";
+        closeSearchSuggestions();
+      }
       searchClearBtn.style.display = state.searchQuery ? "inline-flex" : "none";
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(() => updateView(false), 120);
+      searchTimer = setTimeout(() => {
+        updateView(false);
+        if (state.searchQuery.trim()) renderSearchSuggestions(state.searchQuery);
+      }, 100);
     };
+    searchInputEl.onkeydown = (e) => {
+      const pop = document.getElementById("searchSuggestPop");
+      const isOpen = pop && pop.classList.contains("open") && activeSuggestList.length > 0;
+      if (e.key === "ArrowDown" && isOpen) {
+        e.preventDefault();
+        activeSuggestIdx = (activeSuggestIdx + 1) % activeSuggestList.length;
+        updateSuggestHighlight();
+      } else if (e.key === "ArrowUp" && isOpen) {
+        e.preventDefault();
+        activeSuggestIdx = (activeSuggestIdx - 1 + activeSuggestList.length) % activeSuggestList.length;
+        updateSuggestHighlight();
+      } else if (e.key === "Escape") {
+        closeSearchSuggestions();
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        clearTimeout(searchTimer);
+        ensureFulltextLoaded();
+        if (isOpen) {
+          const target = activeSuggestList[activeSuggestIdx >= 0 ? activeSuggestIdx : 0];
+          if (target) { pickSearchSuggestion(target.doc.id); return; }
+        }
+        updateView(state.viewMode === "graph", { fromSearch: true });
+        closeSearchSuggestions();
+        if (state.selectedDocId) recordDocVisit(state.selectedDocId);
+      }
+    };
+    document.addEventListener("click", (e) => {
+      const wrap = document.getElementById("heroSearchWrap");
+      if (wrap && !wrap.contains(e.target)) closeSearchSuggestions();
+    });
     searchClearBtn.onclick = () => {
       state.searchQuery = "";
+      state.inDocQuery = "";
       searchInputEl.value = "";
       searchClearBtn.style.display = "none";
+      closeSearchSuggestions();
       searchInputEl.focus();
       updateView(false);
     };
 
     document.getElementById("resetBtn").onclick = () => {
       state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all"; state.sortMode = "taxonomy";
-      state.searchQuery = ""; state.activePath = null; state.focusOnly = true; state.inDocQuery = "";
+      state.searchQuery = ""; state.activePath = null; state.activeFrameworkRel = null; state.focusOnly = true; state.inDocQuery = "";
       searchInputEl.value = "";
       searchClearBtn.style.display = "none";
       document.getElementById("clearPathBtn").style.display = "none";
@@ -2569,15 +3338,24 @@
     document.getElementById("bridgeBtn").onclick = (e) => { state.includeBridges = !state.includeBridges; e.target.classList.toggle("active", state.includeBridges); updateView(true); };
 
     document.getElementById("findPathBtn").onclick = () => {
-      const res = findShortestPath(document.getElementById("pathStart").value, document.getElementById("pathEnd").value);
+      const sVal = document.getElementById("pathStart").value;
+      const eVal = document.getElementById("pathEnd").value;
+      const fwRel = getFrameworkPairRelation(sVal, eVal);
+      if (fwRel) {
+        state.activeFrameworkRel = fwRel;
+        state.activePath = null;
+        state.activeTab = "relations";
+        document.getElementById("clearPathBtn").style.display = "inline-block";
+        renderDrawer();
+        return;
+      }
+      const res = findShortestPath(sVal, eVal);
       if (!res) { alert("未找到这两份法规之间的连通关联路径。"); return; }
-      state.focusOnly = false; state.activePath = res;
+      state.focusOnly = false; state.activeFrameworkRel = null; state.activePath = res;
       document.getElementById("clearPathBtn").style.display = "inline-block";
       updateView(true);
     };
-    document.getElementById("clearPathBtn").onclick = () => {
-      state.activePath = null; document.getElementById("clearPathBtn").style.display = "none"; updateView(true);
-    };
+    document.getElementById("clearPathBtn").onclick = () => clearFrameworkOrPath();
 
     document.getElementById("zoomOutBtn").onclick = () => { state.zoom = Math.max(0.35, +(state.zoom - 0.1).toFixed(2)); applyZoom(); };
     document.getElementById("zoomInBtn").onclick = () => { state.zoom = Math.min(1.25, +(state.zoom + 0.1).toFixed(2)); applyZoom(); };
