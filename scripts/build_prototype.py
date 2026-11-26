@@ -180,6 +180,21 @@ TOPIC_RULES = [
         lambda d: d.get("framework") == "US" and d["domain"] == "accounting",
     ),
     (
+        "us_aud_pcaob",
+        "PCAOB & AICPA Auditing Standards (US)",
+        lambda d: d.get("framework") == "US" and d["domain"] == "audit",
+    ),
+    (
+        "us_tax_irc",
+        "US Federal Corporate & International Tax (IRC)",
+        lambda d: d.get("framework") == "US" and d["domain"] == "tax",
+    ),
+    (
+        "us_gen_sec_sox",
+        "SEC Regulation, SOX & FCPA Compliance",
+        lambda d: d.get("framework") == "US" and d["domain"] == "general",
+    ),
+    (
         "intl_acc_guides",
         "Agenda Decisions & Big4 Guides",
         lambda d: d.get("framework") == "INTL"
@@ -984,6 +999,18 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
             ("ASC 323", "ASC 810", "companion", "strong", 90, "L1", "US GAAP Group Reporting suite: Equity Method & Consolidation"),
             ("ASC 480", "ASC 470", "companion", "strong", 90, "L1", "US GAAP Debt & Equity suite: Liabilities vs. Equity & Convertible Debt"),
             ("ASC 405", "ASC 470", "companion", "strong", 88, "L1", "US GAAP Liabilities suite: Extinguishments & Debt modifications"),
+            # US Audit (PCAOB), US Tax (IRC) & US Securities/SOX 核心家族配套（L1 companion / L4 cross_domain）
+            ("PCAOB QC 1000", "PCAOB AS 1000", "companion", "strong", 92, "L1", "PCAOB Quality Control suite: Firm QC system companion to AS 1000"),
+            ("PCAOB AS 1220", "PCAOB QC 1000", "companion", "strong", 90, "L1", "PCAOB Quality Control suite: Engagement Quality Review companion to QC 1000"),
+            ("PCAOB AS 2301", "PCAOB AS 2110", "companion", "strong", 92, "L1", "PCAOB Risk Model: Responses to assessed risks under AS 2110"),
+            ("PCAOB AS 2201", "SOX (2002)", "cross_domain", "strong", 76, "L4", "SOX Section 404(b) statutory mandate implemented via PCAOB AS 2201 ICFR integrated audit"),
+            ("PCAOB AS 3101", "PCAOB AS 1301", "companion", "strong", 90, "L1", "PCAOB Reporting suite: Critical Audit Matters (CAMs) drawn from Audit Committee communications"),
+            ("IRC §951 / §951A", "IRC §11 & §55 (CAMT)", "companion", "strong", 90, "L1", "US Corporate & International Tax suite: CFC Subpart F/GILTI alongside §11 corporate tax"),
+            ("IRC §59A (BEAT)", "IRC §11 & §55 (CAMT)", "companion", "strong", 90, "L1", "US Corporate Tax suite: Base Erosion & Anti-Abuse Tax backstop to §11"),
+            ("IRC §163(j)", "IRC §11 & §55 (CAMT)", "companion", "strong", 88, "L1", "US Corporate Tax suite: Business interest deduction limitation under Title 26"),
+            ("SEC Regulation S-X", "Securities Acts (1933 / 1934)", "companion", "strong", 92, "L1", "SEC Reporting suite: Financial statement form & auditor independence rules"),
+            ("SEC Regulation S-K", "Securities Acts (1933 / 1934)", "companion", "strong", 92, "L1", "SEC Reporting suite: MD&A, Non-GAAP & cybersecurity disclosure rules"),
+            ("FCPA (1977)", "Securities Acts (1933 / 1934)", "companion", "strong", 88, "L1", "Exchange Act §13(b)(2) books-and-records & anti-bribery enforcement"),
         ]
         for fc, tc, rk_c, st_c, sc_c, tr_c, nt_c in intl_curated_links:
             fd_c = code_to_doc_id.get(fc)
