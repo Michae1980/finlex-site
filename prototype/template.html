@@ -624,6 +624,26 @@
       color: #0f766e; background: #f0fdfa; border: 1px solid #99f6e4;
       padding: 0 4px; border-radius: 4px; white-space: nowrap;
     }
+    /* 中国会计准则正文三层柔和语义标亮（低饱和度，不与检索高亮 <mark> 冲突） */
+    .hl-std {
+      background: rgba(224, 231, 255, 0.56); color: #3730a3;
+      border-bottom: 1px dashed #818cf8; padding: 0 2px; border-radius: 3px;
+      cursor: pointer; transition: background 0.14s ease, border-color 0.14s ease;
+    }
+    .hl-std:hover { background: #e0e7ff; border-bottom-style: solid; border-bottom-color: #4f46e5; }
+    .hl-acct {
+      background: rgba(204, 251, 241, 0.52); color: #115e59;
+      padding: 0 2px; border-radius: 3px;
+    }
+    .hl-mech {
+      background: rgba(254, 243, 199, 0.52); color: #78350f;
+      border-bottom: 1px solid #fcd34d; padding: 0 2px; border-radius: 3px;
+    }
+    .term-hl-legend {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+      font-size: 11.5px; color: var(--ink-muted); margin: -2px 0 8px;
+      padding: 5px 10px; border-radius: 7px; background: #f8fafc; border: 1px solid var(--border);
+    }
     .article-text mark { background: #fef08a; padding: 0 2px; border-radius: 3px; }
     .article-source-note {
       margin-top: 16px; padding: 11px 14px; border-radius: var(--radius-md);
@@ -764,13 +784,219 @@
       padding: 8px 4px; border-radius: 9px; font-size: 12px; font-weight: 500; cursor: pointer;
     }
     .mobile-nav-btn.active { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+
+    /* 4. 网站门户主页（Wikipedia 式极简视觉图式 + 检索框一屏呈现） */
+    .home-view {
+      display: none; flex: 1; overflow-y: auto;
+      background: radial-gradient(circle at 50% 24%, #eff6ff 0%, #f8fafc 46%, #f6f7fb 100%);
+    }
+    .app.page-home .home-view { display: flex; flex-direction: column; }
+    .app.page-home .topbar, .app.page-home .workspace, .app.page-home .mobile-nav { display: none !important; }
+    .brand.brand-clickable { cursor: pointer; border-radius: 9px; padding: 2px 6px 2px 2px; margin: -2px -6px -2px -2px; transition: background 0.14s ease; }
+    .brand.brand-clickable:hover { background: var(--surface-subtle); }
+
+    .home-main {
+      flex: 1; width: 100%; max-width: 920px; margin: 0 auto;
+      padding: 28px 20px 24px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .home-header { text-align: center; margin-bottom: 10px; }
+    .home-header h1 {
+      margin: 0; font-size: 30px; font-weight: 800; letter-spacing: 0.04em; color: var(--ink); line-height: 1.25;
+    }
+    .home-hero-sub { margin: 5px 0 0; font-size: 13.5px; color: var(--ink-muted); }
+
+    /* Wikipedia 风格环绕式知识图式 */
+    .orbit-stage {
+      position: relative; width: 820px; height: 340px; max-width: 100%;
+      margin: 6px auto 18px;
+    }
+    .orbit-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .orbit-side-tag {
+      position: absolute; top: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
+      padding: 2px 9px; border-radius: var(--radius-pill);
+    }
+    .orbit-side-left { left: 12px; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; }
+    .orbit-side-right { right: 12px; color: #0f766e; background: #f0fdfa; border: 1px solid #99f6e4; }
+
+    .orbit-hub {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: 162px; height: 162px; border-radius: 50%;
+      background: linear-gradient(145deg, #ffffff 0%, #f1f5ff 100%);
+      border: 2px solid var(--primary-border);
+      box-shadow: 0 12px 32px rgba(37, 99, 235, 0.14), inset 0 0 0 6px rgba(255, 255, 255, 0.85);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+      cursor: pointer; z-index: 4; transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .orbit-hub:hover {
+      transform: translate(-50%, -50%) scale(1.04);
+      border-color: var(--primary);
+      box-shadow: 0 16px 38px rgba(37, 99, 235, 0.22), inset 0 0 0 6px rgba(255, 255, 255, 0.9);
+    }
+    .orbit-hub-mark {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: linear-gradient(135deg, #1d4ed8, #2563eb); color: #fff;
+      display: grid; place-items: center; font-weight: 800; font-size: 16px; margin-bottom: 3px;
+    }
+    .orbit-hub-count { font-size: 24px; font-weight: 800; color: var(--ink); line-height: 1.1; }
+    .orbit-hub-sub { font-size: 11px; font-weight: 600; color: var(--ink-secondary); }
+    .orbit-hub-links { font-size: 10.5px; color: var(--primary); font-weight: 600; margin-top: 2px; }
+
+    .orbit-node {
+      position: absolute; width: 204px; padding: 9px 13px; border-radius: 12px;
+      background: rgba(255, 255, 255, 0.94); border: 1.5px solid var(--border);
+      box-shadow: var(--shadow-sm); cursor: pointer; z-index: 3;
+      display: flex; flex-direction: column; gap: 2px;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+    .orbit-left { text-align: right; align-items: flex-end; }
+    .orbit-right { text-align: left; align-items: flex-start; }
+    .orbit-node:hover {
+      transform: translateY(-2px); box-shadow: var(--shadow-md);
+      background: var(--surface); border-color: var(--primary);
+    }
+    .orbit-node.orbit-intl:hover { border-color: #0f766e; }
+    .orbit-title { font-size: 14.5px; font-weight: 700; color: var(--primary); line-height: 1.3; }
+    .orbit-node.orbit-intl .orbit-title { color: #0f766e; }
+    .orbit-meta { font-size: 11.5px; color: var(--ink-muted); line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .orbit-meta strong { color: var(--ink-secondary); font-weight: 600; }
+
+    /* 8 个节点对称弧形坐标（桌面端） */
+    .pos-l1 { left: 32px; top: 22px; }
+    .pos-l2 { left: 0px; top: 102px; }
+    .pos-l3 { left: 0px; top: 186px; }
+    .pos-l4 { left: 32px; top: 266px; }
+    .pos-r1 { right: 32px; top: 22px; }
+    .pos-r2 { right: 0px; top: 102px; }
+    .pos-r3 { right: 0px; top: 186px; }
+    .pos-r4 { right: 32px; top: 266px; }
+
+    /* 居中主检索框（仿 Wikipedia 首页带范围下拉的检索框） */
+    .home-search-wrap { position: relative; width: 100%; max-width: 580px; margin: 0 auto 12px; text-align: left; }
+    .home-search-box {
+      display: flex; align-items: center; height: 46px;
+      background: var(--surface); border: 1.5px solid var(--border-strong); border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06); overflow: hidden;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .home-search-box:focus-within {
+      border-color: var(--primary); box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.14), 0 8px 22px rgba(15, 23, 42, 0.08);
+    }
+    .home-search-input {
+      flex: 1; min-width: 0; border: none; background: transparent;
+      font-size: 14.5px; color: var(--ink); outline: none; padding: 0 12px 0 15px; height: 100%;
+    }
+    .home-search-input::placeholder { color: #94a3b8; }
+    .home-search-scope {
+      border: none; border-left: 1px solid var(--border); background: #f8fafc;
+      color: var(--ink-secondary); font-size: 12px; font-weight: 600;
+      height: 100%; padding: 0 10px; outline: none; cursor: pointer; flex-shrink: 0;
+    }
+    .home-search-scope:hover { background: #f1f5f9; color: var(--ink); }
+    .home-search-btn {
+      border: none; background: var(--primary); color: #fff; height: 100%; padding: 0 18px;
+      font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+      transition: background 0.14s ease;
+    }
+    .home-search-btn:hover { background: #1d4ed8; }
+    .home-hot-row {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px;
+      margin-bottom: 18px;
+    }
+    .home-hot-chip {
+      border: 1px solid var(--border); background: rgba(255, 255, 255, 0.85); color: var(--ink-muted);
+      padding: 2px 10px; border-radius: var(--radius-pill); font-size: 11.5px; cursor: pointer;
+      transition: all 0.14s ease;
+    }
+    .home-hot-chip:hover { border-color: var(--primary-border); color: var(--primary); background: var(--primary-soft); }
+
+    .home-enter-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; }
+    .home-enter-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid var(--border-strong); background: var(--surface); color: var(--ink);
+      padding: 7px 16px; border-radius: 9px; font-size: 12.5px; font-weight: 600;
+      cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.14s ease;
+    }
+    .home-enter-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+    .home-enter-btn.primary { border-color: var(--primary); background: var(--primary); color: #fff; }
+    .home-enter-btn.primary:hover { background: #1d4ed8; color: #fff; }
+
+    .home-footer {
+      width: 100%; max-width: 780px; margin: 4px auto 0; padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px;
+      font-size: 11.5px; color: var(--ink-muted); text-align: center;
+    }
+    .home-footer-link {
+      border: none; background: transparent; color: var(--ink-secondary); font-size: 11.5px;
+      cursor: pointer; padding: 0 4px; text-decoration: underline; text-underline-offset: 2px;
+    }
+    .home-footer-link:hover { color: var(--primary); }
+
+    /* 平板/手机端优雅退化为居中徽章 + 2列紧凑网格 */
+    @media (max-width: 820px) {
+      .home-main { justify-content: flex-start; padding: 20px 14px 28px; }
+      .home-header h1 { font-size: 24px; }
+      .orbit-stage { width: 100%; height: auto; margin: 10px 0 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+      .orbit-svg, .orbit-side-tag { display: none; }
+      .orbit-hub { position: static; transform: none; width: 124px; height: 124px; }
+      .orbit-hub:hover { transform: scale(1.03); }
+      .orbit-hub-mark { width: 26px; height: 26px; font-size: 13px; }
+      .orbit-hub-count { font-size: 20px; }
+      .orbit-nodes-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .orbit-node { position: static; width: 100%; text-align: left; align-items: flex-start; padding: 9px 11px; }
+      .orbit-title { font-size: 13.5px; }
+    }
+    @media (max-width: 440px) {
+      .orbit-nodes-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="app mode-desktop" id="appRoot" data-mobile-pane="browse">
+  <div class="app mode-desktop page-home" id="appRoot" data-mobile-pane="browse">
+    <section class="home-view" id="homeView" aria-label="财税法规通主页">
+      <div class="home-main">
+        <div class="home-header">
+          <h1>财税法规通</h1>
+          <p class="home-hero-sub" id="homeHeroSub">中国与国际财税审结构化知识库</p>
+        </div>
+
+        <div class="orbit-stage" id="homeRadialStage" aria-label="资料库体系全景图"></div>
+
+        <div class="home-search-wrap" id="homeSearchWrap" role="search">
+          <div class="home-search-box">
+            <input class="home-search-input" id="homeSearchInput" type="search" autocomplete="off" placeholder="检索中国或国际准则、文号或正文（如 CAS14 总额法 / IFRS 15 / 企业所得税）..." />
+            <button class="search-clear-btn" id="homeSearchClearBtn" type="button" title="清空搜索" style="display:none;margin-right:6px;">×</button>
+            <select class="home-search-scope" id="homeSearchScope" aria-label="检索体系范围">
+              <option value="all">全库</option>
+              <option value="CN">中国</option>
+              <option value="INTL">国际</option>
+            </select>
+            <button class="home-search-btn" id="homeSearchBtn" type="button" title="进入工作台检索">🔍</button>
+          </div>
+          <div class="search-suggest-pop" id="homeSuggestPop" role="listbox" aria-label="主页模糊检索建议"></div>
+        </div>
+
+        <div class="home-hot-row" id="homeHotRow"></div>
+
+        <div class="home-enter-row">
+          <button type="button" class="home-enter-btn primary" onclick="enterWorkspace({clearQuery:true})">进入完整工作台 →</button>
+          <button type="button" class="home-enter-btn" onclick="enterWorkspace({viewMode:'graph',clearQuery:true})">🕸 关联图谱视图</button>
+        </div>
+
+        <footer class="home-footer">
+          <span id="homeFooterMeta">支持离线使用 · 仅供参考</span>
+          <span>·</span>
+          <span>🇺🇸 US GAAP（预留）</span>
+          <span>·</span>
+          <button type="button" class="home-footer-link" id="homeComplianceBtn">合规边界与来源</button>
+        </footer>
+      </div>
+    </section>
+
     <header class="topbar">
       <div class="topbar-main">
-        <div class="brand">
+        <div class="brand brand-clickable" onclick="openHomePage()" title="返回资料库主页">
           <div class="brand-badge">法</div>
           <div>
             <div class="brand-title">财税法规通</div>
@@ -787,6 +1013,7 @@
         </div>
 
         <div class="device-controls">
+          <button class="toggle-btn" id="backHomeBtn" onclick="openHomePage()" title="返回资料库概览主页">🏠 主页</button>
           <button class="toggle-btn mobile-or-tablet-only" id="filterToggleBtn">筛选</button>
           <button class="toggle-btn desktop-or-tablet-only active" id="drawerToggleBtn">◧ 收起原文</button>
           <button class="toggle-btn" id="complianceBtn" title="查看免责声明、合规边界与官方来源">⚖ 合规</button>
@@ -1107,6 +1334,7 @@
     }
 
     const state = {
+      pageMode: "home",          // "home" | "workspace"
       frameworkFilter: "CN",     // "CN" | "INTL" | "US" | "all"
       domainFilter: "all",
       typeFilter: "all",
@@ -1127,6 +1355,7 @@
       strengthFilter: "all",     // "all" | "strong" | "strong_medium" | "weak"
       inDocQuery: "",
       onlyLinkedArticles: false,
+      termHighlight: true,
       expandedArtLinks: new Set(),
       expandedArtLinksAll: new Set(),
       articleRenderLimit: 80,
@@ -1235,7 +1464,7 @@
       return set;
     }
 
-    function computeFuzzySuggestions(rawQuery, limit = 8) {
+    function computeFuzzySuggestions(rawQuery, limit = 8, scopeAll = false) {
       const q = String(rawQuery || "").trim();
       if (!q) return { items: [], total: 0 };
       const qLower = q.toLowerCase();
@@ -1251,7 +1480,7 @@
         }
       });
 
-      const domainPool = filterByDomain(filterByFramework(DATA.documents));
+      const domainPool = scopeAll ? DATA.documents : filterByDomain(filterByFramework(DATA.documents));
       const scoreDocs = (pool) => {
         const out = [];
         for (let i = 0; i < pool.length; i++) {
@@ -2785,11 +3014,19 @@
 
           <div class="section-label">
             <span>正文条文（共 ${d.article_count} 条）</span>
-            <span style="display:inline-flex;align-items:center;gap:8px;font-weight:400;">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-weight:400;flex-wrap:wrap;">
               <span id="articleMatchCount"></span>
+              ${((d.framework || "CN") === "CN" && CN_TERM_ENGINES[d.domain]) ? `<button type="button" class="mini-btn ${state.termHighlight ? "primary" : ""}" onclick="toggleTermHighlight()" title="开启或关闭正文核心专业术语柔和标亮">${state.termHighlight ? "✨ 术语标亮：开" : "✨ 术语标亮：关"}</button>` : ""}
               <button type="button" class="mini-btn" id="onlyLinkedArtsBtn" style="display:none" onclick="toggleOnlyLinkedArticles()"></button>
             </span>
           </div>
+          ${((d.framework || "CN") === "CN" && CN_TERM_ENGINES[d.domain] && state.termHighlight) ? `
+            <div class="term-hl-legend">
+              <span>术语标亮：</span>
+              <span><span class="hl-std" style="cursor:default;">${escapeHTML(CN_TERM_ENGINES[d.domain].legend[0])}</span>（点击跳转）</span>
+              <span><span class="hl-acct">${escapeHTML(CN_TERM_ENGINES[d.domain].legend[1])}</span></span>
+              <span><span class="hl-mech">${escapeHTML(CN_TERM_ENGINES[d.domain].legend[2])}</span></span>
+            </div>` : ""}
           <div class="in-doc-controls">
             <input class="in-doc-search" id="inDocSearchInput" type="search" value="${escapeHTML(state.inDocQuery)}" placeholder="在本文件条文中检索关键词或条号..." />
             <select class="toc-select" id="articleTocSelect" aria-label="条文目录快速跳转">
@@ -3064,7 +3301,7 @@
               <button class="mini-btn" onclick="copyCitation(${doc.id}, '${escapeHTML(a.no).replace(/'/g, "\\'")}')">📋 复制引用</button>
             </span>
           </div>
-          <div class="article-text ${(doc.framework || "CN") !== "CN" ? "intl-body" : ""}">${formatArticleBody(a.text, q, (doc.framework || "CN") !== "CN")}</div>
+          <div class="article-text ${(doc.framework || "CN") !== "CN" ? "intl-body" : ""}">${formatArticleBody(a.text, q, (doc.framework || "CN") !== "CN", doc)}</div>
           ${linksDrawerHTML}
         </div>
       `;
@@ -3338,9 +3575,195 @@
       return html;
     }
 
-    function formatArticleBody(text, q, isIntl) {
+    const CN_TERM_CONFIGS = {
+      accounting: {
+        legend: ["关联准则", "报表 / 科目", "确认 / 计量术语"],
+        std: [
+          "会计政策、会计估计变更和差错更正", "持有待售的非流动资产、处置组和终止经营", "持有待售的非流动资产",
+          "金融工具确认和计量", "金融资产转移", "金融工具列报", "套期会计", "金融工具",
+          "长期股权投资", "投资性房地产", "非货币性资产交换", "合并财务报表", "公允价值计量",
+          "资产负债表日后事项", "石油天然气开采", "企业年金基金", "财务报表列报", "中期财务报告",
+          "关联方披露", "可持续披露准则", "小企业会计准则", "基本准则",
+          "固定资产", "无形资产", "生物资产", "资产减值", "职工薪酬", "股份支付",
+          "债务重组", "或有事项", "政府补助", "借款费用", "外币折算", "企业合并",
+          "合营安排", "保险合同", "每股收益", "存货"
+        ],
+        acct: [
+          "所有者权益变动表", "财务报表附注", "交易性金融资产", "其他权益工具投资", "其他债权投资",
+          "递延所得税资产", "递延所得税负债", "公允价值变动损益", "资产处置损益", "资产减值损失",
+          "信用减值损失", "主营业务收入", "主营业务成本", "其他业务收入", "其他业务成本",
+          "营业外收入", "营业外支出", "少数股东权益", "少数股东损益", "其他综合收益",
+          "长期待摊费用", "合同履约成本", "合同取得成本", "其他应收款", "其他应付款",
+          "资产负债表", "现金流量表", "所有者权益", "未分配利润", "所得税费用",
+          "税金及附加", "使用权资产", "预计负债", "租赁负债", "合同资产", "合同负债",
+          "应收账款", "应付账款", "预收账款", "预付账款", "应收票据", "应付票据",
+          "当期损益", "留存收益", "资本公积", "盈余公积", "实收资本", "专项储备",
+          "营业收入", "营业成本", "管理费用", "销售费用", "财务费用", "研发费用",
+          "投资收益", "其他收益", "递延收益", "在建工程", "债权投资", "货币资金",
+          "库存股", "利润表", "商誉"
+        ],
+        mech: [
+          "预计未来现金流量现值", "预计未来现金流量", "应纳税暂时性差异", "可抵扣暂时性差异",
+          "会计政策变更", "会计估计变更", "前期差错更正", "资产负债表日", "预期信用损失",
+          "重大融资成分", "实质重于形式", "非同一控制", "主要责任人", "可变现净值",
+          "可收回金额", "非现金对价", "追溯调整法", "追溯重述法", "未来适用法",
+          "企业所得税", "递延所得税", "权责发生制", "初始计量", "后续计量", "初始确认",
+          "终止确认", "公允价值", "账面价值", "账面余额", "账面净值", "摊余成本",
+          "历史成本", "重置成本", "履约义务", "交易价格", "可变对价", "相关税费",
+          "计税基础", "累计折旧", "累计摊销", "减值准备", "跌价准备", "坏账准备",
+          "重大影响", "共同控制", "同一控制", "持续经营", "附注披露", "经济利益",
+          "重分类", "控制权", "代理人", "增值税", "重要性", "谨慎性", "折旧", "摊销"
+        ]
+      },
+      audit: {
+        legend: ["关联准则 / 规范", "审计程序与报告", "风险与职业判断"],
+        std: [
+          "中国注册会计师鉴证业务基本准则", "企业内部控制基本规范", "企业内部控制审计指引",
+          "企业内部控制评价指引", "中国注册会计师独立性准则第1号", "鉴证业务基本准则",
+          "集团财务报表审计", "关键审计事项", "非无保留意见", "可持续信息鉴证",
+          "质量管理准则", "独立性准则", "企业会计准则", "内部控制",
+          "持续经营", "会计估计", "期后事项", "期初余额", "审计抽样",
+          "比较信息", "其他信息", "服务机构", "内部审计", "货币资金", "关联方"
+        ],
+        acct: [
+          "实质性分析程序", "审计业务约定书", "无法表示意见", "管理层建议书", "总体审计策略",
+          "具体审计计划", "项目质量复核", "风险评估程序", "积极式函证", "消极式函证",
+          "审计工作底稿", "无保留意见", "强调事项段", "其他事项段", "实质性程序",
+          "控制测试", "细节测试", "穿行测试", "重新执行", "重新计算", "外部函证",
+          "存货监盘", "审计证据", "审计报告", "保留意见", "否定意见", "书面声明",
+          "分析程序", "函证"
+        ],
+        mech: [
+          "管理层凌驾于控制之上", "组成部分注册会计师", "实际执行的重要性", "前任注册会计师",
+          "财务报表层次", "重大错报风险", "明显微小错报", "内部控制缺陷", "收入确认舞弊",
+          "重要性水平", "认定层次", "固有风险", "控制风险", "检查风险", "特别风险",
+          "舞弊风险", "职业怀疑", "职业判断", "合理保证", "有限保证", "重大缺陷",
+          "重要缺陷", "一般缺陷", "集团项目组", "客观公正", "保密原则", "独立性",
+          "治理层", "管理层", "舞弊"
+        ]
+      },
+      tax: {
+        legend: ["关联税法 / 法规", "税种、票据与税基", "征管动作与优惠"],
+        std: [
+          "中华人民共和国增值税法", "中华人民共和国企业所得税法", "中华人民共和国个人所得税法",
+          "中华人民共和国税收征收管理法", "中华人民共和国印花税法", "发票管理办法",
+          "企业所得税法", "个人所得税法", "税收征收管理法", "增值税法", "印花税法",
+          "土地增值税", "高新技术企业", "企业会计准则", "公司法"
+        ],
+        acct: [
+          "研发费用加计扣除", "增值税专用发票", "增值税普通发票", "应纳税所得额", "专项附加扣除",
+          "小规模纳税人", "小型微利企业", "扣缴义务人", "财产转让所得", "一般纳税人",
+          "不征税收入", "非居民企业", "非居民个人", "数电发票", "电子发票", "销项税额",
+          "进项税额", "留抵税额", "应纳税额", "计税依据", "计税基础", "综合所得",
+          "经营所得", "股息红利", "税前扣除", "免税收入", "居民企业", "居民个人", "小微企业"
+        ],
+        mech: [
+          "纳税义务发生时间", "逃避缴纳税款", "特别纳税调整", "独立交易原则", "一次性扣除",
+          "汇算清缴", "纳税申报", "纳税期限", "预缴税款", "代扣代缴", "代收代缴",
+          "留抵退税", "出口退税", "即征即退", "先征后退", "免抵退税", "加计扣除",
+          "加速折旧", "税收优惠", "核定征收", "查账征收", "关联交易", "税务稽查",
+          "行政处罚", "虚开发票", "纳税信用", "减免税", "滞纳金"
+        ]
+      },
+      general: {
+        legend: ["关联核心法律", "治理主体与载体", "义务、程序与责任"],
+        std: [
+          "中华人民共和国公司法", "中华人民共和国证券法", "中华人民共和国会计法",
+          "中华人民共和国注册会计师法", "企业内部控制基本规范", "企业所得税法",
+          "税收征收管理法", "注册会计师法", "企业会计准则", "企业破产法",
+          "公司法", "证券法", "会计法", "民法典"
+        ],
+        acct: [
+          "一人有限责任公司", "有限责任公司", "股份有限公司", "财务会计报告", "高级管理人员",
+          "法定代表人", "实际控制人", "审计委员会", "法定公积金", "任意公积金",
+          "资本公积金", "会计师事务所", "资产评估机构", "招股说明书", "独立董事",
+          "控股股东", "上市公司", "注册资本", "认缴出资", "实缴出资", "年度报告",
+          "半年度报告", "临时报告", "股东会", "董事会", "监事会", "关联方"
+        ],
+        mech: [
+          "法人人格否认", "股东代表诉讼", "异议股东回购", "忠实义务", "勤勉义务",
+          "信息披露", "关联交易", "内幕交易", "操纵市场", "虚假陈述", "连带责任",
+          "赔偿责任", "行政处罚", "刑事责任", "出资期限", "利润分配", "公司合并",
+          "公司分立", "解散清算", "特别决议", "内部控制", "会计核算", "会计监督",
+          "表决权", "减资", "增资"
+        ]
+      }
+    };
+
+    const CN_TERM_ENGINES = (() => {
+      const engines = {};
+      const cnActiveDocs = DATA.documents.filter(d => (d.framework || "CN") === "CN" && d.status !== "outdated");
+      const resolveStdTarget = (term, domain) => {
+        const sameDom = cnActiveDocs.filter(d => d.domain === domain);
+        const pick = (pool) =>
+          pool.find(d => (d.display_title || "") === term)
+          || pool.find(d => (d.title || "") === term)
+          || pool.find(d => (d.title || "").includes(`——${term}`) && (d.doc_type === "standard" || d.doc_type === "law"))
+          || pool.find(d => (d.title || "").includes(term) && (d.doc_type === "law" || d.doc_type === "standard"))
+          || pool.find(d => (d.title || "").includes(term));
+        const hit = pick(sameDom) || pick(cnActiveDocs);
+        return hit ? hit.id : null;
+      };
+      Object.entries(CN_TERM_CONFIGS).forEach(([dom, cfg]) => {
+        const kindMap = new Map();
+        const stdMap = new Map();
+        cfg.mech.forEach(t => kindMap.set(t, "mech"));
+        cfg.acct.forEach(t => kindMap.set(t, "acct"));
+        cfg.std.forEach(t => {
+          kindMap.set(t, "std");
+          stdMap.set(t, resolveStdTarget(t, dom));
+        });
+        const re = new RegExp(
+          `(${[...kindMap.keys()].sort((a, b) => b.length - a.length).map(s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
+          "g"
+        );
+        engines[dom] = { legend: cfg.legend, kindMap, stdMap, re };
+      });
+      return engines;
+    })();
+
+    function applyCnTermHighlights(html, doc) {
+      if (!state.termHighlight || !doc || (doc.framework || "CN") !== "CN") return html;
+      const eng = CN_TERM_ENGINES[doc.domain];
+      if (!eng) return html;
+      const selfTitle = (doc.display_title || "").trim();
+      const selfFull = (doc.title || "").trim();
+      const parts = html.split(/(<[^>]+>)/g);
+      let skipDepth = 0;
+      return parts.map(part => {
+        if (!part) return "";
+        if (part.startsWith("<")) {
+          if (/^<(a|mark)\b/i.test(part)) skipDepth += 1;
+          else if (/^<\/(a|mark)>/i.test(part)) skipDepth = Math.max(0, skipDepth - 1);
+          return part;
+        }
+        if (skipDepth > 0) return part;
+        return part.replace(eng.re, (m) => {
+          const kind = eng.kindMap.get(m);
+          if (kind === "std") {
+            const targetId = eng.stdMap.get(m);
+            if (targetId === doc.id || (selfTitle && selfTitle === m) || (selfFull && selfFull === m)) return m;
+            if (targetId && docById[targetId]) {
+              const tTitle = escapeHTML(docById[targetId].title);
+              return `<span class="hl-std" role="button" tabindex="0" title="${escapeHTML(eng.legend[0])}：点击跳转《${tTitle}》" onclick="jumpToDoc(${targetId})">${m}</span>`;
+            }
+            return `<span class="hl-std" title="${escapeHTML(eng.legend[0])}">${m}</span>`;
+          }
+          if (kind === "acct") return `<span class="hl-acct" title="${escapeHTML(eng.legend[1])}">${m}</span>`;
+          return `<span class="hl-mech" title="${escapeHTML(eng.legend[2])}">${m}</span>`;
+        });
+      }).join("");
+    }
+
+    function toggleTermHighlight() {
+      state.termHighlight = !state.termHighlight;
+      renderDrawer();
+    }
+
+    function formatArticleBody(text, q, isIntl, doc) {
       if (!isIntl) {
-        return highlightText(text, q).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1 ↗</a>');
+        const baseHtml = highlightText(text, q).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1 ↗</a>');
+        return applyCnTermHighlights(baseHtml, doc);
       }
       const lines = String(text || "").replace(/\r\n/g, "\n").split("\n");
       const blocks = [];
@@ -3427,6 +3850,8 @@
     }
 
     function buildShareURL() {
+      const base = window.location.href.split("?")[0];
+      if (state.pageMode === "home") return base;
       const p = new URLSearchParams();
       if (state.frameworkFilter !== "CN") p.set("fw", state.frameworkFilter);
       if (state.domainFilter !== "all") p.set("domain", state.domainFilter);
@@ -3440,8 +3865,8 @@
       if (!state.connectedOnly) p.set("conn", "0");
       if (state.selectedDocId) p.set("doc", state.selectedDocId);
       if (state.activeTab !== "detail") p.set("tab", state.activeTab);
+      if (!p.toString()) p.set("mode", "workspace");
       const qs = p.toString();
-      const base = window.location.href.split("?")[0];
       return qs ? `${base}?${qs}` : base;
     }
 
@@ -3452,6 +3877,8 @@
 
     function restoreStateFromURL() {
       const p = new URLSearchParams(window.location.search);
+      const wsKeys = ["mode", "fw", "domain", "type", "status", "topic", "sort", "q", "view", "doc", "tab"];
+      state.pageMode = wsKeys.some(k => p.has(k)) ? "workspace" : "home";
       if (["CN", "INTL", "US", "all"].includes(p.get("fw"))) state.frameworkFilter = p.get("fw");
       if (p.get("domain")) state.domainFilter = p.get("domain");
       if (p.get("type")) state.typeFilter = p.get("type");
@@ -3728,11 +4155,305 @@
       });
     }
 
+    let homeSuggestList = [];
+    let homeSuggestIdx = -1;
+
+    function applyPageMode() {
+      const root = document.getElementById("appRoot");
+      if (!root) return;
+      root.classList.toggle("page-home", state.pageMode === "home");
+      syncStateToURL();
+    }
+
+    function openHomePage() {
+      state.pageMode = "home";
+      closeSearchSuggestions();
+      closeHomeSuggestions();
+      applyPageMode();
+      const hv = document.getElementById("homeView");
+      if (hv) hv.scrollTop = 0;
+    }
+
+    function enterWorkspace(opts = {}) {
+      state.pageMode = "workspace";
+      closeHomeSuggestions();
+      if (opts.fw !== undefined) state.frameworkFilter = opts.fw;
+      if (opts.domain !== undefined) state.domainFilter = opts.domain; else if (opts.fw !== undefined) state.domainFilter = "all";
+      if (opts.type !== undefined) state.typeFilter = opts.type; else if (opts.fw !== undefined || opts.domain !== undefined) state.typeFilter = "all";
+      if (opts.topic !== undefined) state.topicFilter = opts.topic; else if (opts.fw !== undefined || opts.domain !== undefined || opts.type !== undefined) state.topicFilter = "all";
+      if (opts.status !== undefined) state.statusFilter = opts.status; else if (opts.fw !== undefined || opts.domain !== undefined || opts.type !== undefined) state.statusFilter = "all";
+      if (opts.viewMode) state.viewMode = opts.viewMode;
+      if (opts.query !== undefined) {
+        state.searchQuery = String(opts.query || "").trim();
+        searchInputEl.value = state.searchQuery;
+        searchClearBtn.style.display = state.searchQuery ? "inline-flex" : "none";
+        if (state.searchQuery) ensureFulltextLoaded(state.domainFilter, state.frameworkFilter);
+      } else if (opts.clearQuery) {
+        state.searchQuery = "";
+        state.inDocQuery = "";
+        searchInputEl.value = "";
+        searchClearBtn.style.display = "none";
+      }
+      state.activePath = null;
+      state.activeFrameworkRel = null;
+      state.selectedEdgeId = null;
+      const cpBtn = document.getElementById("clearPathBtn");
+      if (cpBtn) cpBtn.style.display = "none";
+      if (opts.docId && docById[Number(opts.docId)]) {
+        const targetId = Number(opts.docId);
+        state.selectedDocId = targetId;
+        ensureDocVisibleInFilters(targetId, { clearSearch: !opts.query });
+        recordDocVisit(targetId);
+        state.inDocQuery = (state.searchQuery && fulltextHitMap[targetId]) ? state.searchQuery : "";
+        state.activeTab = opts.tab || "detail";
+      }
+      applyPageMode();
+      syncCascadingDropdowns();
+      applySplitRatio();
+      updateView(state.viewMode === "graph", { fromSearch: Boolean(opts.query), keepSelected: Boolean(opts.docId) });
+      applyDeviceMode(state.viewMode === "graph");
+      if (opts.docId && getEffectiveDevice() === "mobile") setMobilePane("detail");
+    }
+
+    function closeHomeSuggestions() {
+      const pop = document.getElementById("homeSuggestPop");
+      if (pop) pop.classList.remove("open");
+      homeSuggestIdx = -1;
+    }
+
+    function updateHomeSuggestHighlight() {
+      const pop = document.getElementById("homeSuggestPop");
+      if (!pop) return;
+      pop.querySelectorAll(".suggest-item").forEach((el, idx) => {
+        const on = idx === homeSuggestIdx;
+        el.classList.toggle("active", on);
+        if (on) el.scrollIntoView({ block: "nearest" });
+      });
+    }
+
+    function renderHomeSuggestions(rawQuery) {
+      const pop = document.getElementById("homeSuggestPop");
+      if (!pop) return;
+      const q = String(rawQuery || "").trim();
+      if (!q) { closeHomeSuggestions(); return; }
+      const { items, total } = computeFuzzySuggestions(q, 8, true);
+      homeSuggestList = items;
+      homeSuggestIdx = -1;
+      if (!items.length) {
+        pop.innerHTML = `<div class="suggest-foot"><span>未找到与「${escapeHTML(q)}」相关的法规，按回车可进入工作台全库正文检索。</span></div>`;
+        pop.classList.add("open");
+        return;
+      }
+      const rowsHTML = items.map((item, idx) => {
+        const d = item.doc;
+        const domShort = DOMAIN_SHORT[d.domain] || DOMAIN_LABELS[d.domain] || "";
+        const typeLbl = TYPE_LABELS[d.doc_type] || d.doc_type;
+        return `
+          <div class="suggest-item" role="option" data-idx="${idx}" onmousedown="event.preventDefault(); pickHomeSuggestion(${d.id})">
+            <div class="suggest-item-top">
+              <span class="suggest-item-title" title="${escapeHTML(d.title)}">${highlightText(d.title, q)}</span>
+              <span class="suggest-item-tags">
+                ${renderFrameworkBadge(d)}
+                <span class="pill dom-${d.domain}">${escapeHTML(domShort)}</span>
+                <span class="pill type-pill">${escapeHTML(typeLbl)}</span>
+                <span class="suggest-reason ${item.reasonCls}">${escapeHTML(item.reason)}</span>
+              </span>
+            </div>
+            <div class="suggest-item-sub">${highlightText(item.snippet, q)}</div>
+          </div>
+        `;
+      }).join("");
+      pop.innerHTML = `${rowsHTML}
+        <div class="suggest-foot">
+          <span>全库模糊联想前 ${items.length} 条（共 ${total} 份相关 · ↑↓ 选择，回车直达）</span>
+          <button type="button" class="mini-btn primary" onmousedown="event.preventDefault(); submitHomeSearch()">在工作台查看全部 →</button>
+        </div>`;
+      pop.classList.add("open");
+    }
+
+    function pickHomeSuggestion(docId) {
+      const q = (document.getElementById("homeSearchInput")?.value || "").trim();
+      const d = docById[Number(docId)];
+      enterWorkspace({ fw: d ? (d.framework || "CN") : "all", docId, query: q, viewMode: "list" });
+    }
+
+    function submitHomeSearch(forcedQuery) {
+      const inp = document.getElementById("homeSearchInput");
+      const scopeSel = document.getElementById("homeSearchScope");
+      const fwScope = scopeSel ? scopeSel.value : "all";
+      const q = (forcedQuery !== undefined ? forcedQuery : (inp ? inp.value : "")).trim();
+      if (inp && forcedQuery !== undefined) inp.value = q;
+      enterWorkspace({ fw: fwScope, domain: "all", type: "all", topic: "all", status: "all", query: q, viewMode: "list" });
+    }
+
+    function renderHomePage() {
+      const stage = document.getElementById("homeRadialStage");
+      if (!stage) return;
+      const allDocs = DATA.documents;
+      const cnDocs = allDocs.filter(d => (d.framework || "CN") === "CN");
+      const intlDocs = allDocs.filter(d => (d.framework || "CN") === "INTL");
+      const countDom = (list, dom) => list.filter(d => d.domain === dom).length;
+      const artFmt = (DATA.meta.article_count || 0).toLocaleString("en-US");
+      const linkFmt = (DATA.meta.doc_link_count || 0).toLocaleString("en-US");
+
+      const heroSub = document.getElementById("homeHeroSub");
+      if (heroSub) {
+        heroSub.textContent = `中国与国际财税审结构化知识库 · ${allDocs.length} 份法规与准则 · ${artFmt} 条正文`;
+      }
+
+      // 左侧 4 个中国板块 + 右侧 4 个国际板块（对称弧形环绕中心徽章，仿 Wikipedia 首页极简视觉图式）
+      const leftNodes = [
+        { fw: "CN", dom: "accounting", title: "中国会计准则", sub: "准则 · 指南 · 解释 · 案例", cnt: countDom(cnDocs, "accounting"), pos: "pos-l1" },
+        { fw: "CN", dom: "audit", title: "中国审计准则", sub: "CPA 审计 · 鉴证 · 内控", cnt: countDom(cnDocs, "audit"), pos: "pos-l2" },
+        { fw: "CN", dom: "tax", title: "中国税收法规", sub: "税法 · 条例 · 税收优惠", cnt: countDom(cnDocs, "tax"), pos: "pos-l3" },
+        { fw: "CN", dom: "general", title: "综合商法监管", sub: "会计法 · 公司法 · 证券法", cnt: countDom(cnDocs, "general"), pos: "pos-l4" }
+      ];
+      const rightNodes = [
+        { fw: "INTL", dom: "accounting", title: "IFRS / ISSB 会计", sub: "IFRS · IAS · 可持续 · ESMA", cnt: countDom(intlDocs, "accounting"), pos: "pos-r1" },
+        { fw: "INTL", dom: "audit", title: "IAASB / IESBA 审计", sub: "ISQM · ISA · ISSA · 道德", cnt: countDom(intlDocs, "audit"), pos: "pos-r2" },
+        { fw: "INTL", dom: "tax", title: "OECD 国际税收", sub: "支柱二 · 协定 · 转让定价", cnt: countDom(intlDocs, "tax"), pos: "pos-r3" },
+        { fw: "INTL", dom: "general", title: "跨境治理与反洗钱", sub: "G20/OECD · COSO · FATF", cnt: countDom(intlDocs, "general"), pos: "pos-r4" }
+      ];
+
+      const renderOrbitNode = (n, side) => `
+        <button type="button" class="orbit-node orbit-${side} ${n.pos} ${n.fw === "INTL" ? "orbit-intl" : "orbit-cn"}"
+          onclick="enterWorkspace({fw:'${n.fw}',domain:'${n.dom}',clearQuery:true})"
+          title="进入工作台查看 ${escapeHTML(n.title)}（${n.cnt} 份）">
+          <span class="orbit-title">${escapeHTML(n.title)}</span>
+          <span class="orbit-meta"><strong>${n.cnt} 份</strong> · ${escapeHTML(n.sub)}</span>
+        </button>
+      `;
+
+      stage.innerHTML = `
+        <svg class="orbit-svg" viewBox="0 0 820 340" aria-hidden="true">
+          <defs>
+            <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#2563eb" stop-opacity="0.14" />
+              <stop offset="70%" stop-color="#2563eb" stop-opacity="0.03" />
+              <stop offset="100%" stop-color="#2563eb" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="hubRing" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2563eb" />
+              <stop offset="100%" stop-color="#0f766e" />
+            </linearGradient>
+          </defs>
+          <circle cx="410" cy="170" r="146" fill="url(#hubGlow)" />
+          <circle cx="410" cy="170" r="126" fill="none" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 5" opacity="0.7" />
+          <circle cx="410" cy="170" r="92" fill="none" stroke="url(#hubRing)" stroke-width="1.2" opacity="0.32" />
+          <!-- 左侧连接弧线（中国体系） -->
+          <path d="M 326 130 Q 280 78 232 46" fill="none" stroke="#93c5fd" stroke-width="1.3" opacity="0.75" />
+          <path d="M 318 154 Q 260 132 194 128" fill="none" stroke="#93c5fd" stroke-width="1.3" opacity="0.75" />
+          <path d="M 318 186 Q 260 208 194 212" fill="none" stroke="#93c5fd" stroke-width="1.3" opacity="0.75" />
+          <path d="M 326 210 Q 280 262 232 294" fill="none" stroke="#93c5fd" stroke-width="1.3" opacity="0.75" />
+          <!-- 右侧连接弧线（国际体系） -->
+          <path d="M 494 130 Q 540 78 588 46" fill="none" stroke="#5eead4" stroke-width="1.3" opacity="0.8" />
+          <path d="M 502 154 Q 560 132 626 128" fill="none" stroke="#5eead4" stroke-width="1.3" opacity="0.8" />
+          <path d="M 502 186 Q 560 208 626 212" fill="none" stroke="#5eead4" stroke-width="1.3" opacity="0.8" />
+          <path d="M 494 210 Q 540 262 588 294" fill="none" stroke="#5eead4" stroke-width="1.3" opacity="0.8" />
+          <!-- 弧线端节点 -->
+          <circle cx="232" cy="46" r="3" fill="#2563eb" /><circle cx="194" cy="128" r="3" fill="#2563eb" />
+          <circle cx="194" cy="212" r="3" fill="#2563eb" /><circle cx="232" cy="294" r="3" fill="#2563eb" />
+          <circle cx="588" cy="46" r="3" fill="#0f766e" /><circle cx="626" cy="128" r="3" fill="#0f766e" />
+          <circle cx="626" cy="212" r="3" fill="#0f766e" /><circle cx="588" cy="294" r="3" fill="#0f766e" />
+        </svg>
+
+        <div class="orbit-side-tag orbit-side-left">🇨🇳 中国体系 · ${cnDocs.length} 份</div>
+        <div class="orbit-side-tag orbit-side-right">🌐 国际体系 · ${intlDocs.length} 份</div>
+
+        <button type="button" class="orbit-hub" onclick="enterWorkspace({clearQuery:true})" title="点击进入完整工作台">
+          <span class="orbit-hub-mark">法</span>
+          <span class="orbit-hub-count">${allDocs.length}</span>
+          <span class="orbit-hub-sub">份法规与准则</span>
+          <span class="orbit-hub-links">${linkFmt} 条关联</span>
+        </button>
+
+        <div class="orbit-nodes-grid">
+          ${leftNodes.map(n => renderOrbitNode(n, "left")).join("")}
+          ${rightNodes.map(n => renderOrbitNode(n, "right")).join("")}
+        </div>
+      `;
+
+      const hotQueries = ["CAS14 总额法", "IFRS 15", "企业所得税", "ISA 315", "公司法"];
+      const hotRow = document.getElementById("homeHotRow");
+      if (hotRow) {
+        hotRow.innerHTML = hotQueries.map(q =>
+          `<button type="button" class="home-hot-chip" onclick="submitHomeSearch('${q}')">${escapeHTML(q)}</button>`
+        ).join("");
+      }
+
+      const footMeta = document.getElementById("homeFooterMeta");
+      if (footMeta) {
+        footMeta.textContent = `最近构建 ${DATA.meta.built_at || ""} · 支持离线使用 · 仅供参考，不构成法律/审计/涉税鉴证意见`;
+      }
+    }
+
+    function bindHomeEvents() {
+      const hInp = document.getElementById("homeSearchInput");
+      const hClr = document.getElementById("homeSearchClearBtn");
+      const hBtn = document.getElementById("homeSearchBtn");
+      const hComp = document.getElementById("homeComplianceBtn");
+      if (hComp) hComp.onclick = () => modal.classList.add("open");
+      if (!hInp) return;
+      let hTimer = null;
+      hInp.onfocus = () => {
+        ensureFulltextLoaded("all", "all");
+        if (hInp.value.trim()) renderHomeSuggestions(hInp.value);
+      };
+      hInp.oninput = () => {
+        ensureFulltextLoaded("all", "all");
+        if (hClr) hClr.style.display = hInp.value ? "inline-flex" : "none";
+        clearTimeout(hTimer);
+        hTimer = setTimeout(() => {
+          if (hInp.value.trim()) renderHomeSuggestions(hInp.value);
+          else closeHomeSuggestions();
+        }, 90);
+      };
+      hInp.onkeydown = (e) => {
+        const pop = document.getElementById("homeSuggestPop");
+        const isOpen = pop && pop.classList.contains("open") && homeSuggestList.length > 0;
+        if (e.key === "ArrowDown" && isOpen) {
+          e.preventDefault();
+          homeSuggestIdx = (homeSuggestIdx + 1) % homeSuggestList.length;
+          updateHomeSuggestHighlight();
+        } else if (e.key === "ArrowUp" && isOpen) {
+          e.preventDefault();
+          homeSuggestIdx = (homeSuggestIdx - 1 + homeSuggestList.length) % homeSuggestList.length;
+          updateHomeSuggestHighlight();
+        } else if (e.key === "Escape") {
+          closeHomeSuggestions();
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          clearTimeout(hTimer);
+          if (isOpen && homeSuggestIdx >= 0 && homeSuggestList[homeSuggestIdx]) {
+            pickHomeSuggestion(homeSuggestList[homeSuggestIdx].doc.id);
+            return;
+          }
+          submitHomeSearch();
+        }
+      };
+      if (hClr) {
+        hClr.onclick = () => {
+          hInp.value = "";
+          hClr.style.display = "none";
+          closeHomeSuggestions();
+          hInp.focus();
+        };
+      }
+      if (hBtn) hBtn.onclick = () => submitHomeSearch();
+      document.addEventListener("click", (e) => {
+        const wrap = document.getElementById("homeSearchWrap");
+        if (wrap && !wrap.contains(e.target)) closeHomeSuggestions();
+      });
+    }
+
     const totalArtFmt = (DATA.meta.article_count || 0).toLocaleString("en-US");
     searchInputEl.placeholder = `检索中国或国际准则（如 CAS14 总额法 / IFRS 15 / IAS 36），覆盖 ${totalArtFmt} 条正文...`;
     document.getElementById("ftBadge").title = `点击搜索框自动加载全库 ${totalArtFmt} 条条文正文索引`;
     initPaneResizer();
+    renderHomePage();
+    bindHomeEvents();
     restoreStateFromURL();
+    applyPageMode();
     syncCascadingDropdowns();
     updateView(false);
     applyDeviceMode(false);
