@@ -971,6 +971,7 @@
               <option value="all">全库</option>
               <option value="CN">中国</option>
               <option value="INTL">国际</option>
+              <option value="US">美国</option>
             </select>
             <button class="home-search-btn" id="homeSearchBtn" type="button" title="进入工作台检索">🔍</button>
           </div>
@@ -981,13 +982,12 @@
 
         <div class="home-enter-row">
           <button type="button" class="home-enter-btn primary" onclick="enterWorkspace({clearQuery:true})">进入完整工作台 →</button>
+          <button type="button" class="home-enter-btn" id="homeUsEntryBtn" style="border-color:#ddd6fe;color:#6d28d9;background:#f5f3ff;" onclick="enterWorkspace({fw:'US',clearQuery:true})">🇺🇸 美国准则 US GAAP</button>
           <button type="button" class="home-enter-btn" onclick="enterWorkspace({viewMode:'graph',clearQuery:true})">🕸 关联图谱视图</button>
         </div>
 
         <footer class="home-footer">
           <span id="homeFooterMeta">支持离线使用 · 仅供参考</span>
-          <span>·</span>
-          <span>🇺🇸 US GAAP（预留）</span>
           <span>·</span>
           <button type="button" class="home-footer-link" id="homeComplianceBtn">合规边界与来源</button>
         </footer>
@@ -1690,7 +1690,7 @@
       // 将 "CAS 14"、"CSA 1141"、"IFRS 15"、"IFRS S1"、"ISA 315"、"ISQM 1"、"ISSA 5000"、"解释 18" 合并为单个词组
       const normalized = raw
         .replace(/\bifrs[\s-]+(s\d{1,2})\b/gi, "ifrs$1")
-        .replace(/\b(cas|csa|ifrs|ias|ifric|sic|isqm|isa|isre|isae|issa|isrs)[\s-]+(\d{1,4})\b/gi, "$1$2")
+        .replace(/\b(cas|csa|ifrs|ias|ifric|sic|isqm|isa|isre|isae|issa|isrs|asc|con)[\s-]+(\d{1,4})\b/gi, "$1$2")
         .replace(/解释\s*第?\s*(\d{1,2})\s*号?/g, "解释$1");
 
       const tokens = normalized.split(/\s+/).filter(Boolean).slice(0, 12);
@@ -1709,7 +1709,7 @@
           vSet.add(`ifrs-s${n}`);
         }
 
-        const intlMatch = lower.match(/^(ifrs|ias|ifric|sic|isqm|isa|isre|isae|issa|isrs)0*(\d{1,4})$/);
+        const intlMatch = lower.match(/^(ifrs|ias|ifric|sic|isqm|isa|isre|isae|issa|isrs|asc|con)0*(\d{1,4})$/);
         if (intlMatch) {
           const pfx = intlMatch[1], n = intlMatch[2];
           vSet.add(`${pfx} ${n}`);
@@ -2074,6 +2074,22 @@
           });
         }
       }
+      const usCon8 = DATA.documents.find(d => (d.framework || "CN") === "US" && d.doc_no === "CON 8");
+      if (usCon8) {
+        const kids = DATA.documents.filter(d => (d.framework || "CN") === "US" && d.domain === "accounting" && d.doc_type === "standard" && /^ASC\s+\d+/i.test(d.doc_no || ""));
+        if (kids.length) {
+          groups.push({
+            key: "us_con8",
+            umbrellaDoc: usCon8,
+            childDocs: kids,
+            childIds: new Set(kids.map(d => d.id)),
+            desc: "FASB ASC Topics are developed under Concepts Statement No. 8 (Conceptual Framework for Financial Reporting)",
+            frameworkFilter: "US",
+            domainFilter: "accounting",
+            typeFilter: "standard"
+          });
+        }
+      }
       return groups;
     })();
 
@@ -2198,6 +2214,13 @@
       const getTaxonomyKey = (d) => {
         const t = d.title || "";
         let sub = 5, num = 99999;
+        if ((d.framework || "CN") === "US") {
+          const c = (d.doc_no || d.series_badge || t).trim();
+          if (c === "CON 8") return [0, 0];
+          const m = c.match(/^ASC\s+(\d+)/i);
+          if (m) return [1, Number(m[1])];
+          return [9, d.id];
+        }
         if ((d.framework || "CN") === "INTL") {
           const c = (d.doc_no || d.series_badge || t).trim();
           if (c === "Conceptual Framework") return [0, 0];
@@ -3569,8 +3592,8 @@
 
     function linkifyAndDecorateIntl(rawLine, q) {
       let html = highlightText(rawLine, q);
-      // 高亮官方真实段落与附录引用（如 paragraphs B1–B5、paragraph B112、Appendix A、IFRS 15.B34）
-      html = html.replace(/\b(paragraphs?\s+[A-Z]?\d+[A-Z]?(?:[–\-][A-Z]?\d+[A-Z]?)?|Appendix\s+[A-Z]|(?:IFRS|IAS|IFRIC|SIC|ISA|ISQM|ISRE|ISAE|ISSA)\s*\d+\.[A-Z]?\d+[A-Z]?)\b/g, '<span class="para-ref">$1</span>');
+      // 高亮官方真实段落与附录引用（如 paragraphs B1–B5、IFRS 15.B34、ASC 606-10-25、ASU 2024-03、CON 8）
+      html = html.replace(/\b(paragraphs?\s+[A-Z]?\d+[A-Z]?(?:[–\-][A-Z]?\d+[A-Z]?)?|Appendix\s+[A-Z]|(?:IFRS|IAS|IFRIC|SIC|ISA|ISQM|ISRE|ISAE|ISSA)\s*\d+\.[A-Z]?\d+[A-Z]?|ASC\s+\d{3}(?:-\d{2}){1,3}(?:-\d{1,2}[A-Z]?)?|ASU\s+\d{4}-\d{2}|CON\s+\d)\b/g, '<span class="para-ref">$1</span>');
       html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1 ↗</a>');
       return html;
     }
@@ -4373,12 +4396,23 @@
         </div>
       `;
 
-      const hotQueries = ["CAS14 总额法", "IFRS 15", "企业所得税", "ISA 315", "公司法"];
+      const hotQueries = ["CAS14 总额法", "IFRS 15", "ASC 606", "企业所得税", "ISA 315", "公司法"];
       const hotRow = document.getElementById("homeHotRow");
       if (hotRow) {
         hotRow.innerHTML = hotQueries.map(q =>
           `<button type="button" class="home-hot-chip" onclick="submitHomeSearch('${q}')">${escapeHTML(q)}</button>`
         ).join("");
+      }
+
+      const usDocs = allDocs.filter(d => (d.framework || "CN") === "US");
+      const usEntryBtn = document.getElementById("homeUsEntryBtn");
+      if (usEntryBtn) {
+        if (usDocs.length > 0) {
+          usEntryBtn.style.display = "inline-flex";
+          usEntryBtn.textContent = `🇺🇸 美国准则 US GAAP（${usDocs.length} 份）`;
+        } else {
+          usEntryBtn.style.display = "none";
+        }
       }
 
       const footMeta = document.getElementById("homeFooterMeta");

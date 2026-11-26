@@ -138,6 +138,47 @@ TOPIC_RULES = [
         "Corporate Governance, Internal Control & AML",
         lambda d: d.get("framework") == "INTL" and d["domain"] == "general",
     ),
+    # 美国准则（US GAAP — FASB ASC）英文业务专题
+    (
+        "us_acc_guides",
+        "US GAAP Framework & Big4 Roadmaps",
+        lambda d: d.get("framework") == "US"
+        and d["domain"] == "accounting"
+        and (d["doc_type"] == "interpretation" or d["doc_no"] in ("CON 8", "ASC 105")),
+    ),
+    (
+        "us_acc_pres",
+        "Presentation (ASC 200 Series)",
+        lambda d: d.get("framework") == "US"
+        and d["domain"] == "accounting"
+        and bool(re.match(r"^ASC 2\d\d\b", d["doc_no"] or "")),
+    ),
+    (
+        "us_acc_assets",
+        "Assets, Credit Losses & Intangibles (ASC 300 Series)",
+        lambda d: d.get("framework") == "US"
+        and d["domain"] == "accounting"
+        and bool(re.match(r"^ASC 3\d\d\b", d["doc_no"] or "")),
+    ),
+    (
+        "us_acc_liab_eq",
+        "Liabilities, Debt & Equity (ASC 400–500 Series)",
+        lambda d: d.get("framework") == "US"
+        and d["domain"] == "accounting"
+        and bool(re.match(r"^ASC [45]\d\d\b", d["doc_no"] or "")),
+    ),
+    (
+        "us_acc_rev_exp",
+        "Revenue, Compensation & Income Taxes (ASC 600–700 Series)",
+        lambda d: d.get("framework") == "US"
+        and d["domain"] == "accounting"
+        and bool(re.match(r"^ASC [67]\d\d\b", d["doc_no"] or "")),
+    ),
+    (
+        "us_acc_broad",
+        "Broad Transactions & Industry (ASC 800–900 Series)",
+        lambda d: d.get("framework") == "US" and d["domain"] == "accounting",
+    ),
     (
         "intl_acc_guides",
         "Agenda Decisions & Big4 Guides",
@@ -794,7 +835,7 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
                             "note": nt_i,
                         }
                     )
-            # 2) 中国 CAS <-> 国际 IFRS 直接对应/趋同对照边（专用 rel_kind=intl_mapping）
+            # 2) 跨体系对照边：中国 CAS <-> 国际 IFRS / US GAAP（rel_kind=intl_mapping）
             cas_pairs = list(item.get("cas_links", []))
             if src_code == "IAS 26" and not cas_pairs:
                 cas_pairs = [("企业会计准则第10号——企业年金基金", "退休福利计划/企业年金基金对照")]
@@ -810,6 +851,20 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
                             "score": 68,
                             "tier": "L4",
                             "note": f"中外准则对照：{note_txt}",
+                        }
+                    )
+            for ifrs_code, note_txt in item.get("ifrs_links", []):
+                ifrs_did = code_to_doc_id.get(ifrs_code)
+                if ifrs_did and ifrs_did != did:
+                    intl_extra_edges.append(
+                        {
+                            "from_doc_id": did,
+                            "to_doc_id": ifrs_did,
+                            "rel_kind": "intl_mapping",
+                            "strength": "strong",
+                            "score": 70,
+                            "tier": "L4",
+                            "note": f"美欧准则对照：{note_txt}",
                         }
                     )
 
@@ -911,6 +966,24 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
             ("G20/OECD Corporate Governance", "IFRS S1", "cross_domain", "strong", 72, "L4", "Chapter VI sustainability governance & resilience interoperable with IFRS S1"),
             ("OECD MNE Guidelines (RBC)", "G20/OECD Corporate Governance", "companion", "strong", 88, "L1", "OECD corporate governance & responsible business conduct companion standards"),
             ("FATF 40 Recommendations", "ISA 250 (Revised)", "cross_domain", "strong", 72, "L4", "FATF AML/CFT/DNFBP obligations interacting with auditor NOCLAR responsibilities"),
+            # US GAAP (FASB ASC) 核心家族配套（L1 companion）
+            ("ASC 105", "CON 8", "companion", "strong", 90, "L1", "Foundational US GAAP hierarchy & FASB Conceptual Framework"),
+            ("ASC 210", "ASC 205", "companion", "strong", 90, "L1", "US GAAP Presentation suite: Balance Sheet companion to ASC 205"),
+            ("ASC 220", "ASC 205", "companion", "strong", 90, "L1", "US GAAP Presentation suite: Income Statement & OCI companion to ASC 205"),
+            ("ASC 230", "ASC 205", "companion", "strong", 90, "L1", "US GAAP Presentation suite: Statement of Cash Flows companion to ASC 205"),
+            ("ASC 321", "ASC 320", "companion", "strong", 90, "L1", "US GAAP Financial Instruments suite: Equity vs. Debt securities"),
+            ("ASC 326", "ASC 320", "companion", "strong", 92, "L1", "US GAAP Financial Instruments suite: CECL credit losses companion to debt & receivables"),
+            ("ASC 815", "ASC 320", "companion", "strong", 90, "L1", "US GAAP Financial Instruments suite: Derivatives & hedging"),
+            ("ASC 825", "ASC 320", "companion", "strong", 90, "L1", "US GAAP Financial Instruments suite: Fair Value Option & disclosures"),
+            ("ASC 340", "ASC 606", "companion", "strong", 92, "L1", "US GAAP Revenue suite: Contract costs (ASC 340-40) companion to ASC 606"),
+            ("ASC 610", "ASC 606", "companion", "strong", 90, "L1", "US GAAP Revenue suite: Nonfinancial asset derecognition companion to ASC 606"),
+            ("ASC 350", "ASC 360", "companion", "strong", 90, "L1", "US GAAP Long-Lived Assets suite: Goodwill/Intangibles & PP&E impairment"),
+            ("ASC 730", "ASC 350", "companion", "strong", 90, "L1", "US GAAP R&D expensing vs. capitalized intangibles/software"),
+            ("ASC 985", "ASC 350", "companion", "strong", 90, "L1", "US GAAP Software suite: external-sale software (985-20) vs. internal-use (350-40)"),
+            ("ASC 805", "ASC 810", "companion", "strong", 92, "L1", "US GAAP Group Reporting suite: Business Combinations & Consolidation"),
+            ("ASC 323", "ASC 810", "companion", "strong", 90, "L1", "US GAAP Group Reporting suite: Equity Method & Consolidation"),
+            ("ASC 480", "ASC 470", "companion", "strong", 90, "L1", "US GAAP Debt & Equity suite: Liabilities vs. Equity & Convertible Debt"),
+            ("ASC 405", "ASC 470", "companion", "strong", 88, "L1", "US GAAP Liabilities suite: Extinguishments & Debt modifications"),
         ]
         for fc, tc, rk_c, st_c, sc_c, tr_c, nt_c in intl_curated_links:
             fd_c = code_to_doc_id.get(fc)
