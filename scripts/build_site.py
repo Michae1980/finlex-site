@@ -99,9 +99,45 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="构建 FinLex 正式静态站点（site/ PWA）")
     parser.add_argument("--db", type=Path, default=DEFAULT_DB, help="本地 finlex.db 路径")
     parser.add_argument("--ci", action="store_true", help="CI 模式：仅使用仓库内已有脱敏数据重建 site/ 模板与 PWA 资源")
+    parser.add_argument(
+        "--include-private",
+        action="store_true",
+        help="方案 B（本机私用模式）：叠加 intl_data/private/*.json 并输出至 git-ignored 的 site_private/，不污染公开 site/",
+    )
     args = parser.parse_args()
 
     ensure_pwa_icons()
+    if args.include_private:
+        private_site_dir = PROJECT_ROOT / "site_private"
+        private_site_dir.mkdir(parents=True, exist_ok=True)
+        db_stats = build_from_db(args.db, include_private=True, out_root=private_site_dir)
+        pwa_files = ["manifest.webmanifest", "sw.js", "icon.svg", "icon-192.png", "icon-512.png"]
+        for fname in pwa_files:
+            src = PWA_SRC_DIR / fname
+            if src.exists():
+                shutil.copy2(src, private_site_dir / fname)
+        print(
+            json.dumps(
+                {
+                    "mode": "private_local",
+                    "site_dir": "site_private/",
+                    "pwa_assets": pwa_files,
+                    "db_sync_stats": {
+                        "documents": db_stats["documents"],
+                        "articles": db_stats["articles"],
+                        "doc_links": db_stats["doc_links"],
+                        "index_js_kb": db_stats["index_js_kb"],
+                        "ft_shards": db_stats["ft_shards"],
+                        "ft_total_kb": db_stats["ft_total_kb"],
+                        "ft_max_shard_kb": db_stats["ft_max_shard_kb"],
+                    },
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+
     SITE_DIR.mkdir(parents=True, exist_ok=True)
 
     db_stats = None
