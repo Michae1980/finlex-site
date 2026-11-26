@@ -155,6 +155,35 @@
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
       gap: 10px;
     }
+    .filterbar-left { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .framework-tabs {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 3px; border-radius: 10px;
+      background: #e2e8f0; border: 1px solid var(--border-strong);
+    }
+    .fw-tab {
+      display: inline-flex; align-items: center; gap: 5px;
+      border: none; background: transparent; color: var(--ink-secondary);
+      padding: 4px 10px; border-radius: 7px; font-size: 12px; font-weight: 600;
+      cursor: pointer; white-space: nowrap; transition: all 0.14s ease;
+    }
+    .fw-tab:hover:not(:disabled) { color: var(--primary); background: rgba(255,255,255,0.65); }
+    .fw-tab.active { background: var(--surface); color: var(--primary); box-shadow: var(--shadow-sm); }
+    .fw-tab.active.fw-intl { color: #0f766e; }
+    .fw-tab:disabled { opacity: 0.52; cursor: not-allowed; font-weight: 500; }
+    .fw-tab-cnt {
+      font-size: 10.5px; font-weight: 600; padding: 0 5px; border-radius: 99px;
+      background: rgba(15, 23, 42, 0.08); color: inherit;
+    }
+    .fw-tab.active .fw-tab-cnt { background: var(--primary-soft); color: var(--primary); }
+    .fw-tab.active.fw-intl .fw-tab-cnt { background: #ccfbf1; color: #0f766e; }
+    .fw-divider { width: 1px; height: 20px; background: var(--border-strong); flex-shrink: 0; }
+    .pill.fw-badge-cn { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+    .pill.fw-badge-intl { background: #f0fdfa; color: #0f766e; border-color: #99f6e4; }
+    .pill.fw-badge-us { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+    .pill.fw-badge-other { background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
+    .article-text a { color: var(--primary); text-decoration: none; word-break: break-all; }
+    .article-text a:hover { text-decoration: underline; }
     .domain-pills { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
     .domain-pill {
       display: inline-flex; align-items: center; gap: 5px;
@@ -534,6 +563,15 @@
       transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
     }
     .overview-framework:hover { border-color: #4f46e5; background: #eef2ff; }
+    .overview-intl {
+      display: inline-flex; align-items: center; gap: 4px;
+      border: 1px solid #99f6e4; border-left: 2.5px solid #0f766e;
+      background: var(--surface); color: #115e59;
+      padding: 2px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 500;
+      cursor: pointer; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
+    }
+    .overview-intl:hover { border-color: #0f766e; background: #f0fdfa; }
     .rel-group-title.flash-group { background: var(--primary-soft); color: var(--primary); transition: background 0.3s ease; }
 
     .warn-banner {
@@ -747,7 +785,11 @@
       </div>
 
       <div class="filterbar">
-        <div class="domain-pills" id="domainPills" role="group" aria-label="按专业领域筛选"></div>
+        <div class="filterbar-left">
+          <div class="framework-tabs" id="frameworkTabs" role="tablist" aria-label="按准则体系切换"></div>
+          <span class="fw-divider" aria-hidden="true"></span>
+          <div class="domain-pills" id="domainPills" role="group" aria-label="按专业领域筛选"></div>
+        </div>
         <div class="filter-selects">
           <div class="select-field" id="typeField">
             <label for="typeSelect">层级</label>
@@ -831,7 +873,7 @@
               <thead>
                 <tr>
                   <th>法规 / 案例名称</th>
-                  <th>问题域 / 层级</th>
+                  <th>体系 / 领域 / 层级</th>
                   <th>业务专题</th>
                   <th>文号</th>
                   <th>生效日</th>
@@ -929,7 +971,7 @@
         <strong>标准引用格式：</strong><code>《文件名》（文号）第X条</code>，正式引用请以官方发布文本及主管机关口径为准。正文每条条文右侧提供一键复制标准引用按钮。
       </p>
       <p style="font-size:13px; color:var(--ink-secondary); margin:8px 0;">
-        <strong>主要信息来源：</strong>财政部（mof.gov.cn）、全国人大（npc.gov.cn）、国务院（gov.cn）、国家税务总局（chinatax.gov.cn）、中国注册会计师协会（cicpa.org.cn）及公开互联网整理资料（完整文章底部标注具体来源链接）。
+        <strong>主要信息来源：</strong>中国体系涵盖财政部（mof.gov.cn）、全国人大（npc.gov.cn）、国务院（gov.cn）、国家税务总局（chinatax.gov.cn）、中国注册会计师协会（cicpa.org.cn）；国际准则体系涵盖 IFRS Foundation 官网（ifrs.org）公开目录、概述、修订沿革、IFRIC 议程决议汇编及国际四大会计师事务所（KPMG / EY / Deloitte / PwC）公开实务指引外链。
       </p>
     </div>
   </div>
@@ -949,7 +991,7 @@
 
     const REL_KIND_LABELS = {
       companion: "核心配套", amends: "修补 / 解释",
-      cites: "条文引用", cross_domain: "跨域衔接", thematic: "专题配套",
+      cites: "条文引用", cross_domain: "跨域衔接", intl_mapping: "中外准则对照", thematic: "专题配套",
       supersedes: "替代旧版", superseded_by: "效力沿革",
       applies_to: "案例参考", explains: "官方解读"
     };
@@ -998,10 +1040,12 @@
       }
     };
 
-    function ensureFulltextLoaded(domainScope = state.domainFilter) {
-      const targets = (!domainScope || domainScope === "all")
-        ? FT_SHARDS
-        : FT_SHARDS.filter(sh => sh.domain === domainScope);
+    function ensureFulltextLoaded(domainScope = state.domainFilter, fwScope = state.frameworkFilter) {
+      const targets = FT_SHARDS.filter(sh => {
+        const fwOk = !fwScope || fwScope === "all" || (sh.framework || "CN") === fwScope;
+        const domOk = !domainScope || domainScope === "all" || sh.domain === domainScope;
+        return fwOk && domOk;
+      });
       let started = false;
       targets.forEach(sh => {
         if (ftLoadedIds.has(sh.id) || ftLoadingIds.has(sh.id)) return;
@@ -1044,6 +1088,7 @@
     }
 
     const state = {
+      frameworkFilter: "CN",     // "CN" | "INTL" | "US" | "all"
       domainFilter: "all",
       typeFilter: "all",
       statusFilter: "all",
@@ -1187,7 +1232,7 @@
         }
       });
 
-      const domainPool = filterByDomain(DATA.documents);
+      const domainPool = filterByDomain(filterByFramework(DATA.documents));
       const scoreDocs = (pool) => {
         const out = [];
         for (let i = 0; i < pool.length; i++) {
@@ -1308,6 +1353,7 @@
             <div class="suggest-item-top">
               <span class="suggest-item-title" title="${escapeHTML(d.title)}">${highlightText(d.title, q)}</span>
               <span class="suggest-item-tags">
+                ${renderFrameworkBadge(d)}
                 <span class="pill dom-${d.domain}">${escapeHTML(domShort)}</span>
                 <span class="pill type-pill">${escapeHTML(typeLbl)}</span>
                 <span class="suggest-reason ${item.reasonCls}">${escapeHTML(item.reason)}</span>
@@ -1346,7 +1392,9 @@
       if (!id || !docById[id]) return;
       closeSearchSuggestions();
       const d = docById[id];
-      // 若所选法规不在当前筛选范围内，自动放宽对应筛选以确保左右同步展示
+      // 若所选法规不在当前筛选范围内，自动切换体系或放宽筛选以确保左右同步展示
+      const dFw = d.framework || "CN";
+      if (state.frameworkFilter !== "all" && dFw !== state.frameworkFilter) state.frameworkFilter = dFw;
       if (state.domainFilter !== "all" && d.domain !== state.domainFilter) state.domainFilter = "all";
       if (state.typeFilter !== "all" && d.doc_type !== state.typeFilter) state.typeFilter = "all";
       if (state.topicFilter !== "all" && d.topic_id !== state.topicFilter) state.topicFilter = "all";
@@ -1391,9 +1439,9 @@
         return _cachedQueryParsed;
       }
 
-      // 将 "CAS 14"、"CSA 1141"、"解释 18" 合并为单个词组，再按空白分词实现多词 AND 检索
+      // 将 "CAS 14"、"CSA 1141"、"IFRS 15"、"IAS 36"、"IFRIC 23"、"SIC 32"、"解释 18" 合并为单个词组
       const normalized = raw
-        .replace(/\b(cas|csa)\s+(\d{1,4})\b/gi, "$1$2")
+        .replace(/\b(cas|csa|ifrs|ias|ifric|sic)[\s-]+(\d{1,4})\b/gi, "$1$2")
         .replace(/解释\s*第?\s*(\d{1,2})\s*号?/g, "解释$1");
 
       const tokens = normalized.split(/\s+/).filter(Boolean).slice(0, 12);
@@ -1404,6 +1452,14 @@
       tokens.forEach(tok => {
         const lower = tok.toLowerCase();
         const vSet = new Set([lower]);
+
+        const intlMatch = lower.match(/^(ifrs|ias|ifric|sic)0*(\d{1,2})$/);
+        if (intlMatch) {
+          const pfx = intlMatch[1], n = intlMatch[2];
+          vSet.add(`${pfx} ${n}`);
+          vSet.add(`${pfx}-${n}`);
+          vSet.add(`${pfx}${n}`);
+        }
 
         const casMatch = lower.match(/^cas0*(\d{1,2})$/);
         if (casMatch) {
@@ -1555,6 +1611,24 @@
       return map;
     }
 
+    const FRAMEWORK_META = (DATA.taxonomy && Array.isArray(DATA.taxonomy.frameworks)) ? DATA.taxonomy.frameworks : [
+      { id: "CN", label: "中国准则与法规", short: "中国准则" },
+      { id: "INTL", label: "国际准则（IFRS）", short: "国际准则" },
+      { id: "US", label: "美国准则（US GAAP）", short: "美国准则" }
+    ];
+    const FRAMEWORK_LABELS = Object.fromEntries(FRAMEWORK_META.map(x => [x.id, x.label]));
+    const FRAMEWORK_SHORT = Object.fromEntries(FRAMEWORK_META.map(x => [x.id, x.short || x.label]));
+
+    function renderFrameworkBadge(d) {
+      const fw = (d && d.framework) ? d.framework : "CN";
+      const label = FRAMEWORK_SHORT[fw] || fw;
+      const known = ["CN", "INTL", "US"].includes(fw) ? fw.toLowerCase() : "other";
+      return `<span class="pill fw-badge-${known}">${escapeHTML(label)}</span>`;
+    }
+
+    function filterByFramework(list) {
+      return state.frameworkFilter === "all" ? list : list.filter(d => (d.framework || "CN") === state.frameworkFilter);
+    }
     function filterByDomain(list) { return state.domainFilter === "all" ? list : list.filter(d => d.domain === state.domainFilter); }
     function filterByType(list) { return state.typeFilter === "all" ? list : list.filter(d => d.doc_type === state.typeFilter); }
     function filterByStatus(list) { return state.statusFilter === "all" ? list : list.filter(d => d.status === state.statusFilter); }
@@ -1562,15 +1636,40 @@
 
     const DOMAIN_SHORT = { accounting: "会计", audit: "审计", tax: "税务", general: "综合" };
 
+    function setFrameworkFilter(val) {
+      state.frameworkFilter = val;
+      state.domainFilter = "all";
+      state.typeFilter = "all";
+      state.topicFilter = "all";
+      state.statusFilter = "all";
+      if (state.searchQuery.trim() || ftLoadedIds.size > 0) ensureFulltextLoaded("all", val);
+      syncCascadingDropdowns();
+      updateView(true);
+    }
+
     function setDomainFilter(val) {
       state.domainFilter = val;
-      if (state.searchQuery.trim() || ftLoadedIds.size > 0) ensureFulltextLoaded(val);
+      if (state.searchQuery.trim() || ftLoadedIds.size > 0) ensureFulltextLoaded(val, state.frameworkFilter);
       syncCascadingDropdowns();
       updateView(true);
     }
 
     function syncCascadingDropdowns() {
-      const all = DATA.documents;
+      const fwTabsEl = document.getElementById("frameworkTabs");
+      if (fwTabsEl) {
+        const fwItems = FRAMEWORK_META.map(fw => ({
+          ...fw,
+          cnt: DATA.documents.filter(d => (d.framework || "CN") === fw.id).length
+        }));
+        fwTabsEl.innerHTML = fwItems.map(fw => {
+          const isEmpty = fw.cnt === 0;
+          const activeCls = state.frameworkFilter === fw.id ? `active ${fw.id === "INTL" ? "fw-intl" : ""}` : "";
+          const badgeText = isEmpty ? "预留" : String(fw.cnt);
+          return `<button type="button" class="fw-tab ${activeCls}" ${isEmpty ? "disabled title='后续规划：US GAAP 扩展预留位'" : `onclick="setFrameworkFilter('${fw.id}')"`}><span>${escapeHTML(fw.short)}</span><span class="fw-tab-cnt">${badgeText}</span></button>`;
+        }).join("") + `<button type="button" class="fw-tab ${state.frameworkFilter === "all" ? "active" : ""}" onclick="setFrameworkFilter('all')" title="跨体系合并检索中国与国际准则"><span>全部</span><span class="fw-tab-cnt">${DATA.documents.length}</span></button>`;
+      }
+
+      const all = filterByFramework(DATA.documents);
 
       const pillsEl = document.getElementById("domainPills");
       const domainItems = [{ id: "all", label: "全部", cnt: all.length }];
@@ -1774,7 +1873,7 @@
     }
 
     function updateView(autoFit = false, opts = {}) {
-      let matched = filterByTopic(filterByStatus(filterByType(filterByDomain(DATA.documents))));
+      let matched = filterByTopic(filterByStatus(filterByType(filterByDomain(filterByFramework(DATA.documents)))));
       const q = state.searchQuery.trim();
       const parsedQ = parseSearchQuery(q);
       const hasQ = parsedQ.groups.length > 0;
@@ -1810,6 +1909,23 @@
       const getTaxonomyKey = (d) => {
         const t = d.title || "";
         let sub = 5, num = 99999;
+        if ((d.framework || "CN") === "INTL") {
+          const c = (d.doc_no || d.series_badge || t).trim();
+          if (c === "Conceptual Framework") return [0, 0];
+          if (c === "Preface") return [0, 1];
+          let m = c.match(/^IFRS\s+(\d+)$/i);
+          if (m) return [1, Number(m[1])];
+          m = c.match(/^IAS\s+(\d+)$/i);
+          if (m) return [2, Number(m[1])];
+          if (c === "IFRS for SMEs") return [3, 0];
+          m = c.match(/^IFRIC\s+(\d+)$/i);
+          if (m) return [4, Number(m[1])];
+          m = c.match(/^SIC-(\d+)$/i);
+          if (m) return [5, Number(m[1])];
+          if (c.startsWith("Practice Statement")) return [6, c.includes("2") ? 2 : 1];
+          if (c.includes("IFRIC AD") || t.includes("Agenda Decisions")) return [7, 0];
+          return [8, d.id];
+        }
         if (d.domain === "accounting" && d.doc_type === "standard") {
           if (t.includes("基本准则") && !t.includes("可持续")) { sub = 1; num = 0; }
           else if (t.includes("小企业会计准则")) { sub = 2; num = 0; }
@@ -1958,6 +2074,7 @@
       connBtn.textContent = `🔗 仅看有关联（${connCnt}）`;
 
       const crumbs = [];
+      if (state.frameworkFilter !== "all") crumbs.push(FRAMEWORK_SHORT[state.frameworkFilter] || state.frameworkFilter);
       if (state.domainFilter !== "all") crumbs.push(DOMAIN_SHORT[state.domainFilter] || DOMAIN_LABELS[state.domainFilter]);
       if (state.typeFilter !== "all") crumbs.push(TYPE_LABELS[state.typeFilter]);
       if (state.topicFilter !== "all") crumbs.push(TOPIC_LABELS[state.topicFilter]);
@@ -2024,6 +2141,7 @@
               <span class="pill st-${d.status}">${STATUS_LABELS[d.status] || d.status}</span>
             </div>
             <div class="doc-card-meta">
+              ${renderFrameworkBadge(d)}
               <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain] || d.domain}</span>
               <span class="pill type-pill">${TYPE_LABELS[d.doc_type] || d.doc_type}</span>
               ${hasValidDocNo(d) ? `<span class="chip" style="padding:1px 6px;">${highlightText(d.doc_no, q)}</span>` : ""}
@@ -2067,7 +2185,8 @@
               ${subText ? `<div class="ledger-sub">${highlightText(subText, q)}</div>` : ""}
             </td>
             <td style="white-space:nowrap;">
-              <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain]}</span>
+              ${renderFrameworkBadge(d)}
+              <span class="pill dom-${d.domain}" style="margin-left:3px;">${DOMAIN_SHORT[d.domain] || DOMAIN_LABELS[d.domain]}</span>
               <span class="pill type-pill" style="margin-left:3px;">${TYPE_LABELS[d.doc_type]}</span>
             </td>
             <td style="white-space:nowrap;color:var(--ink-secondary);">${escapeHTML(d.topic_label)}</td>
@@ -2422,8 +2541,9 @@
           </div>
           <div class="node-sub">${escapeHTML(nodeSubParts.join(" · "))}</div>
           <div class="node-foot">
-            <span style="display:inline-flex;gap:4px;align-items:center;">
-              <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain] || d.domain}</span>
+            <span style="display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap;">
+              ${renderFrameworkBadge(d)}
+              <span class="pill dom-${d.domain}">${DOMAIN_SHORT[d.domain] || DOMAIN_LABELS[d.domain] || d.domain}</span>
               <span class="pill type-pill">${TYPE_LABELS[d.doc_type] || d.doc_type}</span>
             </span>
             <span class="pill st-${d.status}">${STATUS_LABELS[d.status] || d.status}</span>
@@ -2431,12 +2551,15 @@
         `;
         card.onclick = () => {
           state.selectedDocId = d.id;
+          ensureDocVisibleInFilters(d.id, { clearSearch: true });
           recordDocVisit(d.id);
           state.focusOnly = true;
           state.selectedEdgeId = null;
           state.activePath = null;
+          state.activeFrameworkRel = null;
+          if (d.total_degree === 0) state.connectedOnly = false;
           document.getElementById("clearPathBtn").style.display = "none";
-          updateView(true);
+          updateView(true, { keepSelected: true });
         };
         nodeLayer.appendChild(card);
       });
@@ -2507,6 +2630,18 @@
               ${tierBuckets.L1.length > 3 ? `<button type="button" class="mini-btn" onclick="openRelationsTier('L1')">+${tierBuckets.L1.length - 3} 项</button>` : ""}
             </div>`
           : "";
+        const intlMapItems = allRel.filter(item => item.edge.rel_kind === "intl_mapping");
+        const intlMapRowHTML = intlMapItems.length
+          ? `<div class="overview-row">
+              <span class="overview-label">中外准则对照</span>
+              ${intlMapItems.slice(0, 4).map(item => {
+                const td = item.doc;
+                const icon = (td.framework || "CN") === "INTL" ? "🌐" : "🇨🇳";
+                const lbl = (td.framework || "CN") === "INTL" ? td.title : (td.display_title || td.title);
+                return `<button type="button" class="overview-intl" title="${escapeHTML(td.title)}" onclick="jumpToDoc(${td.id})">${icon} ${escapeHTML(lbl)}</button>`;
+              }).join("")}
+            </div>`
+          : "";
         const fwRowHTML = fwParent
           ? `<div class="overview-row">
               <span class="overview-label">上位总纲</span>
@@ -2523,6 +2658,7 @@
         const overviewStripHTML = (allRel.length || fwRowHTML)
           ? `<div class="overview-strip">
               ${allRel.length ? `<div class="overview-row"><span class="overview-label">全貌速览</span>${tierPillsHTML}</div>` : ""}
+              ${intlMapRowHTML}
               ${l1QuickHTML}
               ${fwRowHTML}
             </div>`
@@ -2542,6 +2678,7 @@
           <div class="hero-card">
             <h2 class="hero-title">${escapeHTML(d.title)}</h2>
             <div class="meta-row">
+              ${renderFrameworkBadge(d)}
               <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain]}</span>
               <span class="pill type-pill">${TYPE_LABELS[d.doc_type]}</span>
               <span class="pill st-${d.status}">${STATUS_LABELS[d.status]}</span>
@@ -2648,6 +2785,7 @@
                     <span class="tier-tag t-${tCls}" style="flex-shrink:0;">${tCls.toUpperCase()} ${REL_KIND_LABELS[e.rel_kind] || e.rel_kind}</span>
                   </div>
                   <div class="meta-row" style="margin-top:0;">
+                    ${renderFrameworkBadge(td)}
                     <span class="pill dom-${td.domain}">${DOMAIN_LABELS[td.domain]}</span>
                     <span class="pill st-${td.status}">${STATUS_LABELS[td.status]}</span>
                     ${td.is_case ? `<span class="pill case-pill">参考，非规范依据</span>` : ""}
@@ -2842,7 +2980,7 @@
               <button class="mini-btn" onclick="copyCitation(${doc.id}, '${escapeHTML(a.no).replace(/'/g, "\\'")}')">📋 复制引用</button>
             </span>
           </div>
-          <div class="article-text">${highlightText(a.text, q)}</div>
+          <div class="article-text">${highlightText(a.text, q).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1 ↗</a>')}</div>
           ${linksDrawerHTML}
         </div>
       `;
@@ -2933,6 +3071,41 @@
       }
     }
 
+    function ensureDocVisibleInFilters(id, opts = {}) {
+      const d = docById[id];
+      if (!d) return false;
+      let changed = false;
+      const tFw = d.framework || "CN";
+      if (state.frameworkFilter !== "all" && state.frameworkFilter !== tFw) {
+        state.frameworkFilter = tFw;
+        state.domainFilter = "all";
+        state.typeFilter = "all";
+        state.topicFilter = "all";
+        state.statusFilter = "all";
+        state.graphTierFilter = "all";
+        state.graphTypeFilter = "all";
+        changed = true;
+      } else {
+        if (state.domainFilter !== "all" && d.domain !== state.domainFilter) { state.domainFilter = "all"; changed = true; }
+        if (state.typeFilter !== "all" && d.doc_type !== state.typeFilter) { state.typeFilter = "all"; changed = true; }
+        if (state.topicFilter !== "all" && d.topic_id !== state.topicFilter) { state.topicFilter = "all"; changed = true; }
+        if (state.statusFilter !== "all" && d.status !== state.statusFilter) { state.statusFilter = "all"; changed = true; }
+      }
+      if ((opts.clearSearch || changed) && state.searchQuery.trim() && !currentView.coreIds.has(id)) {
+        state.searchQuery = "";
+        const sInp = document.getElementById("searchInput");
+        if (sInp) sInp.value = "";
+        const sClr = document.getElementById("searchClearBtn");
+        if (sClr) sClr.style.display = "none";
+        changed = true;
+      }
+      if (changed) {
+        if (ftLoadedIds.size > 0) ensureFulltextLoaded(state.domainFilter, state.frameworkFilter);
+        syncCascadingDropdowns();
+      }
+      return changed;
+    }
+
     function goBackDoc() {
       if (state.navIndex <= 0) return;
       state.navIndex -= 1;
@@ -2945,14 +3118,9 @@
       state.expandedArtLinksAll.clear();
       state.articleRenderLimit = 80;
       state.selectedEdgeId = null;
-      if (!currentView.coreIds.has(targetId)) {
-        state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
-        state.searchQuery = ""; document.getElementById("searchInput").value = "";
-        document.getElementById("searchClearBtn").style.display = "none";
-        syncCascadingDropdowns();
-      }
+      ensureDocVisibleInFilters(targetId, { clearSearch: true });
       recordDocVisit(targetId, { fromBack: true, keepRecentOrder: true });
-      updateView(state.viewMode === "graph");
+      updateView(state.viewMode === "graph", { keepSelected: true });
     }
 
     function jumpToRecentDoc(docIdStr) {
@@ -2983,6 +3151,11 @@
         alert(`《${docById[prevId].title}》与《${docById[curId].title}》之间暂无已收录的直接或间接关联路径。`);
         return;
       }
+      const prevFw = docById[prevId].framework || "CN";
+      const curFw = docById[curId].framework || "CN";
+      if (prevFw !== curFw && state.frameworkFilter !== "all") {
+        state.frameworkFilter = "all";
+      }
       if (!currentView.coreIds.has(prevId) || !currentView.coreIds.has(curId)) {
         state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
         state.searchQuery = ""; document.getElementById("searchInput").value = "";
@@ -2999,7 +3172,7 @@
       document.getElementById("clearPathBtn").style.display = "inline-block";
       if (getEffectiveDevice() === "mobile") state.mobilePane = "relations";
       applySplitRatio();
-      updateView(true);
+      updateView(true, { keepSelected: true });
       applyDeviceMode(false);
       const sSel = document.getElementById("pathStart");
       const eSel = document.getElementById("pathEnd");
@@ -3009,6 +3182,7 @@
 
     function selectDoc(id) {
       state.selectedDocId = id;
+      ensureDocVisibleInFilters(id, { clearSearch: false });
       recordDocVisit(id);
       // 若当前有全库检索词且该文档正文命中，自动带入抽屉内条文搜索实现精准高亮定位
       state.inDocQuery = (state.searchQuery.trim() && fulltextHitMap[id]) ? state.searchQuery.trim() : "";
@@ -3017,12 +3191,13 @@
       state.expandedArtLinksAll.clear();
       state.articleRenderLimit = 80;
       state.selectedEdgeId = null;
-      updateView(false);
+      updateView(false, { keepSelected: true });
       if (getEffectiveDevice() === "mobile") setMobilePane("detail");
     }
 
     function jumpToDoc(id) {
       state.selectedDocId = id;
+      ensureDocVisibleInFilters(id, { clearSearch: true });
       recordDocVisit(id);
       state.inDocQuery = "";
       state.onlyLinkedArticles = false;
@@ -3030,13 +3205,8 @@
       state.expandedArtLinksAll.clear();
       state.articleRenderLimit = 80;
       state.activeTab = "detail";
-      if (!currentView.coreIds.has(id)) {
-        state.domainFilter = "all"; state.typeFilter = "all"; state.statusFilter = "all"; state.topicFilter = "all";
-        state.searchQuery = ""; document.getElementById("searchInput").value = "";
-        document.getElementById("searchClearBtn").style.display = "none";
-        syncCascadingDropdowns();
-      }
-      updateView(true);
+      if (state.viewMode === "graph" && docById[id]?.total_degree === 0) state.connectedOnly = false;
+      updateView(true, { keepSelected: true });
     }
 
     function jumpToDocArticle(id, targetSeq) {
@@ -3062,13 +3232,17 @@
 
     function openInGraph(id) {
       state.selectedDocId = id;
+      ensureDocVisibleInFilters(id, { clearSearch: true });
       recordDocVisit(id);
       state.viewMode = "graph";
       state.focusOnly = true;
       state.selectedEdgeId = null;
+      state.activePath = null;
+      state.activeFrameworkRel = null;
+      document.getElementById("clearPathBtn").style.display = "none";
       if (docById[id]?.total_degree === 0) state.connectedOnly = false;
       if (getEffectiveDevice() === "mobile") state.mobilePane = "browse";
-      updateView(true);
+      updateView(true, { keepSelected: true });
       applyDeviceMode(false);
     }
 
@@ -3117,6 +3291,7 @@
 
     function buildShareURL() {
       const p = new URLSearchParams();
+      if (state.frameworkFilter !== "CN") p.set("fw", state.frameworkFilter);
       if (state.domainFilter !== "all") p.set("domain", state.domainFilter);
       if (state.typeFilter !== "all") p.set("type", state.typeFilter);
       if (state.statusFilter !== "all") p.set("status", state.statusFilter);
@@ -3140,6 +3315,7 @@
 
     function restoreStateFromURL() {
       const p = new URLSearchParams(window.location.search);
+      if (["CN", "INTL", "US", "all"].includes(p.get("fw"))) state.frameworkFilter = p.get("fw");
       if (p.get("domain")) state.domainFilter = p.get("domain");
       if (p.get("type")) state.typeFilter = p.get("type");
       if (p.get("status")) state.statusFilter = p.get("status");
@@ -3416,7 +3592,7 @@
     }
 
     const totalArtFmt = (DATA.meta.article_count || 0).toLocaleString("en-US");
-    searchInputEl.placeholder = `检索法规、简称或多词组合（如 CAS14 总额法 / 长投 权益法），覆盖 ${totalArtFmt} 条正文...`;
+    searchInputEl.placeholder = `检索中国或国际准则（如 CAS14 总额法 / IFRS 15 / IAS 36），覆盖 ${totalArtFmt} 条正文...`;
     document.getElementById("ftBadge").title = `点击搜索框自动加载全库 ${totalArtFmt} 条条文正文索引`;
     initPaneResizer();
     restoreStateFromURL();

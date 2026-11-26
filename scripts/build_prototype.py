@@ -24,6 +24,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DB = PROJECT_ROOT.parent / "finlex" / "backend" / "data" / "finlex.db"
+INTL_DATA_DIR = PROJECT_ROOT / "intl_data"
 PROTOTYPE_DIR = PROJECT_ROOT / "prototype"
 DATA_DIR = PROTOTYPE_DIR / "data"
 DOCS_DIR = DATA_DIR / "docs"
@@ -34,6 +35,12 @@ OUTPUT_HTML = PROTOTYPE_DIR / "index.html"
 
 # 隐私红线检测正则：禁止泄漏任何本机绝对路径
 LOCAL_PATH_RE = re.compile(r"(/Users/[^\s\"'<>]+|[A-Za-z]:\\Users\\[^\s\"'<>]+)")
+
+FRAMEWORK_META = [
+    {"id": "CN", "label": "中国准则与法规", "short": "中国准则"},
+    {"id": "INTL", "label": "国际准则（IFRS）", "short": "国际准则"},
+    {"id": "US", "label": "美国准则（US GAAP）", "short": "美国准则"},
+]
 
 DOMAIN_META = [
     {"id": "accounting", "label": "会计准则与核算"},
@@ -89,6 +96,49 @@ AUTHORITY_RANK = {
 
 # 按纯业务主题归并（准则应用指南、审计问题解答均直接归入对应业务专题）
 TOPIC_RULES = [
+    # 国际准则（IFRS Accounting）英文业务专题
+    (
+        "intl_acc_guides",
+        "Agenda Decisions & Big4 Guides",
+        lambda d: d.get("framework") == "INTL"
+        and d["domain"] == "accounting"
+        and (d["doc_type"] == "interpretation" or "Agenda Decisions" in d["title"] or "Practice Statement" in d["title"]),
+    ),
+    (
+        "intl_acc_rev_fin",
+        "Revenue, Financial Instruments & Leases",
+        lambda d: d.get("framework") == "INTL"
+        and d["domain"] == "accounting"
+        and any(
+            k in d["title"]
+            for k in ("Revenue", "Financial Instruments", "Lease", "Fair Value", "Insurance", "Share-based", "Construction Contracts", "Customer Loyalty", "Embedded Derivatives", "Extinguishing Financial")
+        ),
+    ),
+    (
+        "intl_acc_assets",
+        "Inventories, PPE & Non-current Assets",
+        lambda d: d.get("framework") == "INTL"
+        and d["domain"] == "accounting"
+        and any(
+            k in d["title"]
+            for k in ("Inventories", "Property, Plant", "Intangible", "Investment Property", "Impairment", "Agriculture", "Mineral Resources", "Held for Sale", "Borrowing Costs", "Decommissioning", "Stripping Costs")
+        ),
+    ),
+    (
+        "intl_acc_liab_tax",
+        "Taxes, Employee Benefits & Provisions",
+        lambda d: d.get("framework") == "INTL"
+        and d["domain"] == "accounting"
+        and any(
+            k in d["title"]
+            for k in ("Income Tax", "Employee Benefits", "Retirement Benefit", "Government Grant", "Government Assistance", "Foreign Exchange", "Foreign Currency", "Hyperinflation", "Provisions", "Levies", "Regulatory", "Euro", "Waste Electrical", "Foreign Operation")
+        ),
+    ),
+    (
+        "intl_acc_group_pres",
+        "Framework, Presentation & Group Reporting",
+        lambda d: d.get("framework") == "INTL" and d["domain"] == "accounting",
+    ),
     ("case_ref", "实务案例（非规范参考）", lambda d: d["doc_type"] == "case"),
     # 会计域（纯业务主题）
     (
@@ -508,6 +558,7 @@ def build_from_db(db_path: Path) -> dict:
 
         doc_obj = {
             "id": doc_id,
+            "framework": "CN",
             "domain": row["domain"] or "general",
             "doc_type": row["doc_type"] or "normative",
             "title": title,
@@ -537,6 +588,141 @@ def build_from_db(db_path: Path) -> dict:
         doc_obj["topic_label"] = tlabel
         topic_labels[tid] = tlabel
         documents.append(doc_obj)
+
+    # 合并仓库内国际准则公开合规数据源（intl_data/*.json），ID 从 10001 起避免与 finlex.db 冲突
+    intl_extra_edges: list[dict] = []
+    if INTL_DATA_DIR.exists():
+        cn_id_by_title = {d["title"]: d["id"] for d in documents if d["framework"] == "CN"}
+        cn_cas_by_num: dict[int, int] = {}
+        for d in documents:
+            if d["framework"] == "CN" and d["domain"] == "accounting" and d["doc_type"] == "standard":
+                m_cn = re.search(r"企业会计准则第0*(\d+)号", d["title"])
+                if m_cn:
+                    num = int(m_cn.group(1))
+                    if num not in cn_cas_by_num or d["status"] == "in_force":
+                        cn_cas_by_num[num] = d["id"]
+
+        def resolve_cn_cas_id(target_title: str) -> int | None:
+            if target_title in cn_id_by_title:
+                return cn_id_by_title[target_title]
+            m_t = re.search(r"企业会计准则第0*(\d+)号", target_title)
+            if m_t:
+                return cn_cas_by_num.get(int(m_t.group(1)))
+            return None
+        intl_raw_items: list[dict] = []
+        for jf in sorted(INTL_DATA_DIR.glob("*.json")):
+            payload_in = json.loads(jf.read_text(encoding="utf-8"))
+            intl_raw_items.extend(payload_in.get("documents", []))
+
+        next_intl_doc_id = 10001
+        next_intl_art_id = 1_000_001
+        code_to_doc_id: dict[str, int] = {}
+        staged_intl: list[tuple[int, dict]] = []
+        for item in intl_raw_items:
+            did = next_intl_doc_id
+            next_intl_doc_id += 1
+            code_to_doc_id[item.get("code", "")] = did
+            staged_intl.append((did, item))
+
+        for did, item in staged_intl:
+            doc_ids_set.add(did)
+            arts_out: list[dict] = []
+            for a in item.get("articles", []):
+                txt_clean, h_a = clean_text(a.get("text", ""))
+                hd_clean, h_h = clean_text(a.get("heading", ""))
+                privacy_redactions += h_a + h_h
+                art_no = (a.get("no") or "").strip()
+                arts_out.append(
+                    {
+                        "id": next_intl_art_id,
+                        "no": art_no,
+                        "heading": hd_clean,
+                        "text": txt_clean,
+                        "seq": int(a.get("seq", 0)),
+                    }
+                )
+                next_intl_art_id += 1
+                fulltext_rows.append([did, art_no, hd_clean, re.sub(r"\s+", " ", txt_clean)])
+            articles_by_doc[did] = arts_out
+
+            rep_code = (item.get("replaced_by_code") or "").strip()
+            rep_did = code_to_doc_id.get(rep_code) if rep_code else None
+            fw = item.get("framework") or "INTL"
+            dom = item.get("domain") or "accounting"
+            dtype = item.get("doc_type") or "standard"
+            title_clean, h1 = clean_text(item.get("title", ""))
+            sum_clean, h2 = clean_text(item.get("summary", ""))
+            privacy_redactions += h1 + h2
+            src_url, src_kind = sanitize_url(item.get("source_url"))
+            if item.get("source_kind") in ("official", "third_party"):
+                src_kind = item["source_kind"]
+
+            doc_obj = {
+                "id": did,
+                "framework": fw,
+                "domain": dom,
+                "doc_type": dtype,
+                "title": title_clean,
+                "display_title": item.get("display_title") or title_clean,
+                "series_badge": item.get("series_badge") or item.get("code", ""),
+                "revision_badge": "",
+                "doc_no": item.get("doc_no") or item.get("code", "待核实"),
+                "issuer": item.get("issuer") or "IFRS Foundation",
+                "pub_date": item.get("pub_date") or "2026-01-01",
+                "effective_date": item.get("effective_date") or "2026-01-01",
+                "status": item.get("status") or "in_force",
+                "version_level": item.get("version_level") or "",
+                "version_note": item.get("version_note") or "",
+                "date_warning": "",
+                "replaced_by_doc_id": rep_did,
+                "source_name": item.get("source_name") or "IFRS Foundation",
+                "source_url": src_url,
+                "source_kind": src_kind,
+                "summary": sum_clean,
+                "first_preview": make_first_article_preview(arts_out),
+                "article_count": len(arts_out),
+                "authority_rank": AUTHORITY_RANK.get((dom, dtype), 50),
+                "is_case": dtype == "case",
+            }
+            tid, tlabel = classify_topic(doc_obj)
+            doc_obj["topic_id"] = tid
+            doc_obj["topic_label"] = tlabel
+            topic_labels[tid] = tlabel
+            documents.append(doc_obj)
+
+            # 1) 国际准则内部引用边（L3）
+            for cited_code in item.get("cited_codes", []):
+                tdid = code_to_doc_id.get(cited_code)
+                if tdid and tdid != did:
+                    intl_extra_edges.append(
+                        {
+                            "from_doc_id": did,
+                            "to_doc_id": tdid,
+                            "rel_kind": "cites",
+                            "strength": "medium",
+                            "score": 65,
+                            "tier": "L3",
+                            "note": f"IFRS cross-reference: {item.get('code', '')} -> {cited_code}",
+                        }
+                    )
+            # 2) 中国 CAS <-> 国际 IFRS 直接对应/趋同对照边（专用 rel_kind=intl_mapping）
+            cas_pairs = list(item.get("cas_links", []))
+            if item.get("code") == "IAS 26" and not cas_pairs:
+                cas_pairs = [("企业会计准则第10号——企业年金基金", "退休福利计划/企业年金基金对照")]
+            for cas_title, note_txt in cas_pairs:
+                cas_id = resolve_cn_cas_id(cas_title)
+                if cas_id:
+                    intl_extra_edges.append(
+                        {
+                            "from_doc_id": did,
+                            "to_doc_id": cas_id,
+                            "rel_kind": "intl_mapping",
+                            "strength": "strong",
+                            "score": 68,
+                            "tier": "L4",
+                            "note": f"中外准则对照：{note_txt}",
+                        }
+                    )
 
     # 聚合条文级关联边为文档级图谱边，保留五层分级、0-100 相关性分值与精确条文跳转索引
     strength_order = {"strong": 3, "medium": 2, "weak": 1}
@@ -594,6 +780,25 @@ def build_from_db(db_path: Path) -> dict:
                 }
             )
 
+    # 合并国际准则内部引用与 CAS<->IFRS 趋同对照边
+    for ie in intl_extra_edges:
+        fd, td, rk = ie["from_doc_id"], ie["to_doc_id"], ie["rel_kind"]
+        if fd not in doc_ids_set or td not in doc_ids_set or fd == td:
+            continue
+        key = (fd, td, rk)
+        if key not in edge_map:
+            edge_map[key] = {
+                "id": f"e_{fd}_{td}_{rk}",
+                "from_doc_id": fd,
+                "to_doc_id": td,
+                "rel_kind": rk,
+                "strength": ie["strength"],
+                "score": ie["score"],
+                "tier": ie["tier"],
+                "count": 1,
+                "pairs": [{"from_art_no": "Overview", "to_art_no": "Overview", "from_seq": 0, "to_seq": 0, "score": ie["score"], "strength": ie["strength"], "note": ie["note"]}],
+            }
+
     # 补充 documents.replaced_by_doc_id 显式版本链
     for d in documents:
         rep_id = d["replaced_by_doc_id"]
@@ -633,29 +838,35 @@ def build_from_db(db_path: Path) -> dict:
         if tid in topic_labels
     ]
 
-    # 按领域 + 单片 ~1.2MB 上限切分全文检索分片（彻底消除单体大文件，支持按领域按需加载与渐进流式出结果）
+    # 按 (准则体系, 领域) + 单片 ~1.2MB 上限切分全文检索分片（彻底消除单体大文件，支持按体系/领域按需加载）
     FT_DIR.mkdir(parents=True, exist_ok=True)
     old_monolith = DATA_DIR / "fulltext.js"
     if old_monolith.exists():
         old_monolith.unlink()
 
-    dom_by_doc = {d["id"]: d["domain"] for d in documents}
-    rows_by_dom: dict[str, list[list]] = defaultdict(list)
+    fw_dom_by_doc = {d["id"]: (d.get("framework", "CN"), d["domain"]) for d in documents}
+    rows_by_bucket: dict[tuple[str, str], list[list]] = defaultdict(list)
     for r in fulltext_rows:
-        rows_by_dom[dom_by_doc.get(r[0], "general")].append(r)
+        rows_by_bucket[fw_dom_by_doc.get(r[0], ("CN", "general"))].append(r)
 
     ft_shards_meta: list[dict] = []
     written_ft_files: set[str] = set()
-    for dom in ("tax", "general", "audit", "accounting"):
-        dom_rows = rows_by_dom.get(dom, [])
+    bucket_order = [
+        ("CN", "tax"), ("CN", "general"), ("CN", "audit"), ("CN", "accounting"),
+        ("INTL", "accounting"), ("INTL", "audit"), ("INTL", "tax"), ("INTL", "general"),
+        ("US", "accounting"), ("US", "audit"), ("US", "tax"), ("US", "general"),
+    ]
+    for fw, dom in bucket_order:
+        dom_rows = rows_by_bucket.get((fw, dom), [])
         if not dom_rows:
             continue
         chunk: list[list] = []
         chunk_bytes = 0
         shard_idx = 0
+        fw_prefix = "" if fw == "CN" else f"{fw.lower()}_"
 
         def flush_chunk(c_rows: list[list], idx: int) -> None:
-            shard_id = f"{dom}_{idx}"
+            shard_id = f"{fw_prefix}{dom}_{idx}"
             fname = f"ft_{shard_id}.js"
             fpath = FT_DIR / fname
             payload_str = (
@@ -668,6 +879,7 @@ def build_from_db(db_path: Path) -> dict:
             ft_shards_meta.append(
                 {
                     "id": shard_id,
+                    "framework": fw,
                     "domain": dom,
                     "file": f"ft/{fname}",
                     "rows": len(c_rows),
@@ -702,6 +914,7 @@ def build_from_db(db_path: Path) -> dict:
             "ft_shards": ft_shards_meta,
         },
         "taxonomy": {
+            "frameworks": FRAMEWORK_META,
             "domains": DOMAIN_META,
             "doc_types": DOC_TYPE_META,
             "statuses": STATUS_META,
