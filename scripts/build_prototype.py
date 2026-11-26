@@ -96,7 +96,38 @@ AUTHORITY_RANK = {
 
 # 按纯业务主题归并（准则应用指南、审计问题解答均直接归入对应业务专题）
 TOPIC_RULES = [
-    # 国际准则（IFRS Accounting）英文业务专题
+    # 国际准则（ISSB / IAASB / IESBA / OECD / IFRS Accounting）英文业务专题
+    (
+        "intl_acc_esg",
+        "Sustainability Disclosure (ISSB)",
+        lambda d: d.get("framework") == "INTL"
+        and d["domain"] == "accounting"
+        and any(k in d["title"] for k in ("IFRS S1", "IFRS S2", "SASB", "Integrated Reporting")),
+    ),
+    (
+        "intl_aud_qm_ethics",
+        "Quality Management & Ethics (ISQM / IESBA)",
+        lambda d: d.get("framework") == "INTL"
+        and d["domain"] == "audit"
+        and any(k in d["title"] for k in ("ISQM", "IESBA", "Assurance Engagements")),
+    ),
+    (
+        "intl_aud_isa",
+        "International Standards on Auditing (ISA)",
+        lambda d: d.get("framework") == "INTL"
+        and d["domain"] == "audit"
+        and (d["title"].startswith("ISA ") or "ISA for LCE" in d["title"]),
+    ),
+    (
+        "intl_aud_assurance",
+        "Review, Assurance & Related Services (ISRE / ISAE / ISSA / ISRS)",
+        lambda d: d.get("framework") == "INTL" and d["domain"] == "audit",
+    ),
+    (
+        "intl_tax_oecd",
+        "International Tax (OECD Pillar Two & Treaties)",
+        lambda d: d.get("framework") == "INTL" and d["domain"] == "tax",
+    ),
     (
         "intl_acc_guides",
         "Agenda Decisions & Big4 Guides",
@@ -385,9 +416,14 @@ def extract_display_parts(title: str, doc_type: str) -> tuple[str, str, str]:
     return "", base, revision_badge
 
 
-def build_from_db(db_path: Path) -> dict:
+def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Path | None = None) -> dict:
     if not db_path.exists():
         raise FileNotFoundError(f"未找到数据库文件：{db_path}")
+    target_root = out_root if out_root is not None else PROTOTYPE_DIR
+    out_data_dir = target_root / "data"
+    out_docs_dir = out_data_dir / "docs"
+    out_ft_dir = out_data_dir / "ft"
+    out_html_path = target_root / "index.html"
 
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
@@ -602,17 +638,42 @@ def build_from_db(db_path: Path) -> dict:
                     if num not in cn_cas_by_num or d["status"] == "in_force":
                         cn_cas_by_num[num] = d["id"]
 
+        cn_docs_all = [d for d in documents if d["framework"] == "CN"]
+
         def resolve_cn_cas_id(target_title: str) -> int | None:
             if target_title in cn_id_by_title:
                 return cn_id_by_title[target_title]
             m_t = re.search(r"企业会计准则第0*(\d+)号", target_title)
             if m_t:
                 return cn_cas_by_num.get(int(m_t.group(1)))
+            for d in cn_docs_all:
+                if d["title"].startswith(target_title):
+                    return d["id"]
             return None
         intl_raw_items: list[dict] = []
         for jf in sorted(INTL_DATA_DIR.glob("*.json")):
             payload_in = json.loads(jf.read_text(encoding="utf-8"))
             intl_raw_items.extend(payload_in.get("documents", []))
+
+        # 方案 B：仅当显式传入 include_private=True 时，叠加本机 git-ignored 的 intl_data/private/*.json 官方段落全文
+        private_overlay: dict[str, list[dict]] = {}
+        private_dir = INTL_DATA_DIR / "private"
+        if include_private and private_dir.exists():
+            for pjf in sorted(private_dir.glob("*.json")):
+                pp = json.loads(pjf.read_text(encoding="utf-8"))
+                pcode = (pp.get("code") or "").strip()
+                if pcode and pp.get("articles"):
+                    private_overlay[pcode] = pp["articles"]
+            for item in intl_raw_items:
+                p_arts = private_overlay.get(item.get("code", ""))
+                if p_arts:
+                    base_arts = item.get("articles", [])
+                    ov = [a for a in base_arts if a.get("no") == "Overview"]
+                    rest = [a for a in base_arts if a.get("no") != "Overview"]
+                    merged_p = ov + p_arts + rest
+                    for idx_p, a_p in enumerate(merged_p):
+                        a_p["seq"] = idx_p
+                    item["articles"] = merged_p
 
         next_intl_doc_id = 10001
         next_intl_art_id = 1_000_001
@@ -690,24 +751,34 @@ def build_from_db(db_path: Path) -> dict:
             topic_labels[tid] = tlabel
             documents.append(doc_obj)
 
-            # 1) 国际准则内部引用边（L3）
+            # 1) 国际准则内部引用边（Big4 实务指南归 L5 explains，IFRIC 议程决议归 L2 amends，其余归 L3 cites）
+            src_code = item.get("code", "")
             for cited_code in item.get("cited_codes", []):
                 tdid = code_to_doc_id.get(cited_code)
                 if tdid and tdid != did:
+                    if dtype == "interpretation" or src_code.startswith("Big4 Guide"):
+                        rk_i, st_i, sc_i, tr_i = "explains", "weak", 42, "L5"
+                        nt_i = f"Big Four practical guide covering {cited_code}"
+                    elif src_code == "IFRIC Agenda Decisions":
+                        rk_i, st_i, sc_i, tr_i = "amends", "strong", 80, "L2"
+                        nt_i = f"IFRIC Agenda Decisions interpreting {cited_code}"
+                    else:
+                        rk_i, st_i, sc_i, tr_i = "cites", "medium", 65, "L3"
+                        nt_i = f"IFRS cross-reference: {src_code} -> {cited_code}"
                     intl_extra_edges.append(
                         {
                             "from_doc_id": did,
                             "to_doc_id": tdid,
-                            "rel_kind": "cites",
-                            "strength": "medium",
-                            "score": 65,
-                            "tier": "L3",
-                            "note": f"IFRS cross-reference: {item.get('code', '')} -> {cited_code}",
+                            "rel_kind": rk_i,
+                            "strength": st_i,
+                            "score": sc_i,
+                            "tier": tr_i,
+                            "note": nt_i,
                         }
                     )
             # 2) 中国 CAS <-> 国际 IFRS 直接对应/趋同对照边（专用 rel_kind=intl_mapping）
             cas_pairs = list(item.get("cas_links", []))
-            if item.get("code") == "IAS 26" and not cas_pairs:
+            if src_code == "IAS 26" and not cas_pairs:
                 cas_pairs = [("企业会计准则第10号——企业年金基金", "退休福利计划/企业年金基金对照")]
             for cas_title, note_txt in cas_pairs:
                 cas_id = resolve_cn_cas_id(cas_title)
@@ -723,6 +794,116 @@ def build_from_db(db_path: Path) -> dict:
                             "note": f"中外准则对照：{note_txt}",
                         }
                     )
+
+        # 3) 国际准则结构化内部关联：核心家族配套（L1 companion）与 IFRIC/SIC 官方解释归属（L2 amends）
+        intl_curated_links = [
+            # L1 核心家族配套：金融工具套件、集团合并套件、财务报表列报与实务公告套件
+            ("IFRS 7", "IFRS 9", "companion", "strong", 92, "L1", "Financial Instruments suite: disclosures companion to IFRS 9"),
+            ("IAS 32", "IFRS 9", "companion", "strong", 92, "L1", "Financial Instruments suite: presentation companion to IFRS 9"),
+            ("IAS 39", "IFRS 9", "companion", "strong", 90, "L1", "Financial Instruments suite: macro hedge accounting carve-out alongside IFRS 9"),
+            ("IFRS 7", "IAS 32", "companion", "strong", 90, "L1", "Financial Instruments suite: disclosures & presentation companion"),
+            ("IFRS 11", "IFRS 10", "companion", "strong", 92, "L1", "Group Reporting suite: joint arrangements companion to consolidation"),
+            ("IFRS 12", "IFRS 10", "companion", "strong", 92, "L1", "Group Reporting suite: disclosures of interests in subsidiaries"),
+            ("IFRS 12", "IFRS 11", "companion", "strong", 90, "L1", "Group Reporting suite: disclosures of interests in joint arrangements"),
+            ("IFRS 12", "IAS 28", "companion", "strong", 90, "L1", "Group Reporting suite: disclosures of interests in associates & JVs"),
+            ("IAS 27", "IFRS 10", "companion", "strong", 92, "L1", "Group Reporting suite: separate vs. consolidated financial statements"),
+            ("IAS 28", "IFRS 10", "companion", "strong", 92, "L1", "Group Reporting suite: equity method companion to consolidation"),
+            ("IFRS 3", "IFRS 10", "companion", "strong", 90, "L1", "Group Reporting suite: business combinations & consolidation"),
+            ("IAS 8", "IFRS 18", "companion", "strong", 92, "L1", "Presentation suite: Basis of Preparation companion to IFRS 18"),
+            ("IAS 7", "IFRS 18", "companion", "strong", 90, "L1", "Presentation suite: Statement of Cash Flows aligned with IFRS 18"),
+            ("IFRS 19", "IFRS 18", "companion", "strong", 90, "L1", "Reduced disclosure framework for eligible subsidiaries under IFRS"),
+            ("IFRS 19", "IFRS for SMEs", "companion", "strong", 88, "L1", "Simplified disclosure standards comparison (eligible subsidiaries vs. SMEs)"),
+            ("IFRS for SMEs", "Conceptual Framework", "companion", "strong", 88, "L1", "Standalone SME standard grounded in the Conceptual Framework"),
+            ("Preface", "Conceptual Framework", "companion", "strong", 90, "L1", "Foundational scope & objectives of IFRS Accounting Standards"),
+            ("IAS 26", "IAS 19", "companion", "strong", 88, "L1", "Retirement benefit plans reporting companion to employee benefits"),
+            ("Practice Statement 1", "IFRS 18", "companion", "strong", 88, "L1", "Management Commentary non-mandatory guidance complementing financial statements"),
+            ("Practice Statement 1", "IAS 1", "companion", "strong", 86, "L1", "Management Commentary guidance alongside IAS 1 presentation"),
+            ("Practice Statement 2", "IFRS 18", "companion", "strong", 88, "L1", "Making Materiality Judgements guidance for IFRS 18 disclosures"),
+            ("Practice Statement 2", "IAS 1", "companion", "strong", 88, "L1", "Making Materiality Judgements guidance for IAS 1"),
+            ("Practice Statement 2", "IAS 8", "companion", "strong", 86, "L1", "Materiality judgements in accounting policy & estimate disclosures"),
+            # L2 IFRIC / SIC 现行官方解释归属母准则
+            ("IFRIC 1", "IAS 16", "amends", "strong", 84, "L2", "IFRIC interpretation of decommissioning changes in PPE cost"),
+            ("IFRIC 1", "IAS 37", "amends", "strong", 84, "L2", "IFRIC interpretation of decommissioning & restoration provisions"),
+            ("IFRIC 2", "IAS 32", "amends", "strong", 84, "L2", "IFRIC interpretation of co-operative shares liability vs. equity"),
+            ("IFRIC 5", "IAS 37", "amends", "strong", 84, "L2", "IFRIC interpretation of decommissioning rehabilitation funds"),
+            ("IFRIC 6", "IAS 37", "amends", "strong", 84, "L2", "IFRIC interpretation of WEEE waste-management liabilities"),
+            ("IFRIC 7", "IAS 29", "amends", "strong", 84, "L2", "IFRIC interpretation of hyperinflation restatement approach"),
+            ("IFRIC 10", "IAS 34", "amends", "strong", 84, "L2", "IFRIC interpretation of interim reporting & impairment"),
+            ("IFRIC 10", "IAS 36", "amends", "strong", 84, "L2", "IFRIC interpretation prohibiting goodwill impairment reversal after interim period"),
+            ("IFRIC 12", "IFRS 15", "amends", "strong", 84, "L2", "IFRIC interpretation of service concession revenue recognition"),
+            ("IFRIC 12", "IAS 38", "amends", "strong", 84, "L2", "IFRIC interpretation of intangible asset model in service concessions"),
+            ("IFRIC 12", "IFRS 9", "amends", "strong", 82, "L2", "IFRIC interpretation of financial asset model in service concessions"),
+            ("IFRIC 14", "IAS 19", "amends", "strong", 84, "L2", "IFRIC interpretation of defined benefit asset ceiling & minimum funding"),
+            ("IFRIC 16", "IAS 21", "amends", "strong", 84, "L2", "IFRIC interpretation of net investment hedges in foreign operations"),
+            ("IFRIC 16", "IFRS 9", "amends", "strong", 84, "L2", "IFRIC interpretation of hedge accounting for net investments"),
+            ("IFRIC 17", "IAS 10", "amends", "strong", 84, "L2", "IFRIC interpretation of non-cash dividend distributions to owners"),
+            ("IFRIC 17", "IFRS 5", "amends", "strong", 82, "L2", "IFRIC interpretation of assets held for distribution to owners"),
+            ("IFRIC 19", "IFRS 9", "amends", "strong", 84, "L2", "IFRIC interpretation of extinguishing financial liabilities with equity"),
+            ("IFRIC 19", "IAS 32", "amends", "strong", 84, "L2", "IFRIC interpretation of equity instruments issued to extinguish debt"),
+            ("IFRIC 20", "IAS 16", "amends", "strong", 84, "L2", "IFRIC interpretation of surface mine stripping costs"),
+            ("IFRIC 21", "IAS 37", "amends", "strong", 84, "L2", "IFRIC interpretation of obligating events for government levies"),
+            ("IFRIC 22", "IAS 21", "amends", "strong", 84, "L2", "IFRIC interpretation of exchange rate for advance consideration"),
+            ("IFRIC 23", "IAS 12", "amends", "strong", 84, "L2", "IFRIC interpretation of uncertain income tax treatments"),
+            ("SIC-7", "IAS 21", "amends", "strong", 82, "L2", "SIC interpretation of Euro introduction under IAS 21"),
+            ("SIC-10", "IAS 20", "amends", "strong", 82, "L2", "SIC interpretation of government assistance without operating relation"),
+            ("SIC-25", "IAS 12", "amends", "strong", 82, "L2", "SIC interpretation of tax status changes under IAS 12"),
+            ("SIC-29", "IFRIC 12", "amends", "strong", 84, "L2", "SIC disclosure companion to IFRIC 12 Service Concession Arrangements"),
+            ("SIC-32", "IAS 38", "amends", "strong", 82, "L2", "SIC interpretation of website development costs under IAS 38"),
+            ("IFRIC Agenda Decisions", "IFRS 15", "amends", "strong", 80, "L2", "IFRIC Agenda Decisions addressing principal vs. agent & revenue recognition"),
+            ("IFRIC Agenda Decisions", "IFRS 16", "amends", "strong", 80, "L2", "IFRIC Agenda Decisions addressing lease term & definition of a lease"),
+            ("IFRIC Agenda Decisions", "IFRS 9", "amends", "strong", 80, "L2", "IFRIC Agenda Decisions addressing financial instruments & ECL"),
+            ("IFRIC Agenda Decisions", "IAS 36", "amends", "strong", 80, "L2", "IFRIC Agenda Decisions addressing impairment testing"),
+            ("IFRIC Agenda Decisions", "IAS 38", "amends", "strong", 80, "L2", "IFRIC Agenda Decisions addressing cloud computing & intangible assets"),
+            # ISSB 可持续披露、IAASB 国际审计与鉴证、IESBA 道德守则、OECD 国际税收内部核心关联
+            ("IFRS S2", "IFRS S1", "companion", "strong", 94, "L1", "ISSB core suite: IFRS S2 climate disclosures applied together with IFRS S1"),
+            ("IFRS S2 Industry Guidance", "IFRS S2", "companion", "strong", 90, "L1", "Industry-based implementation metrics accompanying IFRS S2"),
+            ("SASB Standards", "IFRS S1", "companion", "strong", 88, "L1", "Required source of industry guidance referenced by IFRS S1"),
+            ("Integrated Reporting Framework", "IFRS S1", "companion", "strong", 86, "L1", "Connected financial & sustainability reporting framework"),
+            ("ISSA 5000", "IFRS S1", "cross_domain", "strong", 72, "L4", "Sustainability assurance standard for IFRS S1/S2 disclosures"),
+            ("ISSA 5000", "IFRS S2", "cross_domain", "strong", 72, "L4", "Sustainability assurance standard for IFRS S2 climate disclosures"),
+            ("IESBA Code Part 5 (IESSA)", "ISSA 5000", "companion", "strong", 92, "L1", "Ethics & independence companion to ISSA 5000 sustainability assurance"),
+            ("ISQM 2", "ISQM 1", "companion", "strong", 92, "L1", "Quality Management suite: Engagement Quality Reviews companion to ISQM 1"),
+            ("ISA 220 (Revised)", "ISQM 1", "companion", "strong", 92, "L1", "Engagement-level quality management aligned with firm-level ISQM 1"),
+            ("ISA 220 (Revised)", "ISQM 2", "companion", "strong", 90, "L1", "Engagement partner responsibilities interacting with EQR under ISQM 2"),
+            ("ISA 330", "ISA 315 (Revised 2019)", "companion", "strong", 92, "L1", "Core audit risk model: responses to assessed risks under ISA 315"),
+            ("ISA 240 (Revised)", "ISA 315 (Revised 2019)", "companion", "strong", 90, "L1", "Fraud risk assessment integrated with ISA 315"),
+            ("ISA 540 (Revised)", "ISA 315 (Revised 2019)", "companion", "strong", 88, "L1", "Risk-based auditing of accounting estimates"),
+            ("ISA 501", "ISA 500", "companion", "strong", 88, "L1", "Specific audit evidence considerations under ISA 500"),
+            ("ISA 505", "ISA 500", "companion", "strong", 88, "L1", "External confirmations as audit evidence under ISA 500"),
+            ("ISA 701", "ISA 700 (Revised)", "companion", "strong", 92, "L1", "Reporting suite: Key Audit Matters companion to ISA 700"),
+            ("ISA 705 (Revised)", "ISA 700 (Revised)", "companion", "strong", 92, "L1", "Reporting suite: Modifications to the opinion companion to ISA 700"),
+            ("ISA 706 (Revised)", "ISA 700 (Revised)", "companion", "strong", 90, "L1", "Reporting suite: Emphasis/Other Matter paragraphs companion to ISA 700"),
+            ("ISA 720 (Revised)", "ISA 700 (Revised)", "companion", "strong", 88, "L1", "Reporting suite: Other information responsibilities alongside ISA 700"),
+            ("ISA 800 (Revised)", "ISA 700 (Revised)", "companion", "strong", 86, "L1", "Special purpose framework audits built on ISA 700"),
+            ("ISA 805 (Revised)", "ISA 700 (Revised)", "companion", "strong", 86, "L1", "Single financial statement audits built on ISA 700"),
+            ("ISA 810 (Revised)", "ISA 700 (Revised)", "companion", "strong", 86, "L1", "Summary financial statement reporting built on ISA 700"),
+            ("ISA for LCE", "ISA 200", "companion", "strong", 88, "L1", "Standalone proportionate audit standard for Less Complex Entities"),
+            ("ISRE 2410", "ISRE 2400 (Revised)", "companion", "strong", 88, "L1", "Review engagements suite: interim review vs. general review"),
+            ("ISAE 3400", "ISAE 3000 (Revised)", "companion", "strong", 88, "L1", "Prospective financial information assurance under ISAE 3000"),
+            ("ISAE 3402", "ISAE 3000 (Revised)", "companion", "strong", 88, "L1", "Service organization controls assurance under ISAE 3000"),
+            ("ISAE 3410", "ISAE 3000 (Revised)", "companion", "strong", 88, "L1", "GHG statement assurance under ISAE 3000"),
+            ("ISAE 3420", "ISAE 3000 (Revised)", "companion", "strong", 88, "L1", "Pro forma financial information assurance under ISAE 3000"),
+            ("IESBA Code Part 4A", "IESBA Code Part 1–3", "companion", "strong", 92, "L1", "Audit & review independence standards grounded in Parts 1–3"),
+            ("IESBA Code Part 4B", "IESBA Code Part 1–3", "companion", "strong", 90, "L1", "Other assurance independence standards grounded in Parts 1–3"),
+            ("IESBA Code Part 5 (IESSA)", "IESBA Code Part 1–3", "companion", "strong", 90, "L1", "Sustainability assurance ethics & independence (Volume 2)"),
+            ("OECD Pillar Two (GloBE)", "IAS 12", "cross_domain", "strong", 74, "L4", "Pillar Two 15% global minimum tax directly linked to IAS 12 deferred tax exception & disclosures"),
+            ("OECD Transfer Pricing Guidelines", "OECD Model Tax Convention", "companion", "strong", 90, "L1", "Arm's length principle & transfer pricing companion to Article 9 of Model Tax Convention"),
+        ]
+        for fc, tc, rk_c, st_c, sc_c, tr_c, nt_c in intl_curated_links:
+            fd_c = code_to_doc_id.get(fc)
+            td_c = code_to_doc_id.get(tc)
+            if fd_c and td_c and fd_c != td_c:
+                intl_extra_edges.append(
+                    {
+                        "from_doc_id": fd_c,
+                        "to_doc_id": td_c,
+                        "rel_kind": rk_c,
+                        "strength": st_c,
+                        "score": sc_c,
+                        "tier": tr_c,
+                        "note": nt_c,
+                    }
+                )
 
     # 聚合条文级关联边为文档级图谱边，保留五层分级、0-100 相关性分值与精确条文跳转索引
     strength_order = {"strong": 3, "medium": 2, "weak": 1}
@@ -780,11 +961,17 @@ def build_from_db(db_path: Path) -> dict:
                 }
             )
 
-    # 合并国际准则内部引用与 CAS<->IFRS 趋同对照边
+    # 合并国际准则内部引用与 CAS<->IFRS 趋同对照边（同一文档对优先保留高优先级 L1/L2/L5 语义边，避免与普通 L3 cites 重复）
+    intl_best_pair: dict[tuple[int, int], dict] = {}
     for ie in intl_extra_edges:
-        fd, td, rk = ie["from_doc_id"], ie["to_doc_id"], ie["rel_kind"]
+        fd, td = ie["from_doc_id"], ie["to_doc_id"]
         if fd not in doc_ids_set or td not in doc_ids_set or fd == td:
             continue
+        prev = intl_best_pair.get((fd, td))
+        if not prev or ie["score"] > prev["score"]:
+            intl_best_pair[(fd, td)] = ie
+    for ie in intl_best_pair.values():
+        fd, td, rk = ie["from_doc_id"], ie["to_doc_id"], ie["rel_kind"]
         key = (fd, td, rk)
         if key not in edge_map:
             edge_map[key] = {
@@ -839,8 +1026,8 @@ def build_from_db(db_path: Path) -> dict:
     ]
 
     # 按 (准则体系, 领域) + 单片 ~1.2MB 上限切分全文检索分片（彻底消除单体大文件，支持按体系/领域按需加载）
-    FT_DIR.mkdir(parents=True, exist_ok=True)
-    old_monolith = DATA_DIR / "fulltext.js"
+    out_ft_dir.mkdir(parents=True, exist_ok=True)
+    old_monolith = out_data_dir / "fulltext.js"
     if old_monolith.exists():
         old_monolith.unlink()
 
@@ -868,7 +1055,7 @@ def build_from_db(db_path: Path) -> dict:
         def flush_chunk(c_rows: list[list], idx: int) -> None:
             shard_id = f"{fw_prefix}{dom}_{idx}"
             fname = f"ft_{shard_id}.js"
-            fpath = FT_DIR / fname
+            fpath = out_ft_dir / fname
             payload_str = (
                 f'window.__finlexFtShardLoaded("{shard_id}",'
                 + json.dumps(c_rows, ensure_ascii=False, separators=(",", ":"))
@@ -899,7 +1086,7 @@ def build_from_db(db_path: Path) -> dict:
         if chunk:
             flush_chunk(chunk, shard_idx)
 
-    for stale in FT_DIR.glob("ft_*.js"):
+    for stale in out_ft_dir.glob("ft_*.js"):
         if stale.name not in written_ft_files:
             stale.unlink()
 
@@ -925,8 +1112,8 @@ def build_from_db(db_path: Path) -> dict:
     }
 
     # 写出首屏索引与按文档条文分片
-    DOCS_DIR.mkdir(parents=True, exist_ok=True)
-    index_js_path = DATA_DIR / "index.js"
+    out_docs_dir.mkdir(parents=True, exist_ok=True)
+    index_js_path = out_data_dir / "index.js"
     index_js_path.write_text(
         "window.FINLEX_INDEX = " + json.dumps(index_payload, ensure_ascii=False, separators=(",", ":")) + ";\n",
         encoding="utf-8",
@@ -997,7 +1184,7 @@ def build_from_db(db_path: Path) -> dict:
     for doc_id in doc_ids_set:
         doc_payload = {"id": doc_id, "articles": articles_by_doc.get(doc_id, [])}
         fname = f"doc_{doc_id}.js"
-        doc_js_path = DOCS_DIR / fname
+        doc_js_path = out_docs_dir / fname
         doc_js_path.write_text(
             f"window.__finlexDocLoaded({doc_id}," + json.dumps(doc_payload, ensure_ascii=False, separators=(",", ":")) + ");\n",
             encoding="utf-8",
@@ -1005,12 +1192,12 @@ def build_from_db(db_path: Path) -> dict:
         written_doc_files.add(fname)
 
     # 自动清理已删除文档遗留的旧分片文件
-    for stale_doc in DOCS_DIR.glob("doc_*.js"):
+    for stale_doc in out_docs_dir.glob("doc_*.js"):
         if stale_doc.name not in written_doc_files:
             stale_doc.unlink()
 
     if TEMPLATE_PATH.exists():
-        OUTPUT_HTML.write_text(TEMPLATE_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+        out_html_path.write_text(TEMPLATE_PATH.read_text(encoding="utf-8"), encoding="utf-8")
 
     topic_counts = Counter(d["topic_label"] for d in documents)
     ft_total_kb = round(sum(s["kb"] for s in ft_shards_meta), 1)

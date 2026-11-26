@@ -605,6 +605,25 @@
     .article-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
     .article-no { font-size: 13.5px; font-weight: 600; color: var(--primary); }
     .article-text { font-size: 14.5px; color: var(--ink); white-space: pre-wrap; line-height: 1.8; word-break: break-word; }
+    .article-text.intl-body { white-space: normal; font-size: 14px; line-height: 1.74; }
+    .article-text.intl-body .art-p { margin: 0 0 10px; }
+    .article-text.intl-body .art-p:last-child { margin-bottom: 0; }
+    .article-text.intl-body .art-subhead {
+      font-size: 12px; font-weight: 700; color: #0f766e; letter-spacing: 0.02em;
+      margin: 12px 0 6px; padding-bottom: 3px; border-bottom: 1px dashed #99f6e4;
+    }
+    .article-text.intl-body .art-subhead:first-child { margin-top: 0; }
+    .article-text.intl-body .art-list { margin: 4px 0 10px; padding-left: 18px; }
+    .article-text.intl-body .art-list:last-child { margin-bottom: 0; }
+    .article-text.intl-body .art-list li { margin-bottom: 4px; }
+    .article-text.intl-body .art-ref-line { margin: 0 0 6px; line-height: 1.6; }
+    .article-text.intl-body .art-ref-line:last-child { margin-bottom: 0; }
+    .article-text.intl-body .art-ref-label { font-weight: 600; color: var(--ink-secondary); }
+    .para-ref {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+      color: #0f766e; background: #f0fdfa; border: 1px solid #99f6e4;
+      padding: 0 4px; border-radius: 4px; white-space: nowrap;
+    }
     .article-text mark { background: #fef08a; padding: 0 2px; border-radius: 3px; }
     .article-source-note {
       margin-top: 16px; padding: 11px 14px; border-radius: var(--radius-md);
@@ -1439,9 +1458,10 @@
         return _cachedQueryParsed;
       }
 
-      // 将 "CAS 14"、"CSA 1141"、"IFRS 15"、"IAS 36"、"IFRIC 23"、"SIC 32"、"解释 18" 合并为单个词组
+      // 将 "CAS 14"、"CSA 1141"、"IFRS 15"、"IFRS S1"、"ISA 315"、"ISQM 1"、"ISSA 5000"、"解释 18" 合并为单个词组
       const normalized = raw
-        .replace(/\b(cas|csa|ifrs|ias|ifric|sic)[\s-]+(\d{1,4})\b/gi, "$1$2")
+        .replace(/\bifrs[\s-]+(s\d{1,2})\b/gi, "ifrs$1")
+        .replace(/\b(cas|csa|ifrs|ias|ifric|sic|isqm|isa|isre|isae|issa|isrs)[\s-]+(\d{1,4})\b/gi, "$1$2")
         .replace(/解释\s*第?\s*(\d{1,2})\s*号?/g, "解释$1");
 
       const tokens = normalized.split(/\s+/).filter(Boolean).slice(0, 12);
@@ -1453,7 +1473,14 @@
         const lower = tok.toLowerCase();
         const vSet = new Set([lower]);
 
-        const intlMatch = lower.match(/^(ifrs|ias|ifric|sic)0*(\d{1,2})$/);
+        const ifrsSMatch = lower.match(/^ifrss(\d{1,2})$/);
+        if (ifrsSMatch) {
+          const n = ifrsSMatch[1];
+          vSet.add(`ifrs s${n}`);
+          vSet.add(`ifrs-s${n}`);
+        }
+
+        const intlMatch = lower.match(/^(ifrs|ias|ifric|sic|isqm|isa|isre|isae|issa|isrs)0*(\d{1,4})$/);
         if (intlMatch) {
           const pfx = intlMatch[1], n = intlMatch[2];
           vSet.add(`${pfx} ${n}`);
@@ -1786,6 +1813,38 @@
           });
         }
       }
+      const ifrsCf = DATA.documents.find(d => (d.framework || "CN") === "INTL" && d.doc_no === "Conceptual Framework");
+      if (ifrsCf) {
+        const kids = DATA.documents.filter(d => (d.framework || "CN") === "INTL" && d.domain === "accounting" && d.doc_type === "standard" && /^(IFRS|IAS)\s+\d+/i.test(d.doc_no || ""));
+        if (kids.length) {
+          groups.push({
+            key: "ifrs_cf",
+            umbrellaDoc: ifrsCf,
+            childDocs: kids,
+            childIds: new Set(kids.map(d => d.id)),
+            desc: "IFRS & IAS Accounting Standards are developed within the Conceptual Framework for Financial Reporting",
+            frameworkFilter: "INTL",
+            domainFilter: "accounting",
+            typeFilter: "standard"
+          });
+        }
+      }
+      const intlAssurFw = DATA.documents.find(d => (d.framework || "CN") === "INTL" && d.doc_no === "Assurance Framework");
+      if (intlAssurFw) {
+        const kids = DATA.documents.filter(d => (d.framework || "CN") === "INTL" && d.domain === "audit" && d.doc_type === "standard" && /^(ISA|ISRE|ISAE|ISSA)\b/i.test(d.doc_no || ""));
+        if (kids.length) {
+          groups.push({
+            key: "iaasb_fw",
+            umbrellaDoc: intlAssurFw,
+            childDocs: kids,
+            childIds: new Set(kids.map(d => d.id)),
+            desc: "ISAs, ISREs, ISAEs and ISSA 5000 are governed by the International Framework for Assurance Engagements",
+            frameworkFilter: "INTL",
+            domainFilter: "audit",
+            typeFilter: "standard"
+          });
+        }
+      }
       return groups;
     })();
 
@@ -1817,6 +1876,7 @@
       if (!g) return;
       state.viewMode = "list";
       state.readerExpanded = false;
+      state.frameworkFilter = g.frameworkFilter || "CN";
       state.domainFilter = g.domainFilter;
       state.typeFilter = g.typeFilter;
       state.topicFilter = "all";
@@ -1918,13 +1978,32 @@
           m = c.match(/^IAS\s+(\d+)$/i);
           if (m) return [2, Number(m[1])];
           if (c === "IFRS for SMEs") return [3, 0];
+          m = c.match(/^IFRS\s+S(\d+)$/i);
+          if (m) return [3, 10 + Number(m[1])];
+          if (c.includes("IFRS S2") || c.startsWith("SASB") || c.includes("Integrated Reporting")) return [3, 30];
           m = c.match(/^IFRIC\s+(\d+)$/i);
           if (m) return [4, Number(m[1])];
           m = c.match(/^SIC-(\d+)$/i);
           if (m) return [5, Number(m[1])];
           if (c.startsWith("Practice Statement")) return [6, c.includes("2") ? 2 : 1];
           if (c.includes("IFRIC AD") || t.includes("Agenda Decisions")) return [7, 0];
-          return [8, d.id];
+          if (c === "Assurance Framework") return [10, 0];
+          m = c.match(/^ISQM\s+(\d+)/i);
+          if (m) return [11, Number(m[1])];
+          m = c.match(/^ISA\s+(\d+)/i);
+          if (m) return [12, Number(m[1])];
+          if (c === "ISA for LCE") return [13, 0];
+          m = c.match(/^ISRE\s+(\d+)/i);
+          if (m) return [14, Number(m[1])];
+          m = c.match(/^ISAE\s+(\d+)/i);
+          if (m) return [15, Number(m[1])];
+          m = c.match(/^ISSA\s+(\d+)/i);
+          if (m) return [16, Number(m[1])];
+          m = c.match(/^ISRS\s+(\d+)/i);
+          if (m) return [17, Number(m[1])];
+          if (c.startsWith("IESBA")) return [18, c.includes("Part 5") ? 5 : (c.includes("Part 4B") ? 4 : (c.includes("Part 4A") ? 3 : 1))];
+          if (c.startsWith("OECD")) return [20, c.includes("Pillar Two") ? 1 : (c.includes("Model Tax") ? 2 : 3)];
+          return [25, d.id];
         }
         if (d.domain === "accounting" && d.doc_type === "standard") {
           if (t.includes("基本准则") && !t.includes("可持续")) { sub = 1; num = 0; }
@@ -2980,7 +3059,7 @@
               <button class="mini-btn" onclick="copyCitation(${doc.id}, '${escapeHTML(a.no).replace(/'/g, "\\'")}')">📋 复制引用</button>
             </span>
           </div>
-          <div class="article-text">${highlightText(a.text, q).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1 ↗</a>')}</div>
+          <div class="article-text ${(doc.framework || "CN") !== "CN" ? "intl-body" : ""}">${formatArticleBody(a.text, q, (doc.framework || "CN") !== "CN")}</div>
           ${linksDrawerHTML}
         </div>
       `;
@@ -3246,11 +3325,64 @@
       applyDeviceMode(false);
     }
 
+    function linkifyAndDecorateIntl(rawLine, q) {
+      let html = highlightText(rawLine, q);
+      // 高亮官方真实段落与附录引用（如 paragraphs B1–B5、paragraph B112、Appendix A、IFRS 15.B34）
+      html = html.replace(/\b(paragraphs?\s+[A-Z]?\d+[A-Z]?(?:[–\-][A-Z]?\d+[A-Z]?)?|Appendix\s+[A-Z]|(?:IFRS|IAS|IFRIC|SIC|ISA|ISQM|ISRE|ISAE|ISSA)\s*\d+\.[A-Z]?\d+[A-Z]?)\b/g, '<span class="para-ref">$1</span>');
+      html = html.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1 ↗</a>');
+      return html;
+    }
+
+    function formatArticleBody(text, q, isIntl) {
+      if (!isIntl) {
+        return highlightText(text, q).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1 ↗</a>');
+      }
+      const lines = String(text || "").replace(/\r\n/g, "\n").split("\n");
+      const blocks = [];
+      let listBuf = [];
+      const flushList = () => {
+        if (listBuf.length) {
+          blocks.push(`<ul class="art-list">${listBuf.map(item => `<li>${linkifyAndDecorateIntl(item, q)}</li>`).join("")}</ul>`);
+          listBuf = [];
+        }
+      };
+      for (let i = 0; i < lines.length; i++) {
+        const ln = lines[i].trim();
+        if (!ln) { flushList(); continue; }
+        const mSub = ln.match(/^\[([^\]]+)\]$/);
+        if (mSub) {
+          flushList();
+          blocks.push(`<div class="art-subhead">${highlightText(mSub[1], q)}</div>`);
+          continue;
+        }
+        if (ln.startsWith("• ") || ln.startsWith("- ")) {
+          listBuf.push(ln.slice(2).trim());
+          continue;
+        }
+        flushList();
+        const mRef = ln.match(/^([^:]{2,56}:)\s+(.+)$/);
+        if (mRef && (ln.includes("http://") || ln.includes("https://") || /^(Access Note|Status|Official source|Official IFRS)/i.test(ln))) {
+          blocks.push(`<p class="art-ref-line"><span class="art-ref-label">${highlightText(mRef[1], q)}</span> ${linkifyAndDecorateIntl(mRef[2], q)}</p>`);
+        } else {
+          blocks.push(`<p class="art-p">${linkifyAndDecorateIntl(ln, q)}</p>`);
+        }
+      }
+      flushList();
+      return blocks.join("");
+    }
+
     async function copyCitation(docId, artNo) {
       const d = docById[docId];
       if (!d) return;
-      const noPart = hasValidDocNo(d) ? `（${d.doc_no}）` : "";
-      const cite = `《${d.title}》${noPart}${artNo || ""}${d.source_url ? `，原文链接：${d.source_url}` : ""}`;
+      let cite = "";
+      if ((d.framework || "CN") !== "CN") {
+        const secPart = artNo ? ` — ${artNo}` : "";
+        const urlPart = d.source_url ? ` (${d.source_url})` : "";
+        cite = `${d.title}${secPart}${urlPart}`;
+      } else {
+        const noPart = hasValidDocNo(d) ? `（${d.doc_no}）` : "";
+        cite = `《${d.title}》${noPart}${artNo || ""}${d.source_url ? `，原文链接：${d.source_url}` : ""}`;
+      }
       try {
         await navigator.clipboard.writeText(cite);
         alert(`已复制标准引用：\n${cite}`);

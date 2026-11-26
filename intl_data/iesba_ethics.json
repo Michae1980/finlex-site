@@ -1,0 +1,212 @@
+{
+  "generated_at": "2026-11-26 13:42",
+  "source": "IESBA 2026 Handbook",
+  "count": 4,
+  "documents": [
+    {
+      "code": "IESBA Code Part 1–3",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "IESBA International Code of Ethics for Professional Accountants — Parts 1 to 3 (Fundamental Principles, PAIBs & PAPPs)",
+      "display_title": "IESBA Code of Ethics — Parts 1–3 (Fundamental Principles & Conceptual Framework)",
+      "series_badge": "IESBA Code Part 1–3",
+      "doc_no": "IESBA Code Part 1–3",
+      "issuer": "IESBA",
+      "pub_date": "2026-09-01",
+      "effective_date": "2026-12-15",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IESBA 2026 Handbook",
+      "source_url": "https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants",
+      "source_kind": "official",
+      "summary": "Establishes the five fundamental principles (integrity, objectivity, professional competence and due care, confidentiality, professional behavior) and the conceptual framework for all professional accountants in business (Part 2) and public practice (Part 3), incorporating 2026 external expert and sustainability reporting revisions.",
+      "cited_codes": [
+        "IESBA Code Part 4A",
+        "IESBA Code Part 4B",
+        "ISQM 1",
+        "ISA 200"
+      ],
+      "cas_links": [
+        [
+          "发布通知——中国注册会计师独立性准则第1号",
+          "国际职业道德守则总则与我国职业道德/独立性框架对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Establishes the five fundamental principles (integrity, objectivity, professional competence and due care, confidentiality, professional behavior) and the conceptual framework for all professional accountants in business (Part 2) and public practice (Part 3), incorporating 2026 external expert and sustainability reporting revisions.",
+          "seq": 0
+        },
+        {
+          "no": "IESBA Sec 110–390",
+          "heading": "Five Fundamental Principles, Threats & 2026 External Expert Rules",
+          "text": "• Five Fundamental Principles (Section 110): Integrity, Objectivity, Professional Competence and Due Care, Confidentiality, and Professional Behavior.\n• Five Threat Categories (Section 120): Self-interest, Self-review, Advocacy, Familiarity, and Intimidation — addressed by eliminating circumstances, applying safeguards, or declining/ending the engagement.\n• NOCLAR (Sections 260 & 360): structured response framework for Non-Compliance with Laws and Regulations.\n• 2026 Handbook Additions (effective 15 Dec 2026): new Section 290 (PAIBs) and Section 390 (PAPPs) governing ethical evaluation when using the work of an external expert, plus sustainability reporting ethics revisions.",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IESBA 2026 Handbook): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "IESBA Code Part 4A",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "IESBA International Independence Standards — Part 4A (Independence for Audit and Review Engagements)",
+      "display_title": "IESBA Independence Standards — Part 4A (Audit & Review)",
+      "series_badge": "IESBA Code Part 4A",
+      "doc_no": "IESBA Code Part 4A",
+      "issuer": "IESBA",
+      "pub_date": "2026-09-01",
+      "effective_date": "2026-12-15",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IESBA 2026 Handbook",
+      "source_url": "https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants",
+      "source_kind": "official",
+      "summary": "Sets out the International Independence Standards applicable to audit and review engagements, including public interest entity (PIE) definitions, fee-related provisions, non-assurance services restrictions, and partner rotation.",
+      "cited_codes": [
+        "IESBA Code Part 1–3",
+        "ISQM 1",
+        "ISA 220 (Revised)"
+      ],
+      "cas_links": [
+        [
+          "发布通知——中国注册会计师独立性准则第1号",
+          "IESBA Part 4A 与我国独立性准则第1号直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Sets out the International Independence Standards applicable to audit and review engagements, including public interest entity (PIE) definitions, fee-related provisions, non-assurance services restrictions, and partner rotation.",
+          "seq": 0
+        },
+        {
+          "no": "IESBA Sec 400–600",
+          "heading": "Audit & Review Independence: PIEs, Fees, NAS & Partner Rotation",
+          "text": "• Independence of Mind and Independence in Appearance required throughout the engagement period and period covered by the financial statements (Section 400).\n• Public Interest Entities — PIEs (Section 400.17): expanded definition covering publicly traded entities, banks, insurers, and entities holding assets in a fiduciary capacity.\n• Fee-related provisions (Section 410): public fee transparency for PIEs and fee-dependency thresholds (>15% for 2 consecutive years triggers mandatory pre-issuance EQR; >15% for 5 consecutive years triggers resignation for PIEs).\n• Non-Assurance Services — NAS (Section 600): prohibits creating a self-review threat for PIE audit clients (no materiality qualifier) and requires TCWG concurrence; Key Audit Partner rotation limited to 7 years on / 5 years cooling-off for PIE engagement partners (Section 540).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IESBA 2026 Handbook): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "IESBA Code Part 4B",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "IESBA International Independence Standards — Part 4B (Independence for Assurance Engagements Other than Audit and Review)",
+      "display_title": "IESBA Independence Standards — Part 4B (Other Assurance)",
+      "series_badge": "IESBA Code Part 4B",
+      "doc_no": "IESBA Code Part 4B",
+      "issuer": "IESBA",
+      "pub_date": "2026-09-01",
+      "effective_date": "2026-12-15",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IESBA 2026 Handbook",
+      "source_url": "https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants",
+      "source_kind": "official",
+      "summary": "Sets out independence standards for assurance engagements other than audit, review, and sustainability assurance engagements covered by Part 5.",
+      "cited_codes": [
+        "IESBA Code Part 1–3",
+        "ISAE 3000 (Revised)"
+      ],
+      "cas_links": [
+        [
+          "中国注册会计师其他鉴证业务准则第3101号",
+          "其他鉴证业务独立性要求对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Sets out independence standards for assurance engagements other than audit, review, and sustainability assurance engagements covered by Part 5.",
+          "seq": 0
+        },
+        {
+          "no": "IESBA Sec 900–990",
+          "heading": "Independence for Other Assurance Engagements",
+          "text": "• Applies to assurance engagements other than audits/reviews of historical financial statements (Part 4A) and sustainability assurance engagements (Part 5 — IESSA).\n• Covers financial interests, loans/guarantees, business/family relationships, long association, and provision of non-assurance services to assurance clients (ISAE 3000 / 3402 / 3410).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IESBA 2026 Handbook): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "IESBA Code Part 5 (IESSA)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "IESBA International Ethics Standards for Sustainability Assurance (including International Independence Standards) — Part 5 (IESSA)",
+      "display_title": "International Ethics Standards for Sustainability Assurance (Part 5 — IESSA)",
+      "series_badge": "IESBA Code Part 5 (IESSA)",
+      "doc_no": "IESBA Code Part 5 (IESSA)",
+      "issuer": "IESBA",
+      "pub_date": "2025-01-27",
+      "effective_date": "2026-12-15",
+      "status": "upcoming",
+      "version_level": "upcoming",
+      "version_note": "Effective for sustainability assurance engagements for periods beginning on or after 15 Dec 2026.",
+      "source_name": "IESBA 2026 Handbook (Volume 2)",
+      "source_url": "https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants",
+      "source_kind": "official",
+      "summary": "Profession-agnostic ethics and independence standards for all sustainability assurance practitioners (Volume 2 of the 2026 IESBA Handbook), effective for sustainability assurance engagements for periods beginning on or after 15 Dec 2026.",
+      "cited_codes": [
+        "ISSA 5000",
+        "IFRS S1",
+        "IFRS S2",
+        "IESBA Code Part 1–3"
+      ],
+      "cas_links": [
+        [
+          "可持续信息鉴证业务准则第6101号——基本准则（试行）",
+          "IESSA 可持续鉴证职业道德与我国可持续鉴证准则衔接"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Profession-agnostic ethics and independence standards for all sustainability assurance practitioners (Volume 2 of the 2026 IESBA Handbook), effective for sustainability assurance engagements for periods beginning on or after 15 Dec 2026.",
+          "seq": 0
+        },
+        {
+          "no": "IESBA Part 5 (Eff. Dec 2026)",
+          "heading": "Sustainability Assurance Ethics & Value-Chain Independence",
+          "text": "• Volume 2 of the 2026 IESBA Handbook (effective 15 Dec 2026): applies equally to BOTH professional accountants and non-accountant sustainability assurance practitioners.\n• Establishes independence standards equivalent in rigor to Part 4A for sustainability assurance engagements of PIEs, plus tailored independence rules for value-chain entities and using the work of another practitioner or external expert.",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IESBA 2026 Handbook (Volume 2)): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: upcoming. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    }
+  ]
+}

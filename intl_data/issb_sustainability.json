@@ -1,0 +1,240 @@
+{
+  "generated_at": "2026-11-26 13:42",
+  "source": "IFRS Foundation (ISSB)",
+  "count": 5,
+  "documents": [
+    {
+      "code": "IFRS S1",
+      "framework": "INTL",
+      "domain": "accounting",
+      "doc_type": "standard",
+      "title": "IFRS S1 General Requirements for Disclosure of Sustainability-related Financial Information",
+      "display_title": "General Requirements for Disclosure of Sustainability-related Financial Information",
+      "series_badge": "IFRS S1",
+      "doc_no": "IFRS S1",
+      "issuer": "ISSB (IFRS Foundation)",
+      "pub_date": "2023-06-26",
+      "effective_date": "2024-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IFRS Foundation (ISSB)",
+      "source_url": "https://www.ifrs.org/issued-standards/ifrs-sustainability-standards-navigator/ifrs-s1-general-requirements/",
+      "source_kind": "official",
+      "summary": "Sets out overarching requirements for an entity to disclose material information about sustainability-related risks and opportunities useful to primary users of general purpose financial reports, structured around governance, strategy, risk management, and metrics & targets.",
+      "cited_codes": [
+        "IFRS S2",
+        "SASB Standards",
+        "Integrated Reporting Framework",
+        "Conceptual Framework",
+        "IFRS 18"
+      ],
+      "cas_links": [
+        [
+          "企业可持续披露准则——基本准则（试行）",
+          "ISSB 一般要求与我国企业可持续披露基本准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Sets out overarching requirements for an entity to disclose material information about sustainability-related risks and opportunities useful to primary users of general purpose financial reports, structured around governance, strategy, risk management, and metrics & targets.",
+          "seq": 0
+        },
+        {
+          "no": "IFRS S1.25–53",
+          "heading": "Four-Pillar Core Content & Materiality",
+          "text": "Built on the TCFD structure, IFRS S1 requires disclosures across FOUR core pillars for all material sustainability-related risks and opportunities:\n• Governance (IFRS S1.26–27): governance bodies/individuals overseeing sustainability risks, skills, reporting cadence, and remuneration linkage.\n• Strategy (IFRS S1.28–42): short/medium/long-term risks & opportunities, business model and value chain effects, current and anticipated financial effects, and resilience.\n• Risk Management (IFRS S1.43–44): processes to identify, assess, prioritise, and monitor sustainability risks and integration with overall enterprise risk management.\n• Metrics & Targets (IFRS S1.45–53): cross-industry and industry-specific metrics (referencing SASB Standards under S1.55) and progress against targets.",
+          "seq": 1
+        },
+        {
+          "no": "IFRS S1.17–24 & E1–E6",
+          "heading": "Financial Materiality, Connected Information & Transition Reliefs",
+          "text": "• Investor-focused materiality (IFRS S1.17–19): aligned with IAS 1/IFRS 18 — information is material if omitting, misstating, or obscuring it could reasonably be expected to influence primary users' decisions.\n• Connected information & reporting boundary (IFRS S1.20–24): same reporting entity and reporting period as the related financial statements.\n• Transition reliefs (IFRS S1.E3–E6): 'climate-first' relief permits reporting only climate-related disclosures (IFRS S2) in the first annual reporting period, plus comparative-period relief.\n• China comparison: China's 《企业可持续披露准则——基本准则（试行）》 adopts the same four-pillar structure while incorporating 'double materiality' (impact materiality + financial materiality).",
+          "seq": 2
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IFRS Foundation (ISSB)): https://www.ifrs.org/issued-standards/ifrs-sustainability-standards-navigator/ifrs-s1-general-requirements/\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 3
+        }
+      ]
+    },
+    {
+      "code": "IFRS S2",
+      "framework": "INTL",
+      "domain": "accounting",
+      "doc_type": "standard",
+      "title": "IFRS S2 Climate-related Disclosures",
+      "display_title": "Climate-related Disclosures",
+      "series_badge": "IFRS S2",
+      "doc_no": "IFRS S2",
+      "issuer": "ISSB (IFRS Foundation)",
+      "pub_date": "2023-06-26",
+      "effective_date": "2024-01-01",
+      "status": "in_force",
+      "version_level": "info",
+      "version_note": "In force from 1 Jan 2024; targeted amendments issued Dec 2025 effective 1 Jan 2027.",
+      "source_name": "IFRS Foundation (ISSB)",
+      "source_url": "https://www.ifrs.org/issued-standards/ifrs-sustainability-standards-navigator/ifrs-s2-climate-related-disclosures/",
+      "source_kind": "official",
+      "summary": "Sets out specific climate-related disclosure requirements (physical and transition risks, Scope 1–3 GHG emissions, scenario analysis, and industry-based metrics) designed to be applied together with IFRS S1. Targeted amendments issued Dec 2025 take effect 1 Jan 2027.",
+      "cited_codes": [
+        "IFRS S1",
+        "IFRS S2 Industry Guidance",
+        "ISSA 5000"
+      ],
+      "cas_links": [
+        [
+          "企业可持续披露准则第1号——气候（试行）",
+          "ISSB 气候披露准则与我国第1号气候准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Sets out specific climate-related disclosure requirements (physical and transition risks, Scope 1–3 GHG emissions, scenario analysis, and industry-based metrics) designed to be applied together with IFRS S1. Targeted amendments issued Dec 2025 take effect 1 Jan 2027.",
+          "seq": 0
+        },
+        {
+          "no": "IFRS S2.10–37",
+          "heading": "Climate Risks, GHG Emissions (Scope 1–3) & Scenario Analysis",
+          "text": "• Climate-related risks & opportunities (IFRS S2.10–14): distinguish physical risks (acute/chronic) and transition risks (policy, legal, technology, market, reputation); disclose transition plans and capital deployment.\n• Climate resilience & scenario analysis (IFRS S2.22): use climate-related scenario analysis commensurate with entity's circumstances.\n• Cross-industry climate metrics (IFRS S2.29): absolute gross Scope 1, Scope 2, and Scope 3 GHG emissions (measured per GHG Protocol unless jurisdiction requires another method), financed emissions for financial institutions, internal carbon prices, and climate-linked executive remuneration.\n• Targeted Amendments (Dec 2025, effective 1 Jan 2027): provide targeted reliefs for certain Scope 3 Category 15 financed emissions (e.g., derivatives, facilitated emissions) and GICS classification.",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IFRS Foundation (ISSB)): https://www.ifrs.org/issued-standards/ifrs-sustainability-standards-navigator/ifrs-s2-climate-related-disclosures/\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "IFRS S2 Industry Guidance",
+      "framework": "INTL",
+      "domain": "accounting",
+      "doc_type": "guidance",
+      "title": "Industry-based Guidance on Implementing IFRS S2",
+      "display_title": "Industry-based Guidance on Implementing IFRS S2",
+      "series_badge": "IFRS S2 Industry Guidance",
+      "doc_no": "IFRS S2 Industry Guidance",
+      "issuer": "ISSB (IFRS Foundation)",
+      "pub_date": "2023-06-26",
+      "effective_date": "2024-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IFRS Foundation (ISSB)",
+      "source_url": "https://www.ifrs.org/sustainability/knowledge-hub/introduction-to-issb-and-ifrs-sustainability-disclosure-standards/",
+      "source_kind": "official",
+      "summary": "Provides industry-specific climate disclosure topics and metrics derived from SASB Standards across 68 industries; IFRS S2 requires entities to refer to and consider this guidance when identifying climate risks and metrics.",
+      "cited_codes": [
+        "IFRS S2",
+        "SASB Standards"
+      ],
+      "cas_links": [
+        [
+          "企业可持续披露准则第1号——气候（试行）",
+          "行业气候指标实施指引参考"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Provides industry-specific climate disclosure topics and metrics derived from SASB Standards across 68 industries; IFRS S2 requires entities to refer to and consider this guidance when identifying climate risks and metrics.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IFRS Foundation (ISSB)): https://www.ifrs.org/sustainability/knowledge-hub/introduction-to-issb-and-ifrs-sustainability-disclosure-standards/\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "SASB Standards",
+      "framework": "INTL",
+      "domain": "accounting",
+      "doc_type": "guidance",
+      "title": "SASB Standards (Sustainability Accounting Standards Board)",
+      "display_title": "SASB Standards (Industry Sustainability Topics & Metrics)",
+      "series_badge": "SASB Standards",
+      "doc_no": "SASB Standards",
+      "issuer": "ISSB (IFRS Foundation)",
+      "pub_date": "2023-12-01",
+      "effective_date": "2024-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IFRS Foundation (ISSB)",
+      "source_url": "https://www.ifrs.org/sustainability/knowledge-hub/introduction-to-issb-and-ifrs-sustainability-disclosure-standards/",
+      "source_kind": "official",
+      "summary": "Industry-based sustainability disclosure standards maintained by the ISSB across 77 industries; referenced by IFRS S1 as a required source of guidance for identifying sustainability-related risks, opportunities, and metrics beyond climate.",
+      "cited_codes": [
+        "IFRS S1",
+        "IFRS S2 Industry Guidance"
+      ],
+      "cas_links": [],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Industry-based sustainability disclosure standards maintained by the ISSB across 77 industries; referenced by IFRS S1 as a required source of guidance for identifying sustainability-related risks, opportunities, and metrics beyond climate.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IFRS Foundation (ISSB)): https://www.ifrs.org/sustainability/knowledge-hub/introduction-to-issb-and-ifrs-sustainability-disclosure-standards/\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "Integrated Reporting Framework",
+      "framework": "INTL",
+      "domain": "accounting",
+      "doc_type": "guidance",
+      "title": "Integrated Reporting Framework (<IR>)",
+      "display_title": "Integrated Reporting Framework (<IR>)",
+      "series_badge": "Integrated Reporting Framework",
+      "doc_no": "Integrated Reporting Framework",
+      "issuer": "IFRS Foundation (IASB & ISSB)",
+      "pub_date": "2022-08-01",
+      "effective_date": "2022-08-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IFRS Foundation",
+      "source_url": "https://www.ifrs.org/sustainability/knowledge-hub/introduction-to-issb-and-ifrs-sustainability-disclosure-standards/",
+      "source_kind": "official",
+      "summary": "Principles-based framework jointly overseen by the IASB and ISSB to promote connected reporting between financial statements and sustainability-related financial disclosures.",
+      "cited_codes": [
+        "IFRS S1",
+        "Practice Statement 1",
+        "Conceptual Framework"
+      ],
+      "cas_links": [],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Principles-based framework jointly overseen by the IASB and ISSB to promote connected reporting between financial statements and sustainability-related financial disclosures.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IFRS Foundation): https://www.ifrs.org/sustainability/knowledge-hub/introduction-to-issb-and-ifrs-sustainability-disclosure-standards/\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    }
+  ]
+}

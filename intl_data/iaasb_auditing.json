@@ -1,0 +1,2206 @@
+{
+  "generated_at": "2026-11-26 13:42",
+  "source": "IAASB 2026 Handbook",
+  "count": 51,
+  "documents": [
+    {
+      "code": "Assurance Framework",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "International Framework for Assurance Engagements",
+      "display_title": "International Framework for Assurance Engagements",
+      "series_badge": "Assurance Framework",
+      "doc_no": "Assurance Framework",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-09-30",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Defines and describes the elements and objectives of an assurance engagement (reasonable and limited assurance) and identifies engagements to which ISAs, ISREs, ISAEs, and ISSAs apply.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师鉴证业务基本准则",
+          "国际鉴证业务框架与我国鉴证业务基本准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Defines and describes the elements and objectives of an assurance engagement (reasonable and limited assurance) and identifies engagements to which ISAs, ISREs, ISAEs, and ISSAs apply.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISQM 1",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISQM 1 Quality Management for Firms that Perform Audits or Reviews of Financial Statements, or Other Assurance or Related Services Engagements",
+      "display_title": "Quality Management for Firms (ISQM 1)",
+      "series_badge": "ISQM 1",
+      "doc_no": "ISQM 1",
+      "issuer": "IAASB",
+      "pub_date": "2020-12-18",
+      "effective_date": "2022-12-15",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Requires firms to design, implement, and operate a risk-based system of quality management (SOQM) covering governance, ethics, acceptance/continuance, engagement performance, resources, information/communication, and monitoring/remediation.",
+      "cited_codes": [
+        "ISQM 2",
+        "ISA 220 (Revised)",
+        "IESBA Code Part 1–3"
+      ],
+      "cas_links": [
+        [
+          "发布通知——会计师事务所质量管理准则第5101号等三项",
+          "ISQM 1 与我国质量管理准则第5101号直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Requires firms to design, implement, and operate a risk-based system of quality management (SOQM) covering governance, ethics, acceptance/continuance, engagement performance, resources, information/communication, and monitoring/remediation.",
+          "seq": 0
+        },
+        {
+          "no": "ISQM 1.19–56",
+          "heading": "Eight Components of Firm Quality Management (SOQM)",
+          "text": "Requires firms to design and operate a proactive, risk-based System of Quality Management (SOQM) covering 8 integrated components:\n• (1) Firm's risk assessment process (quality objectives → quality risks → responses); (2) Governance and leadership; (3) Relevant ethical requirements; (4) Acceptance and continuance of client relationships; (5) Engagement performance; (6) Resources (human, technological, intellectual); (7) Information and communication; (8) Monitoring and remediation process.\n• Annual evaluation (ISQM 1.53–55): leadership must evaluate at least annually whether the SOQM provides reasonable assurance that its objectives are being achieved (converged with China QMS 5101).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISQM 2",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISQM 2 Engagement Quality Reviews",
+      "display_title": "Engagement Quality Reviews (ISQM 2)",
+      "series_badge": "ISQM 2",
+      "doc_no": "ISQM 2",
+      "issuer": "IAASB",
+      "pub_date": "2020-12-18",
+      "effective_date": "2022-12-15",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the appointment and eligibility of the engagement quality reviewer (EQR) and the reviewer's responsibilities relating to the performance and documentation of an engagement quality review.",
+      "cited_codes": [
+        "ISQM 1",
+        "ISA 220 (Revised)"
+      ],
+      "cas_links": [
+        [
+          "发布通知——会计师事务所质量管理准则第5101号等三项",
+          "ISQM 2 与我国项目质量复核准则第5102号直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the appointment and eligibility of the engagement quality reviewer (EQR) and the reviewer's responsibilities relating to the performance and documentation of an engagement quality review.",
+          "seq": 0
+        },
+        {
+          "no": "ISQM 2.17–27",
+          "heading": "Engagement Quality Reviewer Eligibility, Cooling-Off & Review",
+          "text": "• Eligibility (ISQM 2.18–20): reviewer must have competence, capabilities, authority, and objectivity; requires a mandatory 2-year cooling-off period before a former engagement partner can serve as EQR for the same entity (ISQM 2.19(b)).\n• Performance & timing (ISQM 2.24–26): review significant judgements and conclusions at appropriate points throughout the engagement; engagement report CANNOT be dated before the EQR notifies completion (converged with China QMS 5102).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 200",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 200 Overall Objectives of the Independent Auditor and the Conduct of an Audit in Accordance with International Standards on Auditing",
+      "display_title": "Overall Objectives of the Independent Auditor and the Conduct of an Audit in Accordance with International Standards on Auditing",
+      "series_badge": "ISA 200",
+      "doc_no": "ISA 200",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Establishes the independent auditor's overall responsibilities when conducting an audit of financial statements in accordance with ISAs, including ethical requirements, professional skepticism, and professional judgment.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1101号",
+          "ISA 200 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Establishes the independent auditor's overall responsibilities when conducting an audit of financial statements in accordance with ISAs, including ethical requirements, professional skepticism, and professional judgment.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 200.11–24",
+          "heading": "Overall Objectives, Audit Risk Model & Professional Skepticism",
+          "text": "• Overall objective (ISA 200.11): obtain reasonable assurance about whether the financial statements as a whole are free from material misstatement (whether due to fraud or error) and report in accordance with ISAs.\n• Core pillars (ISA 200.14–17): comply with IESBA ethical/independence requirements; plan and perform with professional skepticism; exercise professional judgment; obtain sufficient appropriate audit evidence to reduce audit risk (AR = IR × CR × DR) to an acceptably low level (converged with China CSA 1101).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 210",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 210 Agreeing the Terms of Audit Engagements",
+      "display_title": "Agreeing the Terms of Audit Engagements",
+      "series_badge": "ISA 210",
+      "doc_no": "ISA 210",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities in agreeing the terms of the audit engagement with management and, where appropriate, those charged with governance, including preconditions for an audit.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1111号",
+          "ISA 210 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities in agreeing the terms of the audit engagement with management and, where appropriate, those charged with governance, including preconditions for an audit.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 220 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 220 (Revised) Quality Management for an Audit of Financial Statements",
+      "display_title": "Quality Management for an Audit of Financial Statements",
+      "series_badge": "ISA 220 (Revised)",
+      "doc_no": "ISA 220 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the specific responsibilities of the auditor regarding quality management at the engagement level for an audit of financial statements, and the related responsibilities of the engagement partner.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1121号",
+          "ISA 220 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the specific responsibilities of the auditor regarding quality management at the engagement level for an audit of financial statements, and the related responsibilities of the engagement partner.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 230",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 230 Audit Documentation",
+      "display_title": "Audit Documentation",
+      "series_badge": "ISA 230",
+      "doc_no": "ISA 230",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to prepare audit documentation for an audit of financial statements sufficient to enable an experienced auditor to understand the nature, timing, extent, and results of audit procedures.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1131号",
+          "ISA 230 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to prepare audit documentation for an audit of financial statements sufficient to enable an experienced auditor to understand the nature, timing, extent, and results of audit procedures.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 240 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 240 (Revised) The Auditor's Responsibilities Relating to Fraud in an Audit of Financial Statements",
+      "display_title": "The Auditor's Responsibilities Relating to Fraud in an Audit of Financial Statements",
+      "series_badge": "ISA 240 (Revised)",
+      "doc_no": "ISA 240 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "info",
+      "version_note": "Revised edition published July 2025 in IAASB 2026 Handbook.",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities relating to fraud in an audit of financial statements, including reinforced professional skepticism, fraud risk identification, and transparent communication (Revised July 2025).",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1141号",
+          "ISA 240 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities relating to fraud in an audit of financial statements, including reinforced professional skepticism, fraud risk identification, and transparent communication (Revised July 2025).",
+          "seq": 0
+        },
+        {
+          "no": "ISA 240 (Rev. 2025)",
+          "heading": "Fraud Responsibilities, Presumed Risks & 2025 Revision Highlights",
+          "text": "• Fraud triangle & skepticism (ISA 240.12–16): maintain heightened professional skepticism throughout; hold mandatory engagement team discussion on fraud susceptibility.\n• Two presumed fraud risks (ISA 240.27, 32): (1) improper revenue recognition (rebuttable, must document if rebutted); (2) management override of controls (NEVER rebuttable — mandatory journal entry testing, retrospective review of estimates, and evaluation of significant unusual transactions).\n• July 2025 Revised Edition highlights: clarifies auditor's role on fraud, reinforces fraud-lens risk assessment aligned with ISA 315, strengthens responses when fraud or suspected fraud is identified, and enhances transparency in auditor's reports (converged with China CSA 1141).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 250 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 250 (Revised) Consideration of Laws and Regulations in an Audit of Financial Statements",
+      "display_title": "Consideration of Laws and Regulations in an Audit of Financial Statements",
+      "series_badge": "ISA 250 (Revised)",
+      "doc_no": "ISA 250 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to consider laws and regulations in an audit of financial statements, including non-compliance with laws and regulations (NOCLAR).",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1142号",
+          "ISA 250 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to consider laws and regulations in an audit of financial statements, including non-compliance with laws and regulations (NOCLAR).",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 260 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 260 (Revised) Communication with Those Charged with Governance",
+      "display_title": "Communication with Those Charged with Governance",
+      "series_badge": "ISA 260 (Revised)",
+      "doc_no": "ISA 260 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to communicate with those charged with governance in an audit of financial statements regarding planned scope, timing, and significant audit findings.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1151号",
+          "ISA 260 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to communicate with those charged with governance in an audit of financial statements regarding planned scope, timing, and significant audit findings.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 265",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 265 Communicating Deficiencies in Internal Control to Those Charged with Governance and Management",
+      "display_title": "Communicating Deficiencies in Internal Control to Those Charged with Governance and Management",
+      "series_badge": "ISA 265",
+      "doc_no": "ISA 265",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to communicate appropriately to those charged with governance and management deficiencies in internal control identified in an audit.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1152号",
+          "ISA 265 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to communicate appropriately to those charged with governance and management deficiencies in internal control identified in an audit.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 300",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 300 Planning an Audit of Financial Statements",
+      "display_title": "Planning an Audit of Financial Statements",
+      "series_badge": "ISA 300",
+      "doc_no": "ISA 300",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to plan an audit of financial statements, including establishing an overall audit strategy and developing an audit plan.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1201号",
+          "ISA 300 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to plan an audit of financial statements, including establishing an overall audit strategy and developing an audit plan.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 315 (Revised 2019)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 315 (Revised 2019) Identifying and Assessing the Risks of Material Misstatement",
+      "display_title": "Identifying and Assessing the Risks of Material Misstatement",
+      "series_badge": "ISA 315 (Revised 2019)",
+      "doc_no": "ISA 315 (Revised 2019)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to identify and assess the risks of material misstatement in the financial statements through understanding the entity, its environment, and its system of internal control.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1211号",
+          "ISA 315 (Revised 2019) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to identify and assess the risks of material misstatement in the financial statements through understanding the entity, its environment, and its system of internal control.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 315.19–38",
+          "heading": "Spectrum of Inherent Risk, Significant Risks & ITGCs",
+          "text": "• Risk identification & assessment (ISA 315.19–34): separately assess Inherent Risk (using 5 inherent risk factors: complexity, subjectivity, change, uncertainty, susceptibility to bias/fraud) and Control Risk.\n• Significant risk (ISA 315.12(l), 32): an identified risk of material misstatement where inherent risk sits close to the upper end of the spectrum of inherent risk (triggers mandatory substantive responses under ISA 330).\n• IT environment & ITGCs (ISA 315.26, Appendix 5): identify risks arising from use of IT and evaluate design & implementation of General IT Controls (ITGCs) addressing those risks (converged with China CSA 1211).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 320",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 320 Materiality in Planning and Performing an Audit",
+      "display_title": "Materiality in Planning and Performing an Audit",
+      "series_badge": "ISA 320",
+      "doc_no": "ISA 320",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to apply the concept of materiality in planning and performing an audit of financial statements, including performance materiality.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1221号",
+          "ISA 320 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to apply the concept of materiality in planning and performing an audit of financial statements, including performance materiality.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 320.10–14",
+          "heading": "Overall Materiality, Performance Materiality & Revisions",
+          "text": "• Overall materiality (ISA 320.10): determined for the financial statements as a whole using an appropriate benchmark (e.g., profit before tax, revenue, total assets).\n• Performance materiality (ISA 320.9, 11): set BELOW overall materiality to reduce to an appropriately low level the probability that aggregate uncorrected and undetected misstatements exceed overall materiality.\n• Revise materiality (ISA 320.12) if new information during the audit would have caused a different initial amount (converged with China CSA 1221).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 330",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 330 The Auditor's Responses to Assessed Risks",
+      "display_title": "The Auditor's Responses to Assessed Risks",
+      "series_badge": "ISA 330",
+      "doc_no": "ISA 330",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to design and implement responses to the risks of material misstatement identified and assessed in accordance with ISA 315.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1231号",
+          "ISA 330 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to design and implement responses to the risks of material misstatement identified and assessed in accordance with ISA 315.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 330.5–28",
+          "heading": "Responses to Assessed Risks: Tests of Controls vs. Substantive Procedures",
+          "text": "• Overall responses (ISA 330.5): address financial-statement-level risks (e.g., assign more experienced staff, incorporate unpredictability).\n• Tests of controls (ISA 330.8–17): mandatory when auditor intends to rely on operating effectiveness of controls OR when substantive procedures alone cannot provide sufficient appropriate evidence.\n• Substantive procedures (ISA 330.18–23): mandatory for each material class of transactions, account balance, and disclosure; for Significant Risks, MUST perform substantive procedures specifically responsive to that risk (including tests of details if relying solely on substantive procedures, converged with China CSA 1231).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 402",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 402 Audit Considerations Relating to an Entity Using a Service Organization",
+      "display_title": "Audit Considerations Relating to an Entity Using a Service Organization",
+      "series_badge": "ISA 402",
+      "doc_no": "ISA 402",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the user auditor's responsibility to obtain sufficient appropriate audit evidence when a user entity uses the services of one or more service organizations.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1241号",
+          "ISA 402 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the user auditor's responsibility to obtain sufficient appropriate audit evidence when a user entity uses the services of one or more service organizations.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 450",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 450 Evaluation of Misstatements Identified during the Audit",
+      "display_title": "Evaluation of Misstatements Identified during the Audit",
+      "series_badge": "ISA 450",
+      "doc_no": "ISA 450",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to evaluate the effect of identified misstatements on the audit and of uncorrected misstatements, if any, on the financial statements.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1251号",
+          "ISA 450 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to evaluate the effect of identified misstatements on the audit and of uncorrected misstatements, if any, on the financial statements.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 500",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 500 Audit Evidence",
+      "display_title": "Audit Evidence",
+      "series_badge": "ISA 500",
+      "doc_no": "ISA 500",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Explains what constitutes audit evidence in an audit of financial statements and deals with the auditor's responsibility to design and perform audit procedures to obtain sufficient appropriate audit evidence.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1301号",
+          "ISA 500 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Explains what constitutes audit evidence in an audit of financial statements and deals with the auditor's responsibility to design and perform audit procedures to obtain sufficient appropriate audit evidence.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 500.6–11",
+          "heading": "Sufficient Appropriate Audit Evidence & Reliability Hierarchy",
+          "text": "• Sufficiency (quantity) and Appropriateness (quality = relevance + reliability) (ISA 500.6, A4–A5).\n• Reliability principles (ISA 500.A31): independent external sources > internal records; effective controls increase internal reliability; direct auditor-obtained evidence > indirect; documentary > oral; originals > photocopies.\n• Management's expert (ISA 500.8): evaluate competence, capabilities, and objectivity of any management's expert whose work is used as audit evidence (converged with China CSA 1301).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 501",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 501 Audit Evidence—Specific Considerations for Selected Items",
+      "display_title": "Audit Evidence—Specific Considerations for Selected Items",
+      "series_badge": "ISA 501",
+      "doc_no": "ISA 501",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with specific considerations by the auditor in obtaining sufficient appropriate audit evidence with respect to inventory, litigation and claims, and segment information.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1311号",
+          "ISA 501 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with specific considerations by the auditor in obtaining sufficient appropriate audit evidence with respect to inventory, litigation and claims, and segment information.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 505",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 505 External Confirmations",
+      "display_title": "External Confirmations",
+      "series_badge": "ISA 505",
+      "doc_no": "ISA 505",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's use of external confirmation procedures to obtain audit evidence in accordance with ISA 330 and ISA 500.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1312号",
+          "ISA 505 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's use of external confirmation procedures to obtain audit evidence in accordance with ISA 330 and ISA 500.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 510",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 510 Initial Audit Engagements—Opening Balances",
+      "display_title": "Initial Audit Engagements—Opening Balances",
+      "series_badge": "ISA 510",
+      "doc_no": "ISA 510",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities relating to opening balances in an initial audit engagement.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1331号",
+          "ISA 510 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities relating to opening balances in an initial audit engagement.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 520",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 520 Analytical Procedures",
+      "display_title": "Analytical Procedures",
+      "series_badge": "ISA 520",
+      "doc_no": "ISA 520",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's use of analytical procedures as substantive procedures and near the end of the audit to assist in forming an overall conclusion.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1313号",
+          "ISA 520 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's use of analytical procedures as substantive procedures and near the end of the audit to assist in forming an overall conclusion.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 530",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 530 Audit Sampling",
+      "display_title": "Audit Sampling",
+      "series_badge": "ISA 530",
+      "doc_no": "ISA 530",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Applies when the auditor has decided to use audit sampling in performing audit procedures, covering statistical and non-statistical sampling design, selection, and evaluation.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1314号",
+          "ISA 530 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Applies when the auditor has decided to use audit sampling in performing audit procedures, covering statistical and non-statistical sampling design, selection, and evaluation.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 540 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 540 (Revised) Auditing Accounting Estimates and Related Disclosures",
+      "display_title": "Auditing Accounting Estimates and Related Disclosures",
+      "series_badge": "ISA 540 (Revised)",
+      "doc_no": "ISA 540 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities relating to accounting estimates and related disclosures in an audit of financial statements, emphasizing estimation uncertainty and inherent risk factors.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1321号",
+          "ISA 540 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities relating to accounting estimates and related disclosures in an audit of financial statements, emphasizing estimation uncertainty and inherent risk factors.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 540.13–36",
+          "heading": "Auditing Accounting Estimates: Three Testing Approaches & Bias",
+          "text": "• Separate inherent and control risk assessment considering estimation uncertainty, complexity, and subjectivity (ISA 540.16).\n• Three testing approaches (ISA 540.18): (a) obtain evidence from events occurring up to auditor's report date; (b) test how management made the estimate (method, significant assumptions, data); (c) develop an auditor's point estimate or range.\n• Stand-back evaluation (ISA 540.33–36): evaluate indicators of possible management bias and reasonableness of disclosures (converged with China CSA 1321).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 550",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 550 Related Parties",
+      "display_title": "Related Parties",
+      "series_badge": "ISA 550",
+      "doc_no": "ISA 550",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities relating to related party relationships and transactions in an audit of financial statements.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1323号",
+          "ISA 550 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities relating to related party relationships and transactions in an audit of financial statements.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 560",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 560 Subsequent Events",
+      "display_title": "Subsequent Events",
+      "series_badge": "ISA 560",
+      "doc_no": "ISA 560",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities relating to subsequent events in an audit of financial statements, covering events up to and after the auditor's report date.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1332号",
+          "ISA 560 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities relating to subsequent events in an audit of financial statements, covering events up to and after the auditor's report date.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 570 (Revised 2024)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 570 (Revised 2024) Going Concern",
+      "display_title": "Going Concern",
+      "series_badge": "ISA 570 (Revised 2024)",
+      "doc_no": "ISA 570 (Revised 2024)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "info",
+      "version_note": "Revised 2024 edition published April 2025 in IAASB 2026 Handbook.",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities in the audit of financial statements relating to going concern and the implications for the auditor's report (Revised 2024, published April 2025).",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1324号",
+          "ISA 570 (Revised 2024) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities in the audit of financial statements relating to going concern and the implications for the auditor's report (Revised 2024, published April 2025).",
+          "seq": 0
+        },
+        {
+          "no": "ISA 570 (Rev. 2024)",
+          "heading": "Going Concern Assessment, 12-Month Window & Reporting",
+          "text": "• Management's assessment (ISA 570 Revised 2024, published April 2025): strengthens auditor evaluation of management's going concern assessment over at least 12 months from the date of approval of the financial statements.\n• Reporting outcomes: adequate disclosure of Material Uncertainty → unmodified opinion with dedicated 'Material Uncertainty Related to Going Concern' section; inadequate disclosure → Qualified or Adverse opinion; inappropriate going concern basis → Adverse opinion (converged with China CSA 1324).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 580",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 580 Written Representations",
+      "display_title": "Written Representations",
+      "series_badge": "ISA 580",
+      "doc_no": "ISA 580",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to obtain written representations from management and, where appropriate, those charged with governance.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1341号",
+          "ISA 580 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to obtain written representations from management and, where appropriate, those charged with governance.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 600 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 600 (Revised) Special Considerations—Audits of Group Financial Statements (Including the Work of Component Auditors)",
+      "display_title": "Special Considerations—Audits of Group Financial Statements (Including the Work of Component Auditors)",
+      "series_badge": "ISA 600 (Revised)",
+      "doc_no": "ISA 600 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with special considerations that apply to a group audit, including a risk-based approach to scoping components and directing, supervising, and reviewing component auditors.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1401号",
+          "ISA 600 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with special considerations that apply to a group audit, including a risk-based approach to scoping components and directing, supervising, and reviewing component auditors.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 600.16–59",
+          "heading": "Risk-Based Group Audits & Component Auditors",
+          "text": "• Removes the legacy 'significant component' full-scope bright line in favour of a risk-based scoping approach aligned with ISA 315.\n• Group engagement partner retains sole responsibility for direction, supervision, and review of component auditors, determining component performance materiality (lower than group materiality), and evaluating sufficiency of group audit evidence (converged with China CSA 1401).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 610 (Revised 2013)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 610 (Revised 2013) Using the Work of Internal Auditors",
+      "display_title": "Using the Work of Internal Auditors",
+      "series_badge": "ISA 610 (Revised 2013)",
+      "doc_no": "ISA 610 (Revised 2013)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the external auditor's responsibilities if using the work of internal auditors, including obtaining audit evidence and direct assistance.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1411号",
+          "ISA 610 (Revised 2013) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the external auditor's responsibilities if using the work of internal auditors, including obtaining audit evidence and direct assistance.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 620",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 620 Using the Work of an Auditor's Expert",
+      "display_title": "Using the Work of an Auditor's Expert",
+      "series_badge": "ISA 620",
+      "doc_no": "ISA 620",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities relating to the work of an individual or organization in a field of expertise other than accounting or auditing, when used to obtain sufficient appropriate audit evidence.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1421号",
+          "ISA 620 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities relating to the work of an individual or organization in a field of expertise other than accounting or auditing, when used to obtain sufficient appropriate audit evidence.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 700 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 700 (Revised) Forming an Opinion and Reporting on Financial Statements",
+      "display_title": "Forming an Opinion and Reporting on Financial Statements",
+      "series_badge": "ISA 700 (Revised)",
+      "doc_no": "ISA 700 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to form an opinion on the financial statements and the form and content of the auditor's report.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1501号",
+          "ISA 700 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to form an opinion on the financial statements and the form and content of the auditor's report.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 700.20–49",
+          "heading": "Auditor's Report Structure & Unmodified Opinion",
+          "text": "• Standardised report order (ISA 700.23–45): (1) Opinion (placed FIRST); (2) Basis for Opinion (including IESBA independence statement); (3) Going Concern (where applicable); (4) Key Audit Matters (ISA 701 for listed entities); (5) Other Information (ISA 720); (6) Responsibilities of Management & TCWG; (7) Auditor's Responsibilities (converged with China CSA 1501).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 701",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 701 Communicating Key Audit Matters in the Independent Auditor's Report",
+      "display_title": "Communicating Key Audit Matters in the Independent Auditor's Report",
+      "series_badge": "ISA 701",
+      "doc_no": "ISA 701",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to communicate key audit matters (KAM) in the auditor's report for listed entities and where required.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1504号",
+          "ISA 701 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to communicate key audit matters (KAM) in the auditor's report for listed entities and where required.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 701.9–16",
+          "heading": "Key Audit Matters (KAM) Selection & Description",
+          "text": "• Mandatory for audits of complete sets of general purpose financial statements of listed entities (ISA 701.5).\n• Selection funnel (ISA 701.9–10): matters communicated with TCWG → matters requiring significant auditor attention (high risk, significant judgements/estimates, significant events) → matters of MOST significance in the current period audit.\n• Description (ISA 701.13): explain WHY the matter was a KAM and HOW it was addressed in the audit (not a substitute for a modified opinion, converged with China CSA 1504).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 705 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 705 (Revised) Modifications to the Opinion in the Independent Auditor's Report",
+      "display_title": "Modifications to the Opinion in the Independent Auditor's Report",
+      "series_badge": "ISA 705 (Revised)",
+      "doc_no": "ISA 705 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibility to issue an appropriate report when a modification to the opinion (qualified, adverse, or disclaimer of opinion) is necessary.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1502号",
+          "ISA 705 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibility to issue an appropriate report when a modification to the opinion (qualified, adverse, or disclaimer of opinion) is necessary.",
+          "seq": 0
+        },
+        {
+          "no": "ISA 705.6–15",
+          "heading": "Modified Opinions Matrix (Material vs. Pervasive)",
+          "text": "• Financial statements are materially misstated: Material but NOT pervasive → Qualified Opinion (保留意见); Material AND pervasive → Adverse Opinion (否定意见).\n• Inability to obtain sufficient appropriate audit evidence (scope limitation): Material but NOT pervasive → Qualified Opinion; Material AND pervasive → Disclaimer of Opinion (无法表示意见) (converged with China CSA 1502).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISA 706 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 706 (Revised) Emphasis of Matter Paragraphs and Other Matter Paragraphs in the Independent Auditor's Report",
+      "display_title": "Emphasis of Matter Paragraphs and Other Matter Paragraphs in the Independent Auditor's Report",
+      "series_badge": "ISA 706 (Revised)",
+      "doc_no": "ISA 706 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with additional communication in the auditor's report when the auditor considers it necessary to draw users' attention to a matter via an Emphasis of Matter or Other Matter paragraph.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1503号",
+          "ISA 706 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with additional communication in the auditor's report when the auditor considers it necessary to draw users' attention to a matter via an Emphasis of Matter or Other Matter paragraph.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 710",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 710 Comparative Information—Corresponding Figures and Comparative Financial Statements",
+      "display_title": "Comparative Information—Corresponding Figures and Comparative Financial Statements",
+      "series_badge": "ISA 710",
+      "doc_no": "ISA 710",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities relating to comparative information in an audit of financial statements.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1511号",
+          "ISA 710 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities relating to comparative information in an audit of financial statements.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 720 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 720 (Revised) The Auditor's Responsibilities Relating to Other Information",
+      "display_title": "The Auditor's Responsibilities Relating to Other Information",
+      "series_badge": "ISA 720 (Revised)",
+      "doc_no": "ISA 720 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities relating to other information, whether financial or non-financial information, included in an entity's annual report.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1521号",
+          "ISA 720 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities relating to other information, whether financial or non-financial information, included in an entity's annual report.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 800 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 800 (Revised) Special Considerations—Audits of Financial Statements Prepared in Accordance with Special Purpose Frameworks",
+      "display_title": "Special Considerations—Audits of Financial Statements Prepared in Accordance with Special Purpose Frameworks",
+      "series_badge": "ISA 800 (Revised)",
+      "doc_no": "ISA 800 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with special considerations in the application of ISAs to an audit of financial statements prepared in accordance with a special purpose framework.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1601号",
+          "ISA 800 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with special considerations in the application of ISAs to an audit of financial statements prepared in accordance with a special purpose framework.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 805 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 805 (Revised) Special Considerations—Audits of Single Financial Statements and Specific Elements, Accounts or Items of a Financial Statement",
+      "display_title": "Special Considerations—Audits of Single Financial Statements and Specific Elements, Accounts or Items of a Financial Statement",
+      "series_badge": "ISA 805 (Revised)",
+      "doc_no": "ISA 805 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with special considerations in the application of ISAs to an audit of a single financial statement or of a specific element, account, or item of a financial statement.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1603号",
+          "ISA 805 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with special considerations in the application of ISAs to an audit of a single financial statement or of a specific element, account, or item of a financial statement.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA 810 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISA 810 (Revised) Engagements to Report on Summary Financial Statements",
+      "display_title": "Engagements to Report on Summary Financial Statements",
+      "series_badge": "ISA 810 (Revised)",
+      "doc_no": "ISA 810 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the auditor's responsibilities relating to an engagement to report on summary financial statements derived from financial statements audited in accordance with ISAs.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师审计准则第1604号",
+          "ISA 810 (Revised) 与我国审计准则直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the auditor's responsibilities relating to an engagement to report on summary financial statements derived from financial statements audited in accordance with ISAs.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISA for LCE",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "International Standard on Auditing for Audits of Financial Statements of Less Complex Entities (ISA for LCE)",
+      "display_title": "Audits of Financial Statements of Less Complex Entities (ISA for LCE)",
+      "series_badge": "ISA for LCE",
+      "doc_no": "ISA for LCE",
+      "issuer": "IAASB",
+      "pub_date": "2023-12-06",
+      "effective_date": "2025-12-15",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Standalone global auditing standard designed specifically for audits of financial statements of less complex entities (LCEs), providing a proportionate risk-based audit framework effective for periods beginning on or after 15 Dec 2025.",
+      "cited_codes": [
+        "ISA 200",
+        "ISQM 1"
+      ],
+      "cas_links": [],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Standalone global auditing standard designed specifically for audits of financial statements of less complex entities (LCEs), providing a proportionate risk-based audit framework effective for periods beginning on or after 15 Dec 2025.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISRE 2400 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISRE 2400 (Revised) Engagements to Review Historical Financial Statements",
+      "display_title": "Engagements to Review Historical Financial Statements",
+      "series_badge": "ISRE 2400 (Revised)",
+      "doc_no": "ISRE 2400 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the practitioner's responsibilities when engaged to perform a review of historical financial statements when the practitioner is not the auditor of the entity's financial statements.",
+      "cited_codes": [
+        "Assurance Framework",
+        "ISRE 2410"
+      ],
+      "cas_links": [
+        [
+          "中国注册会计师审阅准则第2101号",
+          "ISRE 2400 与我国财务报表审阅准则对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the practitioner's responsibilities when engaged to perform a review of historical financial statements when the practitioner is not the auditor of the entity's financial statements.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISRE 2410",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISRE 2410 Review of Interim Financial Information Performed by the Independent Auditor of the Entity",
+      "display_title": "Review of Interim Financial Information by the Independent Auditor",
+      "series_badge": "ISRE 2410",
+      "doc_no": "ISRE 2410",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Establishes standards and provides guidance on the auditor's professional responsibilities when undertaking an engagement to review interim financial information of an audit client.",
+      "cited_codes": [
+        "ISRE 2400 (Revised)",
+        "IAS 34"
+      ],
+      "cas_links": [
+        [
+          "中国注册会计师审阅准则第2101号",
+          "中期财务信息审阅对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Establishes standards and provides guidance on the auditor's professional responsibilities when undertaking an engagement to review interim financial information of an audit client.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISAE 3000 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISAE 3000 (Revised) Assurance Engagements Other than Audits or Reviews of Historical Financial Information",
+      "display_title": "Assurance Engagements Other than Audits or Reviews of Historical Financial Information",
+      "series_badge": "ISAE 3000 (Revised)",
+      "doc_no": "ISAE 3000 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Umbrella standard for reasonable and limited assurance engagements other than audits or reviews of historical financial information.",
+      "cited_codes": [
+        "Assurance Framework",
+        "ISAE 3402",
+        "ISAE 3410",
+        "ISSA 5000"
+      ],
+      "cas_links": [
+        [
+          "中国注册会计师其他鉴证业务准则第3101号",
+          "ISAE 3000 与我国其他鉴证业务准则第3101号直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Umbrella standard for reasonable and limited assurance engagements other than audits or reviews of historical financial information.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISAE 3400",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISAE 3400 The Examination of Prospective Financial Information",
+      "display_title": "The Examination of Prospective Financial Information",
+      "series_badge": "ISAE 3400",
+      "doc_no": "ISAE 3400",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Establishes standards and provides guidance on engagements to examine and report on prospective financial information (forecasts and projections).",
+      "cited_codes": [
+        "ISAE 3000 (Revised)"
+      ],
+      "cas_links": [
+        [
+          "中国注册会计师其他鉴证业务准则第3111号",
+          "ISAE 3400 与我国预测性财务信息审核第3111号直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Establishes standards and provides guidance on engagements to examine and report on prospective financial information (forecasts and projections).",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISAE 3402",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISAE 3402 Assurance Reports on Controls at a Service Organization",
+      "display_title": "Assurance Reports on Controls at a Service Organization",
+      "series_badge": "ISAE 3402",
+      "doc_no": "ISAE 3402",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with assurance engagements undertaken by a professional accountant in public practice to provide a report for use by user entities and their auditors on the controls at a service organization (Type 1 & Type 2).",
+      "cited_codes": [
+        "ISAE 3000 (Revised)",
+        "ISA 402"
+      ],
+      "cas_links": [],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with assurance engagements undertaken by a professional accountant in public practice to provide a report for use by user entities and their auditors on the controls at a service organization (Type 1 & Type 2).",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISAE 3410",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISAE 3410 Assurance Engagements on Greenhouse Gas Statements",
+      "display_title": "Assurance Engagements on Greenhouse Gas Statements",
+      "series_badge": "ISAE 3410",
+      "doc_no": "ISAE 3410",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with assurance engagements to report on an entity's greenhouse gas (GHG) statement, complementing ISAE 3000 (Revised) and ISSA 5000.",
+      "cited_codes": [
+        "ISAE 3000 (Revised)",
+        "ISSA 5000",
+        "IFRS S2"
+      ],
+      "cas_links": [],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with assurance engagements to report on an entity's greenhouse gas (GHG) statement, complementing ISAE 3000 (Revised) and ISSA 5000.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISAE 3420",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISAE 3420 Assurance Engagements to Report on the Compilation of Pro Forma Financial Information Included in a Prospectus",
+      "display_title": "Assurance Reports on Pro Forma Financial Information in a Prospectus",
+      "series_badge": "ISAE 3420",
+      "doc_no": "ISAE 3420",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with reasonable assurance engagements undertaken by a practitioner to report on the responsible party's compilation of pro forma financial information included in a prospectus.",
+      "cited_codes": [
+        "ISAE 3000 (Revised)"
+      ],
+      "cas_links": [],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with reasonable assurance engagements undertaken by a practitioner to report on the responsible party's compilation of pro forma financial information included in a prospectus.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISSA 5000",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISSA 5000 General Requirements for Sustainability Assurance Engagements",
+      "display_title": "General Requirements for Sustainability Assurance Engagements",
+      "series_badge": "ISSA 5000",
+      "doc_no": "ISSA 5000",
+      "issuer": "IAASB",
+      "pub_date": "2024-11-12",
+      "effective_date": "2026-12-15",
+      "status": "upcoming",
+      "version_level": "upcoming",
+      "version_note": "Effective for sustainability assurance engagements for periods beginning on or after 15 Dec 2026; early adoption permitted.",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Overarching global standard for limited and reasonable sustainability assurance engagements across all sustainability reporting frameworks (including IFRS S1/S2), effective for periods beginning on or after 15 Dec 2026.",
+      "cited_codes": [
+        "IFRS S1",
+        "IFRS S2",
+        "ISQM 1",
+        "IESBA Code Part 5 (IESSA)",
+        "ISAE 3000 (Revised)"
+      ],
+      "cas_links": [
+        [
+          "可持续信息鉴证业务准则第6101号——基本准则（试行）",
+          "ISSA 5000 与我国可持续信息鉴证基本准则第6101号直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Overarching global standard for limited and reasonable sustainability assurance engagements across all sustainability reporting frameworks (including IFRS S1/S2), effective for periods beginning on or after 15 Dec 2026.",
+          "seq": 0
+        },
+        {
+          "no": "ISSA 5000 (Eff. Dec 2026)",
+          "heading": "Sustainability Assurance: Limited vs. Reasonable & Value Chain",
+          "text": "• Profession-agnostic, framework-neutral global standard for sustainability assurance engagements (applicable to IFRS S1/S2, ESRS, GRI, etc.) effective for periods beginning on or after 15 Dec 2026.\n• Covers both Limited Assurance (primarily inquiry and analytical procedures) and Reasonable Assurance (tests of controls and substantive procedures), addressing double vs. financial materiality, forward-looking estimates, value chain data, and fraud/greenwashing risks.\n• Preconditions: requires firm quality management at least as demanding as ISQM 1 and ethical/independence requirements at least as demanding as IESBA Part 5 (IESSA) (converged with China Sustainability Assurance Standard No. 6101).",
+          "seq": 1
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: upcoming. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 2
+        }
+      ]
+    },
+    {
+      "code": "ISRS 4400 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISRS 4400 (Revised) Agreed-Upon Procedures Engagements",
+      "display_title": "Agreed-Upon Procedures Engagements",
+      "series_badge": "ISRS 4400 (Revised)",
+      "doc_no": "ISRS 4400 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the practitioner's responsibilities when engaged to perform an agreed-upon procedures (AUP) engagement and the form and content of the AUP report.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师相关服务准则第4101号",
+          "ISRS 4400 与我国商定程序准则第4101号直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the practitioner's responsibilities when engaged to perform an agreed-upon procedures (AUP) engagement and the form and content of the AUP report.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    },
+    {
+      "code": "ISRS 4410 (Revised)",
+      "framework": "INTL",
+      "domain": "audit",
+      "doc_type": "standard",
+      "title": "ISRS 4410 (Revised) Compilation Engagements",
+      "display_title": "Compilation Engagements",
+      "series_badge": "ISRS 4410 (Revised)",
+      "doc_no": "ISRS 4410 (Revised)",
+      "issuer": "IAASB",
+      "pub_date": "2026-09-30",
+      "effective_date": "2026-01-01",
+      "status": "in_force",
+      "version_level": "",
+      "version_note": "",
+      "source_name": "IAASB 2026 Handbook",
+      "source_url": "https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance",
+      "source_kind": "official",
+      "summary": "Deals with the practitioner's responsibilities when engaged to assist management with the preparation and presentation of historical financial information without obtaining any assurance on that information.",
+      "cited_codes": [],
+      "cas_links": [
+        [
+          "中国注册会计师相关服务准则第4111号",
+          "ISRS 4410 与我国代编财务信息准则第4111号直接对照"
+        ]
+      ],
+      "articles": [
+        {
+          "no": "Overview",
+          "heading": "Scope & Key Requirements (Public Summary)",
+          "text": "Deals with the practitioner's responsibilities when engaged to assist management with the preparation and presentation of historical financial information without obtaining any assurance on that information.",
+          "seq": 0
+        },
+        {
+          "no": "Official Access",
+          "heading": "Official Handbook & Reference Entry",
+          "text": "Official source (IAASB 2026 Handbook): https://www.iaasb.org/publications/2026-handbook-international-quality-management-auditing-review-sustainability-and-other-assurance\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "seq": 1
+        }
+      ]
+    }
+  ]
+}
