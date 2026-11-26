@@ -146,28 +146,34 @@
           "seq": 0
         },
         {
+          "no": "IFRS 1.6–21",
+          "heading": "First-Time Adoption: Opening IFRS Statement & Exemptions",
+          "text": "Prepare an opening IFRS statement of financial position at the date of transition applying IFRS policies retrospectively (IFRS 1.7–10), subject to mandatory exceptions (estimates, derecognition, hedge accounting, NCI, IFRS 1.B1–B12) and optional exemptions (deemed cost for PPE, cumulative translation differences, leases, IFRS 1.C–D); present equity and profit reconciliations from previous GAAP (IFRS 1.24, converged with China CAS 38).",
+          "seq": 1
+        },
+        {
           "no": "History 1",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board (Board) adopted SIC‑8 First-time Application of IASs as the Primary Basis of Accounting, which had been issued by the Standing Interpretations Committee of the International Accounting Standards Committee in July 1998.\n\nIn June 2003 the Board issued IFRS 1 First-time Adoption of International Financial Reporting Standards to replace SIC‑8. IAS 1 Presentation of Financial Statements (as revised in 2007) amended the terminology used throughout IFRS Standards, including IFRS 1.\n\nThe Board restructured IFRS 1 in November 2008. In December 2010 the Board amended IFRS 1 to reflect that a first-time adopter would restate past transactions from the date of transition to IFRS Standards instead of at 1 January 2004.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "History 2",
           "heading": "Standard History & Amendments",
           "text": "Since it was issued in 2003, IFRS 1 was amended to accommodate first-time adoption requirements resulting from new or amended Standards. Most recently, IFRS 1 was amended by IFRS 17 Insurance Contracts (issued May 2017), which added an exception to the retrospective application of IFRS 17 to require that first-time adopters apply the transition provisions in IFRS 17 to contracts within the scope of IFRS 17.\n\nOther Standards have made minor amendments to IFRS 1. They include Improvements to IFRSs (issued May 2010), Revised IFRS 3 Business Combinations (issued January 2008), Severe Hyperinflation and Removal of Fixed Dates for First-time Adopters (Amendments to IFRS 1) (issued December 2010), IFRS 10 Consolidated Financial Statements (issued May 2011), IFRS 11 Joint Arrangements (issued May 2011), IFRS 13 Fair Value Measurement (issued May 2011), IAS 19 Employee Benefits (issued June 2011), Presentation of Items of Other Comprehensive Income (Amendments to IAS 1) (issued June 2011), IFRIC 20 Stripping Costs in the Production Phase of a Surface Mine (issued October 2011), Government Loans (issued March 2012), Annual Improvements to IFRSs 2009–2011 Cycle (issued May 2012), Consolidated Financial Statements, Joint Arrangements and Disclosure of Interests in Other Entities: Transition Guidance (Amendments to IFRS 10, IFRS 11 and IFRS 12) (issued June 2012), Investment Entities (Amendments to IFRS 10, IFRS 12 and IAS 27) (issued October 2012), IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39) (issued November 2013), IFRS 14 Regulatory Deferral Accounts (issued January 2014), Accounting for Acquisitions of Interests in Joint Operations (Amendments to IFRS 11) (issued May 2014), IFRS 15 Revenue from Contracts with Customers (issued May 2014), IFRS 9 Financial Instruments (issued July 2014), Equity Method in Separate Financial Statements (Amendments to IAS 27) (issued August 2014), IFRS 16 Leases (issued January 2016), Annual Improvements to IFRS Standards 2014–2016 Cycle (issued December 2016), which deleted several lapsed short-term exemptions, IFRIC 22 Foreign Currency Transactions and Advance Consideration (issued December 2016), IFRIC 23 Uncertainty over Income Tax Treatments (issued June 2017), Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018), Annual Improvements to IFRS Standards 2018–2020 (issued May 2020), Deferred Tax related to Assets and Liabilities arising from a Single Transaction (issued May 2021), Lack of Exchangeability (Amendments to IAS 21) (issued August 2023), Annual Improvements to IFRS Accounting Standards—Volume 11 (issued July 2024), IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024) and IFRS 19 Subsidiaries without Public Accountability: Disclosures (issued in May 2024).",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Annual Improvements to IFRS Accounting Standards—Hedge Accounting by a First-time Adopter (Amendments to IFRS 1)\n• Borrowing Costs (Amendments to IFRS 1)\n• Cost of an Investment in a Subsidiary (Amendments to IFRS 1 and IAS 27)\n• Deletion of Short-Term Exemptions for First-Time Adopters (Amendments to IFRS 1)\n• Government Loans (Amendments to IFRS 1)\n• Limited Exemption from Capital Comparative (Amendments to IFRS 1)\n• Meaning of Effective IFRSs (Amendments to IFRS 1)\n• Removal of Fixed Dates (Amendments to IFRS 1)\n• Repeated Application of IFRS 1\n• Severe Hyperinflation (Amendments to IFRS 1)\n• Subsidiary as a First-time Adopter (Amendment to IFRS 1)\n• Subsidiary as a First-time Adopter (IFRS 1)\n\n[Unconsolidated amendments]\n• Absence de convertibilité (Modifications d’IAS 21)\n• Ausencia de Convertibilidad (Modificaciones a la NIC 21)\n• Impuestos Diferidos relacionados con Activos y Pasivos que surgen de una Transacción Única (Modificaciones a la NIC 12)\n• Impôt différé rattaché à des actifs et des passifs issus d’une même transaction\n• Nemogućnosti razmjene - Izmjene i dopune MRS-a 21\n• Неможливість обміну: Зміни, що вносяться до МСБО 21\n• Отложенный налог, связанный с активами и обязательствами, которые возникают в результате одной операции Поправки к МСФО (IAS) 12\n• Отсутствие возможности обмена валют Поправки к МСФО (IAS) 21\n\n[Implementation support]\n• IFRS 1 supporting material",
-          "seq": 3
+          "seq": 4
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifrs-1-first-time-adoption-of-ifrs/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 4
+          "seq": 5
         }
       ],
       "cited_codes": [
@@ -513,22 +519,28 @@
           "seq": 0
         },
         {
+          "no": "IFRS 6.6–21",
+          "heading": "Exploration & Evaluation Assets and Impairment Triggers",
+          "text": "Permits entities to retain existing accounting policies for exploration and evaluation (E&E) expenditures pending comprehensive IASB review (IFRS 6.9); requires testing E&E assets for impairment whenever facts and circumstances indicate carrying amount may exceed recoverable amount (IFRS 6.18–20, e.g., expiring rights, no budgeted further exploration).",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In December 2004 the International Accounting Standards Board issued IFRS 6 Exploration for and Evaluation of Mineral Resources.\n\nOther Standards have made minor consequential amendments to IFRS 6, including Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018) and IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Extractive Activities\n• Extractive Activities—Discussion Paper 2010\n\n[Unconsolidated amendments]\n• Amendments to IFRS 1 and IFRS 6\n• Amendments to References to the Conceptual Framework in IFRS Standards Amendments to IFRS Standards\n• Amendments to References to the Conceptual Framework in IFRS Standards Amendments to IFRS Standards\n• Amendments to References to the Conceptual Framework in IFRS Standards Amendments to bases for conclusions on IFRS Standards and IFRS practice statements\n• IFRS 1 First-time Adoption of International Financial Reporting Standards: Basis for Conclusions\n• IFRS 8 Operating Segments\n• IFRS 8 Operating Segments: Basis for Conclusions\n• Modificaciones a las Referencias al Marco Conceptual en las Normas NIIF (Parte A)\n• Modificaciones a las Referencias al Marco Conceptual en las Normas NIIF (Parte C)\n\n[Implementation support]\n• IFRS 6 supporting material",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifrs-6-exploration-for-and-evaluation-of-mineral-resources/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -1041,28 +1053,34 @@
           "seq": 0
         },
         {
+          "no": "IFRS 12.7–31",
+          "heading": "Disclosures of Interests in Subsidiaries, JVs, Associates & Structured Entities",
+          "text": "Requires disclosure of significant judgements in determining control, joint control, or significant influence (IFRS 12.7–9), summarised financial information for material NCI, joint ventures, and associates (IFRS 12.12, 21), and nature/risks of interests in unconsolidated structured entities (IFRS 12.24–31, converged with China CAS 41).",
+          "seq": 1
+        },
+        {
           "no": "History 1",
           "heading": "Standard History & Amendments",
           "text": "In May 2011 the International Accounting Standards Board issued IFRS 12 Disclosure of Interests in Other Entities. IFRS 12 replaced the disclosure requirements in IAS 27 Consolidated and Separate Financial Statements, IAS 28 Investments in Associates and IAS 31 Interests in Joint Ventures.\n\nIn June 2012 IFRS 12 was amended by Consolidated Financial Statements, Joint Arrangements and Disclosure of Interests in Other Entities: Transition Guidance (Amendments to IFRS 10, IFRS 11 and IFRS 12). These amendments provided additional transition relief in IFRS 12, limiting the requirement to present adjusted comparative information to only the annual period immediately preceding the first annual period for which IFRS 12 is applied. Furthermore, for disclosures related to unconsolidated structured entities, the amendments removed the requirement to present comparative information for periods before IFRS 12 is first applied.\n\nIn October 2012 Investment Entities (Amendments to IFRS 10, IFRS 12 and IAS 27) introduced new disclosure requirements for investment entities that, in accordance with IFRS 10 Consolidated Financial Statements, measure their subsidiaries at fair value through profit or loss instead of consolidating them.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "History 2",
           "heading": "Standard History & Amendments",
           "text": "Other Standards have made minor amendments to IFRS 12, including Investment Entities: Applying the Consolidation Exception (Amendments to IFRS 10, IFRS 12 and IAS 28) (issued December 2014), Annual Improvements to IFRS® Standards 2014–2016 Cycle (issued December 2016), Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018) and IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024).",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Clarification of the Scope of the Disclosure Requirements in IFRS 12\n• Consolidation and Disclosure\n• Investment Entities (Amendments to IFRS 10, IFRS 12 and IAS 27)\n• Investment Entities: Applying the Consolidation Exception\n• Joint Arrangements\n• Liabilities in Relation to a Joint Operator’s Interest in a Joint Operation (IFRS 11)\n• Post-implementation Review of IFRS 10, IFRS 11 and IFRS 12\n• Transition and Guidance (Amendments to IFRS 10)\n\n[Related IFRS Standards]\n• IAS 28 Investments in Associates and Joint Ventures\n• IFRS 10 Consolidated Financial Statements\n• IFRS 11 Joint Arrangements\n\n[Implementation support]\n• IFRS 12 supporting material",
-          "seq": 3
+          "seq": 4
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifrs-12-disclosure-of-interests-in-other-entities/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 4
+          "seq": 5
         }
       ],
       "cited_codes": [
@@ -1776,34 +1794,40 @@
           "seq": 0
         },
         {
+          "no": "IAS 1.10–138",
+          "heading": "Complete Set of Financial Statements & Going Concern (Superseded by IFRS 18 in 2027)",
+          "text": "Prescribes overall requirements for complete financial statements, fair presentation, going concern (IAS 1.25–26), current vs. non-current liability classification including covenant conditions (IAS 1.69–76, amended 2020/2022), and material accounting policy disclosures (IAS 1.117). Replaced by IFRS 18 for annual periods beginning on or after 1 January 2027.",
+          "seq": 1
+        },
+        {
           "no": "History 1",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board (IASB) adopted IAS 1 Presentation of Financial Statements, which had originally been issued by the International Accounting Standards Committee in September 1997. IAS 1 Presentation of Financial Statements replaced IAS 1 Disclosure of Accounting Policies (issued in 1975), IAS 5 Information to be Disclosed in Financial Statements (originally approved in 1977) and IAS 13 Presentation of Current Assets and Current Liabilities (approved in 1979).\n\nIn December 2003 the IASB issued a revised IAS 1 as part of its initial agenda of technical projects. The IASB issued an amended IAS 1 in September 2007, which included an amendment to the presentation of owner changes in equity and comprehensive income and a change in terminology in the titles of financial statements. In June 2011 the IASB amended IAS 1 to improve how items of other income comprehensive income should be presented.\n\nIn December 2014 IAS 1 was amended by Disclosure Initiative (Amendments to IAS 1), which addressed concerns expressed about some of the existing presentation and disclosure requirements in IAS 1 and ensured that entities are able to use judgement when applying those requirements. In addition, the amendments clarified the requirements in paragraph 82A of IAS 1.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "History 2",
           "heading": "Standard History & Amendments",
           "text": "In October 2018 the IASB issued Definition of Material (Amendments to IAS 1 and IAS 8). This amendment clarified the definition of material and how it should be applied by (a) including in the definition guidance that until now has featured elsewhere in IFRS Standards; (b) improving the explanations accompanying the definition; and (c) ensuring that the definition of material is consistent across all IFRS Standards.\n\nIn February 2021 the IASB issued Disclosure of Accounting Policies which amended IAS 1 and IFRS Practice Statement 2 Making Materiality Judgements. The amendment amended IAS 1 to replace the requirement for entities to disclose their significant accounting policies with the requirement to disclose their material accounting policy information.\n\nIn October 2022, the IASB issued Non-current Liabilities with Covenants. The amendments improved the information an entity provides when its right to defer settlement of a liability for at least twelve months is subject to compliance with covenants. The amendments also responded to stakeholders’ concerns about the classification of such a liability as current or non-current.",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "History 3",
           "heading": "Standard History & Amendments",
           "text": "Other Standards have made minor consequential amendments to IAS 1. They include Improvement to IFRSs (issued April 2009), Improvement to IFRSs (issued May 2010), IFRS 10 Consolidated Financial Statements (issued May 2011), IFRS 12 Disclosures of Interests in Other Entities (issued May 2011), IFRS 13 Fair Value Measurement (issued May 2011), IAS 19 Employee Benefits (issued June 2011), Annual Improvements to IFRSs 2009–2011 Cycle (issued May 2012), IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39) (issued November 2013), IFRS 15 Revenue from Contracts with Customers (issued May 2014), Agriculture: Bearer Plants (Amendments to IAS 16 and IAS 41) (issued June 2014), IFRS 9 Financial Instruments (issued July 2014), IFRS 16 Leases (issued January 2016), Disclosure Initiative (Amendments to IAS 7) (issued January 2016), IFRS 17 Insurance Contracts (issued May 2017), Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018) and Amendments to IFRS 17 (issued June 2020).",
-          "seq": 3
+          "seq": 4
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related active projects]\n• Financial Instruments with Characteristics of Equity\n\n[Related completed projects]\n• Clarification of the Requirements for Comparative Information (Amendments to IAS 1)\n• Classification of Liabilities as Current or Non-current (Amendments to IAS 1)\n• Definition of Accounting Estimates (Amendments to IAS 8)\n• Disclosure Initiative (Amendments to IAS 1)\n• Disclosure Initiative (Amendments to IAS 7)\n• Disclosure Initiative—Accounting Policies\n• Disclosure Initiative—Definition of Material (Amendments to IAS 1 and IAS 8)\n• Disclosure Initiative—Principles of Disclosure\n• Disclosure Initiative—Targeted Standards-level Review of Disclosures\n• Disclosures about Uncertainties in the Financial Statements\n• IFRS Accounting Taxonomy Update—Amendments to IAS 1, IAS 8 and IFRS Practice Statement 2\n• IFRS Accounting Taxonomy Update—Amendments to IFRS 16 and IAS 1\n• IFRS Accounting Taxonomy—IFRS 18 Presentation and Disclosure in Financial Statements\n• Joint Financial Statement Presentation (Replacement of IAS 1)\n• Non-current Liabilities with Covenants (Amendments to IAS 1)\n• Presentation of Items of Other Comprehensive Income (Amendments to IAS 1)\n• Presentation of Liabilities or Assets Related to Uncertain Tax Treatments (IAS 1)\n• Presentation of interest revenue for particular financial instruments (IFRS 9 and IAS 1)\n• Puttable Financial Instruments and Obligations Arising on Liquidation (Amendments to IAS 32 and IAS 1)\n• Revised IAS 1 Presentation of Financial Statements: Phase A\n• Supply Chain Financing Arrangements—Reverse Factoring\n\n[Related IFRIC Interpretations]\n• IFRIC 1 Changes in Existing Decommissioning, Restoration and Similar Liabilities\n\n[Implementation support]\n• IAS 1 supporting material",
-          "seq": 4
+          "seq": 5
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ias-1-presentation-of-financial-statements/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 5
+          "seq": 6
         }
       ],
       "cited_codes": [
@@ -2833,22 +2857,28 @@
           "seq": 0
         },
         {
+          "no": "IAS 26.13–36",
+          "heading": "Defined Contribution vs. Defined Benefit Retirement Plan Reporting",
+          "text": "Specifies reporting by retirement benefit plans themselves: defined contribution plans report net assets available for benefits and funding policy (IAS 26.13); defined benefit plans additionally report the actuarial present value of promised retirement benefits, distinguishing vested and non-vested benefits (IAS 26.17–26, aligned with China CAS 10).",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board adopted IAS 26 Accounting and Reporting by Retirement Benefit Plans, which had originally been issued by the International Accounting Standards Committee in January 1987.\n\nOther Standards have made minor consequential amendments to IAS 26, including Disclosure of Accounting Policies (issued February 2021).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Implementation support]\n• IAS 26 supporting material",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ias-26-accounting-and-reporting-by-retirement-benefit-plans/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [],
@@ -2883,28 +2913,34 @@
           "seq": 0
         },
         {
+          "no": "IAS 27.10–17",
+          "heading": "Separate Financial Statements: Investment Measurement Options",
+          "text": "In separate financial statements, account for investments in subsidiaries, joint ventures, and associates at: (a) cost, (b) in accordance with IFRS 9 (fair value), or (c) using the equity method under IAS 28 — applied consistently per category (IAS 27.10). Dividends are recognised in P&L when right to receive is established (IAS 27.12).",
+          "seq": 1
+        },
+        {
           "no": "History 1",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board (Board) adopted IAS 27 Consolidated Financial Statements and Accounting for Investments in Subsidiaries, which had originally been issued by the International Accounting Standards Committee in April 1989. That standard replaced IAS 3 Consolidated Financial Statements (issued in June 1976), except for those parts that dealt with accounting for investment in associates.\n\nIn December 2003 the Board issued a revised IAS 27 with a new title—Consolidated and Separate Financial Statements. This revised IAS 27 was part of the IASB’s initial agenda of technical projects. The revised IAS 27 also incorporated the guidance from two related Interpretations (SIC‑12 Consolidation—Special Purpose Entities and SIC‑33 Consolidation and Equity Method—Potential Voting Rights and Allocation of Ownership Interests).\n\nThe Board amended IAS 27 in January 2008 to address the accounting for non‑controlling interests and loss of control of a subsidiary as part of its business combinations project.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "History 2",
           "heading": "Standard History & Amendments",
           "text": "In May 2011 the Board issued a revised IAS 27 with a modified title—Separate Financial Statements. IFRS 10 Consolidated Financial Statements addresses the principle of control and the requirements relating to the preparation of consolidated financial statements.\n\nIn October 2012 IAS 27 was amended by Investment Entities (Amendments to IFRS 10, IFRS 12 and IAS 27). These amendments introduced new disclosure requirements for investment entities.\n\nIn August 2014 IAS 27 was amended by Equity Method in Separate Financial Statements (Amendments to IAS 27). These amendments allowed entities to use the equity method to account for investments in subsidiaries, joint ventures and associates in their separate financial statements.",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Business Combinations\n• Cost of an Investment in a Subsidiary (Amendments to IFRS 1 and IAS 27)\n• Equity Method in Separate Financial Statements (Amendments to IAS 27)\n• Investment Entities (Amendments to IFRS 10, IFRS 12 and IAS 27)\n• Investments in a Subsidiary Accounted for at Cost: Partial Disposal (IAS 27)\n• Investments in a Subsidiary Accounted for at Cost: Step Acquisition (IAS 27)\n• Merger between a Parent and Its Subsidiary in Separate Financial Statements (IAS 27)\n\n[Implementation support]\n• IAS 27 supporting material",
-          "seq": 3
+          "seq": 4
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ias-27-separate-financial-statements/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 4
+          "seq": 5
         }
       ],
       "cited_codes": [
@@ -3032,22 +3068,28 @@
           "seq": 0
         },
         {
+          "no": "IAS 29.3–38",
+          "heading": "Hyperinflationary Economies: Constant Purchasing Power Restatement",
+          "text": "Applies when functional currency is hyperinflationary (indicators include cumulative 3-year inflation approaching or exceeding 100%, IAS 29.3). Restate non-monetary items and all P&L items using a general price index to the measuring unit current at the reporting date; recognise net monetary position gain/loss in P&L (IAS 29.27).",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board adopted IAS 29 Financial Reporting in Hyperinflationary Economies, which had originally been issued by the International Accounting Standards Committee in July 1989.\n\nOther Standards have made minor consequential amendments to IAS 29. They include IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related active projects]\n• High Inflation: Scope of IAS 29\n\n[Related completed projects]\n• Assessing Indicators of Hyperinflationary Economies (IAS 29)\n• Cumulative Exchange Differences before a Foreign Operation becomes Hyperinflationary (IAS 21 & IAS 29)\n• High Inflation\n• Presenting Comparative Amounts when a Foreign Operation First becomes Hyperinflationary (IAS 21 & IAS 29)\n• Translation of a Hyperinflationary Foreign Operation—Presenting Exchange Differences (IAS 21 & IAS 29)\n\n[Related IFRIC Interpretations]\n• IFRIC 7 Applying the Restatement Approach under IAS 29 Financial Reporting in Hyperinflationary Economies\n\n[Implementation support]\n• IAS 29 supporting material",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ias-29-financial-reporting-in-hyperinflationary-economies/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -3241,22 +3283,28 @@
           "seq": 0
         },
         {
+          "no": "IAS 34.8–41",
+          "heading": "Interim Financial Reporting: Condensed Statements & Discrete-Period Approach",
+          "text": "Minimum content comprises condensed balance sheet, P&L/OCI, changes in equity, cash flows, and selected explanatory notes covering significant events/transactions since last annual report (IAS 34.8–15C). Apply the same accounting policies as annual statements on a discrete-period basis (e.g., do not smooth seasonal costs, IAS 34.28–39, converged with China CAS 32).",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board adopted IAS 34 Interim Financial Reporting, which had originally been issued by the International Accounting Standards Committee in 2000. IAS 34 that was issued in 2000 replaced the original version that was published in February 1998.\n\nIn April 2024 the IASB issued IFRS 18 Presentation and Disclosure in Financial Statements. The IASB amended IAS 34 to require an entity to disclose in the notes to its condensed interim financial statements the information about management-defined performance measures that an entity is required to disclose by IFRS 18.\n\nOther Standards have made minor consequential amendments to IAS 34. They include Improvements to IFRSs (issued May 2010), IFRS 13 Fair Value Measurement (issued May 2011), Presentation of Items of Other Comprehensive Income (Amendments to IAS 1) (issued June 2011), Annual Improvements to IFRSs 2009–2011 Cycle (issued May 2012), Investment Entities (Amendments to IFRS 10, IFRS 12 and IAS 27) (issued October 2012), IFRS 15 Revenue from Contracts with Customers (issued May 2014), Annual Improvements to IFRSs 2012–2014 Cycle (issued September 2014), Disclosure Initiative (Amendments to IAS 1) (issued December 2014), IFRS 16 Leases (issued January 2016), IFRS 17 Insurance Contracts (issued May 2017), Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018), Definition of Material (Amendments to IAS 1 and IAS 8) (issued October 2018), Disclosure of Accounting Policies (issued February 2021) and IFRS 19 Subsidiaries without Public Accountability: Disclosures (issued in May 2024).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Applicability of the Offsetting Amendments to IFRS 7 to Condensed Interim Financial Statements (Amendments to IFRS 7)\n• Disclosure of Information 'Elsewhere in the Interim Financial Report' (Amendments to IAS 34)\n• Improvements to IFRS 8 Operating Segments\n• Interim Financial Reporting and Segment Information for Total Assets and Liabilities (Amendments to IAS 34)\n\n[Related IFRIC Interpretations]\n• IFRIC 10 Interim Financial Reporting and Impairment\n\n[Implementation support]\n• IAS 34 supporting material",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ias-34-interim-financial-reporting/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -3716,28 +3764,34 @@
           "seq": 0
         },
         {
+          "no": "IAS 41.10–33",
+          "heading": "Biological Assets & Agricultural Produce at Fair Value Less Costs to Sell",
+          "text": "Measure biological assets (excluding bearer plants accounted for under IAS 16) and agricultural produce at harvest at Fair Value Less Costs to Sell, with changes recognised in P&L (IAS 41.12–13, 26). Cost model permitted only if fair value is clearly unreliable on initial recognition (IAS 41.30). Note: China CAS 5 uses Cost Model as default.",
+          "seq": 1
+        },
+        {
           "no": "History 1",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board (Board) adopted IAS 41 Agriculture, which had originally been issued by the International Accounting Standards Committee in February 2001.\n\nIn December 2003 the Board issued a revised IAS 41 as part of its initial agenda of technical projects.\n\nIn June 2014 the Board amended the scope of IAS 16 Property, Plant and Equipment to include bearer plants related to agricultural activity. Bearer plants related to agricultural activity were previously within the scope of IAS 41. However, IAS 41 applies to the produce growing on those bearer plants.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "History 2",
           "heading": "Standard History & Amendments",
           "text": "Other Standards have made minor consequential amendments to IAS 41, including IFRS 13 Fair Value Measurement (issued May 2011), IFRS 16 Leases (issued January 2016), Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018), Annual Improvements to IFRS Standards 2018–2020 (issued May 2020) and IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024).",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Agriculture: Bearer Plants (Amendments to IAS 16 and IAS 41)\n• Biological Assets Growing on Bearer Plants (IAS 41)\n• Subsequent Expenditure on Biological Assets (IAS 41 Agriculture)\n• Taxation in Fair Value Measurements (Amendment to IAS 41)\n\n[Related IFRS Standards]\n• IAS 36 Impairment of Assets\n• IFRS 13 Fair Value Measurement\n\n[Implementation support]\n• IAS 41 supporting material",
-          "seq": 3
+          "seq": 4
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ias-41-agriculture/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 4
+          "seq": 5
         }
       ],
       "cited_codes": [
@@ -3783,22 +3837,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 1.4–8",
+          "heading": "Changes in Decommissioning Liabilities",
+          "text": "Under Cost Model, add/deduct changes in decommissioning/restoration liabilities (IAS 37) to/from the related PPE asset cost (IAS 16) and depreciate prospectively; unwinding of discount is always recognised in P&L as finance cost.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In May 2004 the International Accounting Standards Board issued IFRIC 1 Changes in Existing Decommissioning, Restoration and Similar Liabilities. It was developed by the Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 1, including IFRS 16 Leases (issued January 2016) and IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 1 Presentation of Financial Statements\n• IAS 16 Property, Plant and Equipment\n• IAS 37 Provisions, Contingent Liabilities and Contingent Assets\n\n[Implementation support]\n• IFRIC 1 Changes in Existing Decommissioning, Restoration and Similar Liabilities",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-1-changes-in-existing-decommissioning-restoration-and-similar-liabilities/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -3836,22 +3896,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 2.5–11",
+          "heading": "Members' Shares in Co-operative Entities",
+          "text": "Members' shares are equity ONLY if the entity has an unconditional right to refuse redemption, or local law/charter prohibits redemption; otherwise classify as financial liabilities under IAS 32.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In November 2004 the International Accounting Standards Board issued IFRIC 2 Members’ Shares in Co‑operative Entities and Similar Instruments. It was developed by the Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 2. They include Annual Improvements to IFRSs 2009–2011 Cycle (issued May 2012), IFRS 13 Fair Value Measurement (issued May 2011), IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39) (issued November 2013) and IFRS 9 Financial Instruments (issued July 2014).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 32 Financial Instruments: Presentation\n\n[Implementation support]\n• IFRIC 2 Members’ Shares in Co-operative Entities and Similar Instruments",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-2-members-shares-in-cooperative-entities-and-similar-instruments/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -3944,22 +4010,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 5.7–13",
+          "heading": "Decommissioning & Rehabilitation Funds",
+          "text": "Recognise contributor's obligation to pay decommissioning costs as a liability and interest in the fund separately as a reimbursement right (IAS 37) unless contributor is not liable if the fund fails to pay.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In December 2004 the International Accounting Standards Board issued IFRIC 5 Rights to Interests arising from Decommissioning, Restoration and Environmental Rehabilitation Funds. It was developed by the Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 5. They include IFRS 10 Consolidated Financial Statements (issued May 2011), IFRS 11 Joint Arrangements (issued May 2011), IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39) (issued November 2013), IFRS 9 Financial Instruments (issued July 2014) and Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 37 Provisions, Contingent Liabilities and Contingent Assets\n\n[Implementation support]\n• IFRIC 5 Rights to Interests arising from Decommissioning Restoration and Environmental Rehabilitation Funds",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-5-rights-to-interests-arising-from-decommissioning-restoration-and-environmental/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4000,22 +4072,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 6.8–9",
+          "heading": "Waste Electrical & Electronic Equipment (WEEE) Liabilities",
+          "text": "Participation in the market during the measurement period is the obligating event under IAS 37.14 triggering recognition of a liability for historical household WEEE waste management.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In September 2005 the International Accounting Standards Board issued IFRIC 6 Liabilities arising from Participating in a Specific Market—Waste Electrical and Electronic Equipment. It was developed by the Interpretations Committee.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related active projects]\n• Provisions—Targeted Improvements\n\n[Related IFRS Standards]\n• IAS 37 Provisions, Contingent Liabilities and Contingent Assets\n\n[Implementation support]\n• IFRIC 6 Liabilities arising from Participating in a Specific Market—Waste Electrical and Electronic Equipment",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-6-liabilities-arising-from-participating-in-a-specific-market-waste-electrical/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4052,22 +4130,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 7.3–5",
+          "heading": "Restatement Approach under IAS 29",
+          "text": "When an entity's economy becomes hyperinflationary, apply IAS 29 as if the economy had always been hyperinflationary and remeasure deferred tax items under IAS 12 after restating non-monetary carrying amounts.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In November 2005 the International Accounting Standards Board issued IFRIC 7 Applying the Restatement Approach under IAS 29 Financial Reporting in Hyperinflationary Economies. It was developed by the Interpretations Committee.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 29 Financial Reporting in Hyperinflationary Economies\n\n[Implementation support]\n• IFRIC 7 Applying the Restatement Approach under IAS 29 Financial Reporting under Hyperinflationary Economies",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-7-applying-the-restatement-approach-under-ias-29-financial-reporting/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4158,22 +4242,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 10.8–9",
+          "heading": "Interim Reporting & Impairment Reversal Prohibition",
+          "text": "An entity shall NOT reverse an impairment loss recognised in a previous interim period in respect of goodwill (IAS 36) at a subsequent annual or interim reporting date.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In July 2006 the International Accounting Standards Board issued IFRIC 10 Interim Financial Reporting and Impairment. It was developed by the Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 10. They include IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39) (issued November 2013) and IFRS 9 Financial Instruments (issued July 2014).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 34 Interim Financial Reporting\n• IAS 36 Impairment of Assets\n• IAS 39 Financial Instruments: Recognition and Measurement\n• IFRS 9 Financial Instruments\n\n[Unconsolidated amendments]\n• IAS 1 Presentation of Financial Statements\n• IFRIC 10 Interim Financial Reporting and Impairment\n• IFRS 9 Financial Instruments\n• IFRS 9 Financial Instruments\n• IFRS 9 Financial Instruments (2010)\n• IFRS 9 Financial Instruments (2014)\n• IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39)\n• IFRS 9 Financial Instruments: Amendments to other IFRSs and guidance\n• IFRS 9 Financial Instruments: Basis for Conclusions\n• IFRS 9 Financial Instruments: Basis for Conclusions\n• IFRS 9 Financial Instruments: Basis for Conclusions\n• IFRS 9 Financial Instruments: Basis for Conclusions\n• IFRS 9 Financial Instruments: Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39\n• IFRS 9 Instruments financiers\n• IFRS 9 Instruments financiers (Comptabilité de couverture et modifications d’IFRS 9, d’IFRS 7 et d’IAS 39)\n• MSFI 9 Finansijski instrumenti\n• NIIF 9 Instrumentos Financieros\n• NIIF 9 Instrumentos Financieros (Contabilidad de Coberturas y modificaciones a la NIIF 9, NIIF 7 y NIC 39)\n• NIIF 9 Instrumentos Financieros: Fundamentos de las Conclusiones\n\n[Implementation support]\n• IFRIC 10 Interim Financial Reporting and Impairment",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-10-interim-financial-reporting-and-impairment/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4212,22 +4302,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 12.11–27",
+          "heading": "Service Concession Arrangements (BOT / PPP Models)",
+          "text": "Infrastructure within scope is NOT recognised as operator's PPE; recognise a financial asset (unconditional contractual right to receive cash from grantor, IFRS 9) or an intangible asset (right to charge public users, IAS 38), with construction/upgrade revenue under IFRS 15 (aligned with China MOF Interpretation No. 14).",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In November 2006 the International Accounting Standards Board issued IFRIC 12 Service Concession Arrangements. It was developed by the Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 12. They include IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39) (issued November 2013), IFRS 15 Revenue from Contracts with Customers (issued May 2014), IFRS 9 Financial Instruments (issued July 2014), IFRS 16 Leases (issued January 2016) and Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Rate-regulated Activities\n\n[Implementation support]\n• IFRIC 12 Service Concession Arrangements",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-12-service-concession-arrangements/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4322,22 +4418,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 14.7–24",
+          "heading": "IAS 19 Defined Benefit Asset Ceiling & Minimum Funding",
+          "text": "Clarifies when refunds or reductions in future contributions are 'available' to support recognising a defined benefit surplus, and when minimum funding requirements create an additional onerous liability.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In July 2007 the International Accounting Standards Board issued IFRIC 14 IAS 19—The Limit on a Defined Benefit Asset, Minimum Funding Requirements and their Interaction. It was developed by the Interpretations Committee.\n\nIn November 2009 IFRIC 14 was amended to address prepayments of future minimum funding requirement contributions.\n\nOther Standards have made minor consequential amendments to IFRIC 14. They include IFRS 13 Fair Value Measurement (issued May 2011), IAS 19 Employee Benefits (issued June 2011), Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018), IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024) and IFRS 19 Subsidiaries without Public Accountability: Disclosures (issued in May 2024).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Availability of a Refund (Amendments to IFRIC 14)\n• Prepayments of a Minimum Funding Requirement (Amendments to IFRIC 14)\n\n[Related IFRS Standards]\n• IAS 19 Employee Benefits",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-14-ias-19-the-limit-on-a-defined-benefit-asset-minimum-funding-requirements/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4423,22 +4525,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 16.10–17",
+          "heading": "Hedges of a Net Investment in a Foreign Operation",
+          "text": "Net investment hedge accounting applies only to FX differences between functional currency of the foreign operation and functional currency of any parent entity (not presentation currency); hedging instrument may be held by any entity within the group.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In July 2008 the International Accounting Standards Board issued IFRIC 16 Hedges of a Net Investment in a Foreign Operation. It was developed by the Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 16. They include IFRS 11 Joint Arrangements (issued May 2011), IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39) (issued November 2013) and IFRS 9 Financial Instruments (issued July 2014).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 21 The Effects of Changes in Foreign Exchange Rates\n• IAS 39 Financial Instruments: Recognition and Measurement\n• IFRS 9 Financial Instruments\n\n[Implementation support]\n• IFRIC 16 Hedges of a Net Investment in a Foreign Operation",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-16-hedges-of-a-net-investment-in-a-foreign-operation/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4478,22 +4586,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 17.10–16",
+          "heading": "Distributions of Non-Cash Assets to Owners",
+          "text": "Measure dividend payable at fair value of non-cash assets to be distributed; remeasure at each reporting date through equity; on settlement recognise difference between carrying amount of assets distributed and dividend payable in P&L.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In November 2008 the International Accounting Standards Board issued IFRIC 17 Distributions of Non-cash Assets to Owners. It was developed by the Interpretations Committee.\n\nThe Basis for Conclusions on IFRIC 17 was amended to reflect IFRS 9 Financial Instruments (issued July 2014).\n\nOther Standards have made minor consequential amendments to IFRIC 17. They include IFRS 10 Consolidated Financial Statements (issued May 2011), IFRS 13 Fair Value Measurement (issued May 2011), Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018) and IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Implementation support]\n• IFRIC 17 Distributions of Non-cash Assets to Owners",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-17-distributions-of-non-cash-assets-to-owners/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4585,22 +4699,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 19.5–11",
+          "heading": "Extinguishing Financial Liabilities with Equity Instruments",
+          "text": "Debt-for-equity swaps: measure equity instruments issued at their fair value (or fair value of liability extinguished if more reliable) and recognise the difference against the carrying amount of the liability in P&L.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In November 2009 the International Accounting Standards Board issued IFRIC 19 Extinguishing Financial Liabilities with Equity Instruments. It was developed by the Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 19. They include IFRS 13 Fair Value Measurement (issued May 2011), IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39) (issued November 2013), IFRS 9 Financial Instruments (issued July 2014), Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018) and IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 39 Financial Instruments: Recognition and Measurement\n• IFRS 9 Financial Instruments",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-19-extinguishing-financial-liabilities-with-equity-instruments/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4641,22 +4761,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 20.7–16",
+          "heading": "Stripping Costs in Surface Mine Production Phase",
+          "text": "Capitalise production-phase waste-removal stripping costs as a 'stripping activity asset' (part of existing mine PPE/intangible) when providing improved access to an identified ore body; depreciate over expected useful life of that ore component.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In October 2011 the International Accounting Standards Board issued IFRIC 20 Stripping Costs in the Production Phase of a Surface Mine. It was developed by the Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 20, including Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Stripping Costs in the Production Phase of a Surface Mine\n\n[Related IFRS Standards]\n• IAS 16 Property, Plant and Equipment\n• IAS 2 Inventories\n• IAS 38 Intangible Assets\n\n[Implementation support]\n• IFRIC 20 Stripping Costs in the Production Phase of a Surface Mine",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-20-stripping-costs-in-the-production-phase-of-a-surface-mine/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4693,22 +4819,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 21.8–14",
+          "heading": "Levies: Obligating Event Recognition",
+          "text": "Recognise a liability for a government levy ONLY when the activity triggering payment (as identified by legislation) occurs; do NOT accrue progressively before a minimum threshold is reached.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In May 2013 the International Accounting Standards Board issued IFRIC 21 Levies. It was developed by the Interpretations Committee.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related active projects]\n• Provisions—Targeted Improvements\n\n[Related completed projects]\n• Levies\n\n[Related IFRS Standards]\n• IAS 37 Provisions, Contingent Liabilities and Contingent Assets",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-21-levies/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [],
@@ -4743,22 +4875,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 22.8–9",
+          "heading": "Foreign Currency Advance Consideration",
+          "text": "For determining the spot exchange rate on initial recognition of the related asset, expense, or income, the date of the transaction is the date on which the entity initially recognises the non-monetary prepayment asset or deferred income liability (no retranslation later).",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In December 2016 the International Accounting Standards Board issued IFRIC 22 Foreign Currency Transactions and Advance Consideration. It was developed by the Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 22, including IFRS 17 Insurance Contracts (issued May 2017) and Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Foreign Currency Transactions and Advance Consideration (Amendments to IAS 21)\n\n[Related IFRS Standards]\n• IAS 21 The Effects of Changes in Foreign Exchange Rates",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-22-foreign-currency-transactions-and-advance-consideration/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4795,22 +4933,28 @@
           "seq": 0
         },
         {
+          "no": "IFRIC 23.9–14",
+          "heading": "Uncertainty over Income Tax Treatments",
+          "text": "Assume tax authorities will examine with full knowledge of all relevant information. If probable (>50%) that the authority will accept the treatment, reflect it consistently; otherwise reflect uncertainty using the most likely amount or expected value (IAS 12).",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In May 2017, the International Accounting Standards Board (Board) issued IFRIC 23 Uncertainty over Income Tax Treatments. It was developed by the IFRS Interpretations Committee.\n\nOther Standards have made minor consequential amendments to IFRIC 23, including IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related completed projects]\n• Presentation of Liabilities or Assets Related to Uncertain Tax Treatments (IAS 1)\n• Uncertainty over Income Tax Treatments\n\n[Related IFRS Standards]\n• IAS 12 Income Taxes",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/ifric-23-uncertainty-over-income-tax-treatments/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4848,22 +4992,28 @@
           "seq": 0
         },
         {
+          "no": "SIC-7.3–4",
+          "heading": "Introduction of the Euro",
+          "text": "Clarifies that IAS 21 requirements apply strictly to the changeover to the Euro, with FX differences on monetary items recognised in P&L and cumulative translation reserves preserved until disposal.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board adopted SIC‑7 Introduction of the Euro, which had originally been issued by the Standing Interpretations Committee of the International Accounting Standards Committee in May 1998.\n\nOther Standards have made minor consequential amendments to SIC‑7, including IFRS 9 Financial Instruments (Hedge Accounting and amendments to IFRS 9, IFRS 7 and IAS 39) (issued November 2013).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 21 The Effects of Changes in Foreign Exchange Rates\n\n[Implementation support]\n• SIC-7 Introduction of the Euro",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/sic-7-introduction-of-the-euro/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -4902,22 +5052,28 @@
           "seq": 0
         },
         {
+          "no": "SIC-10.3",
+          "heading": "Government Assistance — No Specific Operating Relation",
+          "text": "Government assistance aimed at encouraging long-term business activity in specific regions or sectors qualifies as a government grant under IAS 20 and must NOT be credited directly to shareholders' equity.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board adopted SIC‑10 Government Assistance—No Specific Relation to Operating Activities, which had originally been issued by the Standing Interpretations Committee of the International Accounting Standards Committee in July 1998.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 20 Accounting for Government Grants and Disclosure of Government Assistance",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/sic-10-government-assistance-no-specific-relation-to-operating-activities/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -5006,22 +5162,28 @@
           "seq": 0
         },
         {
+          "no": "SIC-25.4",
+          "heading": "Income Taxes — Changes in Tax Status",
+          "text": "Include current and deferred tax consequences of a change in tax status of an entity or its shareholders in P&L unless related to transactions/events recognised directly in OCI or equity.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In April 2001 the International Accounting Standards Board adopted SIC‑25 Income Taxes—Changes in the Tax Status of an Entity or its Shareholders, which had originally been issued by the Standing Interpretations Committee of the International Accounting Standards Committee in July 2000.",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 12 Income Taxes",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/sic-25-income-taxes-changes-in-the-tax-status-of-an-entity-or-its-shareholders/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [],
@@ -5108,22 +5270,28 @@
           "seq": 0
         },
         {
+          "no": "SIC-29.6–7",
+          "heading": "Service Concession Arrangements: Disclosures",
+          "text": "Requires operators and grantors to disclose arrangement descriptions, significant terms affecting cash flows, renewal/termination rights, and obligations to acquire/build/hand back concession assets.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In December 2001 the International Accounting Standards Board (IASB) issued SIC‑29 Disclosure—Service Concession Arrangements, which had originally been developed by the Standing Interpretations Committee of the International Accounting Standards Committee.\n\nIn November 2006, when the IASB issued IFRIC 12 Service Concession Arrangements, SIC‑29’s title was changed to Service Concession Arrangements: Disclosures.\n\nOther Standards have made minor consequential amendments to SIC‑29, including IFRS 16 Leases (issued January 2016) and Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IFRIC 12 Service Concession Arrangements",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/sic-29-service-concession-arrangements-disclosures/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -5214,22 +5382,28 @@
           "seq": 0
         },
         {
+          "no": "SIC-32.7–10",
+          "heading": "Intangible Assets — Web Site Costs",
+          "text": "Planning stage costs are expensed; application/infrastructure development and graphical design costs are capitalised under IAS 38.57 ONLY if probable future economic benefits (e.g., direct online ordering revenue) are demonstrated; purely promotional websites are expensed.",
+          "seq": 1
+        },
+        {
           "no": "History",
           "heading": "Standard History & Amendments",
           "text": "In March 2002 the International Accounting Standards Board issued SIC‑32 Intangible Assets—Web Site Costs, which had originally been developed by the Standing Interpretations Committee of the International Accounting Standards Committee.\n\nOther Standards have made minor consequential amendments to SIC‑32, including IFRS 15 Revenue from Contracts with Customers (issued May 2014), IFRS 16 Leases (issued January 2016), Amendments to References to the Conceptual Framework in IFRS Standards (issued March 2018) and IFRS 18 Presentation and Disclosure in Financial Statements (issued April 2024).",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRS Standards]\n• IAS 16 Property, Plant and Equipment\n• IAS 38 Intangible Assets\n\n[Implementation support]\n• SIC-32 Intangible Assets—Web Site Costs",
-          "seq": 2
+          "seq": 3
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/list-of-standards/sic-32-intangible-assets-web-site-costs/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 3
+          "seq": 4
         }
       ],
       "cited_codes": [
@@ -5360,16 +5534,22 @@
           "seq": 0
         },
         {
+          "no": "IFRS for SMEs (3rd Ed.)",
+          "heading": "Standalone Simplified Standard for Non-Publicly Accountable Entities",
+          "text": "Self-contained 35-section standard tailored for entities without public accountability: omits EPS/segment/interim reporting, simplifies financial instruments and revenue/leases alignment (updated in 2025 Third Edition), and cuts disclosure volume by >85% compared with full IFRS.",
+          "seq": 1
+        },
+        {
           "no": "Support",
           "heading": "Related Projects & Implementation Support",
           "text": "[Related IFRIC Interpretations]\n• Unconsolidated Amendments\n• Implementation Support\n• 2015 IFRS for SMEs Standard application support\n• 2025 IFRS for SMEs Standard application support",
-          "seq": 1
+          "seq": 2
         },
         {
           "no": "References",
           "heading": "Official Text Link & Public Practical Guidance",
           "text": "Official IFRS Foundation Page (English): https://www.ifrs.org/issued-standards/ifrs-for-smes/\nAccess Note: Free access to the unaccompanied text of IFRS Accounting Standards on ifrs.org requires a free registered IFRS.org account; Basis for Conclusions and Illustrative Examples require an IFRS Digital Subscription.\nPublic Companion Overview: KPMG Insights into IFRS — An Overview (Sept 2026): https://assets.kpmg.com/content/dam/kpmgsites/xx/pdf/ifrg/2026/isg-2026-insights-an-overview.pdf",
-          "seq": 2
+          "seq": 3
         }
       ],
       "cited_codes": [],

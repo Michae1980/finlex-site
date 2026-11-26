@@ -50,7 +50,7 @@
         {
           "no": "Official Access",
           "heading": "Official Handbook & Reference Entry",
-          "text": "Official source (IESBA 2026 Handbook): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "text": "Official source (IESBA 2026 Handbook): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.\n2026 Handbook Volume: Volume 1 (Parts 1–3, Part 4A & Part 4B)\nOfficial Free PDF (Vol. 1): https://ifacweb.blob.core.windows.net/publicfiles/2026-09/2026-IESBA-HB-Volume-1.pdf\nLocal Private Full-Text Import: Run `python3 scripts/import_private_intl_pdfs.py --download-iesba` (or place the PDF in local_pdfs/).",
           "seq": 2
         }
       ]
@@ -101,7 +101,7 @@
         {
           "no": "Official Access",
           "heading": "Official Handbook & Reference Entry",
-          "text": "Official source (IESBA 2026 Handbook): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "text": "Official source (IESBA 2026 Handbook): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.\n2026 Handbook Volume: Volume 1 (Parts 1–3, Part 4A & Part 4B)\nOfficial Free PDF (Vol. 1): https://ifacweb.blob.core.windows.net/publicfiles/2026-09/2026-IESBA-HB-Volume-1.pdf\nLocal Private Full-Text Import: Run `python3 scripts/import_private_intl_pdfs.py --download-iesba` (or place the PDF in local_pdfs/).",
           "seq": 2
         }
       ]
@@ -151,7 +151,7 @@
         {
           "no": "Official Access",
           "heading": "Official Handbook & Reference Entry",
-          "text": "Official source (IESBA 2026 Handbook): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "text": "Official source (IESBA 2026 Handbook): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: in_force. Detailed paragraph-level summaries and practice notes can be expanded incrementally.\n2026 Handbook Volume: Volume 1 (Parts 1–3, Part 4A & Part 4B)\nOfficial Free PDF (Vol. 1): https://ifacweb.blob.core.windows.net/publicfiles/2026-09/2026-IESBA-HB-Volume-1.pdf\nLocal Private Full-Text Import: Run `python3 scripts/import_private_intl_pdfs.py --download-iesba` (or place the PDF in local_pdfs/).",
           "seq": 2
         }
       ]
@@ -203,7 +203,7 @@
         {
           "no": "Official Access",
           "heading": "Official Handbook & Reference Entry",
-          "text": "Official source (IESBA 2026 Handbook (Volume 2)): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: upcoming. Detailed paragraph-level summaries and practice notes can be expanded incrementally.",
+          "text": "Official source (IESBA 2026 Handbook (Volume 2)): https://www.ethicsboard.org/publications/2026-handbook-international-code-ethics-professional-accountants\nStatus: upcoming. Detailed paragraph-level summaries and practice notes can be expanded incrementally.\n2026 Handbook Volume: Volume 2 (Part 5 — IESSA)\nLocal Private Full-Text Import: Run `python3 scripts/import_private_intl_pdfs.py --download-iesba` (or place the PDF in local_pdfs/).",
           "seq": 2
         }
       ]
