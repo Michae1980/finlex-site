@@ -718,6 +718,8 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
             return None
         intl_raw_items: list[dict] = []
         for jf in sorted(INTL_DATA_DIR.glob("*.json")):
+            if jf.name == "home_news.json":
+                continue
             payload_in = json.loads(jf.read_text(encoding="utf-8"))
             intl_raw_items.extend(payload_in.get("documents", []))
 
@@ -1213,6 +1215,11 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
         if stale.name not in written_ft_files:
             stale.unlink()
 
+    home_news_items: list[dict] = []
+    home_news_path = INTL_DATA_DIR / "home_news.json"
+    if home_news_path.exists():
+        home_news_items = json.loads(home_news_path.read_text(encoding="utf-8")).get("items", [])
+
     index_payload = {
         "meta": {
             "built_at": dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -1230,6 +1237,7 @@ def build_from_db(db_path: Path, *, include_private: bool = False, out_root: Pat
             "statuses": STATUS_META,
             "topics": topics_list,
         },
+        "home_news": home_news_items,
         "documents": documents,
         "doc_links": doc_links,
     }

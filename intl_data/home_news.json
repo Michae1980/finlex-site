@@ -1,0 +1,126 @@
+{
+  "updated_at": "2026-11-26",
+  "description": "首页中心滚动框展示的近期已实施、即将实施法规准则与国家宏观财税政策规划动态",
+  "items": [
+    {
+      "id": "policy-15th-fyp",
+      "category": "policy",
+      "tag": "国家规划",
+      "date": "2026-03",
+      "source": "国家发改委",
+      "title": "《国民经济和社会发展第十五个五年规划纲要》财税与披露部署",
+      "summary": "深化财税体制改革、健全现代财政制度，纵深推进全国统一大市场，推动企业气候与环境信息依法披露及国际互认。",
+      "url": "https://www.ndrc.gov.cn/fggz/fzzlgh/gjfzgh/202603/U020260317369114704096.pdf"
+    },
+    {
+      "id": "enacted-vat-law",
+      "category": "enacted",
+      "tag": "已实施",
+      "date": "2026-01-01",
+      "source": "全国人大",
+      "title": "《中华人民共和国增值税法》正式施行",
+      "summary": "我国第一大税种完成税收法定，统一应税交易、税率档次与留抵退税制度框架。",
+      "doc_query": "中华人民共和国增值税法"
+    },
+    {
+      "id": "upcoming-ifrs-18",
+      "category": "upcoming",
+      "tag": "即将实施",
+      "date": "2027-01-01",
+      "source": "IASB",
+      "title": "IFRS 18《财务报表列报与披露》即将替代 IAS 1",
+      "summary": "强制划分经营/投资/筹资三大损益类别、新增营业利润小计，并要求 MPM 非公认业绩指标入注接受审计。",
+      "doc_query": "IFRS 18"
+    },
+    {
+      "id": "policy-mof-vat-2026",
+      "category": "policy",
+      "tag": "部委政策",
+      "date": "2026-03",
+      "source": "财政部",
+      "title": "《2025年中国财政政策执行情况报告》明确财税改革重点",
+      "summary": "推动出台增值税法实施条例，完善增值税留抵退税政策，强化财会监督与地方财政科学管理。",
+      "url": "https://www.mof.gov.cn/zhengwuxinxi/caizhengxinwen/202603/t20260317_3985436.htm"
+    },
+    {
+      "id": "upcoming-asc-220-dise",
+      "category": "upcoming",
+      "tag": "即将实施",
+      "date": "2027-01-01",
+      "source": "FASB",
+      "title": "ASC 220-40（ASU 2024-03）利润表费用分解（DISE）生效",
+      "summary": "美股公众公司须在附注中按表分解各费用行项内嵌的存货采购、员工薪酬、折旧及无形资产摊销。",
+      "doc_query": "ASC 220"
+    },
+    {
+      "id": "policy-mof-budget-2026",
+      "category": "policy",
+      "tag": "部委政策",
+      "date": "2026-03",
+      "source": "财政部",
+      "title": "2026年主要财政政策：规范税收优惠与财政补贴",
+      "summary": "坚持税收法定原则规范税收优惠与财政补贴，支持大规模设备更新、专精特新奖补及海南自贸港封关税收政策。",
+      "url": "http://m.mof.gov.cn/czsj/202603/t20260306_3984742.htm"
+    },
+    {
+      "id": "enacted-cas-interp-18",
+      "category": "enacted",
+      "tag": "已实施",
+      "date": "2024-12",
+      "source": "财政部",
+      "title": "《企业会计准则解释第18号》实务执行",
+      "summary": "明确不属于单项履约义务的保证类质保费用计入营业成本、浮动收费法下基础项目会计处理等核心口径。",
+      "doc_query": "企业会计准则解释第18号"
+    },
+    {
+      "id": "policy-mof-vat-nontax",
+      "category": "policy",
+      "tag": "实务配套",
+      "date": "2026-08",
+      "source": "财政部",
+      "title": "非应税交易等增值税有关事项明确",
+      "summary": "衔接《增值税法》正式施行，进一步明确非应税交易界定及高频涉税实务处理口径。",
+      "url": "https://www.mof.gov.cn/zhengwuxinxi/zhengcefabu/"
+    },
+    {
+      "id": "enacted-esg-basic",
+      "category": "enacted",
+      "tag": "已实施",
+      "date": "2024-11",
+      "source": "财政部等九部委",
+      "title": "《企业可持续披露准则——基本准则（试行）》落地推进",
+      "summary": "确立我国国家统一可持续披露准则体系总纲，衔接 IFRS S1 并分步推进气候披露准则落地。",
+      "doc_query": "企业可持续披露准则——基本准则（试行）"
+    },
+    {
+      "id": "upcoming-ifrs-19",
+      "category": "upcoming",
+      "tag": "即将实施",
+      "date": "2027-01-01",
+      "source": "IASB",
+      "title": "IFRS 19《无公众问责子公司：披露》正式生效",
+      "summary": "允许符合条件的集团子公司沿用 IFRS 完整确认计量要求，同时大幅精简财务报表附注披露负担。",
+      "doc_query": "IFRS 19"
+    },
+    {
+      "id": "enacted-us-crypto-tax",
+      "category": "enacted",
+      "tag": "已实施",
+      "date": "2025-01-01",
+      "source": "FASB",
+      "title": "ASC 350-60 加密资产公允价值与 ASC 740 税率披露升级",
+      "summary": "ASU 2023-08 要求合规加密资产按公允价值入损益；ASU 2023-09 强制披露八类有效税率调节表与分地区现金税。",
+      "doc_query": "ASC 350"
+    },
+    {
+      "id": "upcoming-ifrs-20",
+      "category": "upcoming",
+      "tag": "即将实施",
+      "date": "2029-01-01",
+      "source": "IASB",
+      "title": "IFRS 20《监管资产与监管负债》发布（替代 IFRS 14）",
+      "summary": "2026年5月正式发布，为受费率监管的公用事业主体建立完整的监管资产与负债会计模型。",
+      "doc_query": "IFRS 20"
+    }
+  ]
+}

@@ -796,83 +796,108 @@
     .brand.brand-clickable:hover { background: var(--surface-subtle); }
 
     .home-main {
-      flex: 1; width: 100%; max-width: 920px; margin: 0 auto;
-      padding: 28px 20px 24px;
+      flex: 1; width: 100%; max-width: 960px; margin: 0 auto;
+      padding: 24px 20px 22px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-    .home-header { text-align: center; margin-bottom: 10px; }
+    .home-header { text-align: center; margin-bottom: 8px; }
     .home-header h1 {
       margin: 0; font-size: 30px; font-weight: 800; letter-spacing: 0.04em; color: var(--ink); line-height: 1.25;
     }
     .home-hero-sub { margin: 5px 0 0; font-size: 13.5px; color: var(--ink-muted); }
 
-    /* Wikipedia 风格环绕式知识图式 */
-    .orbit-stage {
-      position: relative; width: 820px; height: 340px; max-width: 100%;
-      margin: 6px auto 18px;
+    /* 居中法规与政策动态滚动框 */
+    .home-news-stage {
+      width: 100%; max-width: 680px;
+      margin: 12px auto 16px;
     }
-    .orbit-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-    .orbit-side-tag {
-      position: absolute; top: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
-      padding: 2px 9px; border-radius: var(--radius-pill);
+    .orbit-news-hub {
+      width: 100%; height: 276px; border-radius: 15px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1.5px solid var(--primary-border);
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.09);
+      display: flex; flex-direction: column; overflow: hidden;
     }
-    .orbit-side-left { left: 12px; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; }
-    .orbit-side-right { right: 12px; color: #0f766e; background: #f0fdfa; border: 1px solid #99f6e4; }
-
-    .orbit-hub {
-      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      width: 162px; height: 162px; border-radius: 50%;
-      background: linear-gradient(145deg, #ffffff 0%, #f1f5ff 100%);
-      border: 2px solid var(--primary-border);
-      box-shadow: 0 12px 32px rgba(37, 99, 235, 0.14), inset 0 0 0 6px rgba(255, 255, 255, 0.85);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
-      cursor: pointer; z-index: 4; transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    .news-hub-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      padding: 9px 14px 7px; border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
+      flex-shrink: 0;
     }
-    .orbit-hub:hover {
-      transform: translate(-50%, -50%) scale(1.04);
-      border-color: var(--primary);
-      box-shadow: 0 16px 38px rgba(37, 99, 235, 0.22), inset 0 0 0 6px rgba(255, 255, 255, 0.9);
+    .news-hub-title {
+      font-size: 13px; font-weight: 700; color: var(--ink); white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 5px;
     }
-    .orbit-hub-mark {
-      width: 34px; height: 34px; border-radius: 9px;
-      background: linear-gradient(135deg, #1d4ed8, #2563eb); color: #fff;
-      display: grid; place-items: center; font-weight: 800; font-size: 16px; margin-bottom: 3px;
+    .news-hub-tabs { display: inline-flex; align-items: center; gap: 4px; }
+    .news-tab-btn {
+      border: 1px solid transparent; background: transparent; color: var(--ink-muted);
+      font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 6px;
+      cursor: pointer; transition: all 0.14s ease;
     }
-    .orbit-hub-count { font-size: 24px; font-weight: 800; color: var(--ink); line-height: 1.1; }
-    .orbit-hub-sub { font-size: 11px; font-weight: 600; color: var(--ink-secondary); }
-    .orbit-hub-links { font-size: 10.5px; color: var(--primary); font-weight: 600; margin-top: 2px; }
-
-    .orbit-node {
-      position: absolute; width: 204px; padding: 9px 13px; border-radius: 12px;
-      background: rgba(255, 255, 255, 0.94); border: 1.5px solid var(--border);
-      box-shadow: var(--shadow-sm); cursor: pointer; z-index: 3;
+    .news-tab-btn:hover { color: var(--primary); background: var(--primary-soft); }
+    .news-tab-btn.active { color: var(--primary); background: var(--primary-soft); border-color: var(--primary-border); }
+    .news-ticker-viewport {
+      position: relative; flex: 1; overflow: hidden;
+      padding: 4px 12px;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 92%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 92%, transparent 100%);
+    }
+    .news-ticker-track {
+      display: flex; flex-direction: column; gap: 7px;
+      animation: newsTickerScroll var(--ticker-dur, 42s) linear infinite;
+      will-change: transform;
+    }
+    .news-ticker-viewport:hover .news-ticker-track,
+    .news-ticker-viewport:focus-within .news-ticker-track {
+      animation-play-state: paused;
+    }
+    @keyframes newsTickerScroll {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+    .news-item {
       display: flex; flex-direction: column; gap: 2px;
-      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      padding: 8px 11px; border-radius: 9px; text-align: left;
+      background: #f8fafc; border: 1px solid var(--border);
+      cursor: pointer; text-decoration: none; color: inherit;
+      transition: border-color 0.14s ease, background 0.14s ease;
     }
-    .orbit-left { text-align: right; align-items: flex-end; }
-    .orbit-right { text-align: left; align-items: flex-start; }
-    .orbit-node:hover {
-      transform: translateY(-2px); box-shadow: var(--shadow-md);
-      background: var(--surface); border-color: var(--primary);
+    .news-item:hover {
+      background: var(--primary-soft); border-color: var(--primary-border);
     }
-    .orbit-node.orbit-intl:hover { border-color: #0f766e; }
-    .orbit-title { font-size: 14.5px; font-weight: 700; color: var(--primary); line-height: 1.3; }
-    .orbit-node.orbit-intl .orbit-title { color: #0f766e; }
-    .orbit-meta { font-size: 11.5px; color: var(--ink-muted); line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-    .orbit-meta strong { color: var(--ink-secondary); font-weight: 600; }
+    .news-item-top {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      font-size: 11px; color: var(--ink-muted);
+    }
+    .news-item-meta { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+    .news-tag {
+      font-size: 10px; font-weight: 700; padding: 0 6px; border-radius: 4px;
+      white-space: nowrap; line-height: 1.55;
+    }
+    .news-tag-enacted { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .news-tag-upcoming { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .news-tag-policy { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+    .news-item-title {
+      font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.38;
+      display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .news-item-sum {
+      font-size: 11.5px; color: var(--ink-secondary); line-height: 1.45;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .news-hub-foot {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      padding: 6px 14px; border-top: 1px solid var(--border); background: #f8fafc;
+      font-size: 11px; color: var(--ink-muted); flex-shrink: 0;
+    }
+    .news-hub-foot-btn {
+      border: none; background: transparent; color: var(--primary); font-size: 11px;
+      font-weight: 600; cursor: pointer; padding: 0;
+    }
+    .news-hub-foot-btn:hover { text-decoration: underline; }
 
-    /* 8 个节点对称弧形坐标（桌面端） */
-    .pos-l1 { left: 32px; top: 22px; }
-    .pos-l2 { left: 0px; top: 102px; }
-    .pos-l3 { left: 0px; top: 186px; }
-    .pos-l4 { left: 32px; top: 266px; }
-    .pos-r1 { right: 32px; top: 22px; }
-    .pos-r2 { right: 0px; top: 102px; }
-    .pos-r3 { right: 0px; top: 186px; }
-    .pos-r4 { right: 32px; top: 266px; }
-
-    /* 居中主检索框（仿 Wikipedia 首页带范围下拉的检索框） */
-    .home-search-wrap { position: relative; width: 100%; max-width: 580px; margin: 0 auto 12px; text-align: left; }
+    /* 居中主检索框（与动态滚动框、资料库简介同宽对齐） */
+    .home-search-wrap { position: relative; width: 100%; max-width: 680px; margin: 0 auto 12px; text-align: left; }
     .home-search-box {
       display: flex; align-items: center; height: 46px;
       background: var(--surface); border: 1.5px solid var(--border-strong); border-radius: 12px;
@@ -901,7 +926,7 @@
     .home-search-btn:hover { background: #1d4ed8; }
     .home-hot-row {
       display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
     .home-hot-chip {
       border: 1px solid var(--border); background: rgba(255, 255, 255, 0.85); color: var(--ink-muted);
@@ -910,7 +935,7 @@
     }
     .home-hot-chip:hover { border-color: var(--primary-border); color: var(--primary); background: var(--primary-soft); }
 
-    .home-enter-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; }
+    .home-enter-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; }
     .home-enter-btn {
       display: inline-flex; align-items: center; gap: 6px;
       border: 1px solid var(--border-strong); background: var(--surface); color: var(--ink);
@@ -921,8 +946,30 @@
     .home-enter-btn.primary { border-color: var(--primary); background: var(--primary); color: #fff; }
     .home-enter-btn.primary:hover { background: #1d4ed8; color: #fff; }
 
+    /* 资料库收录范围简述（Brief） */
+    .home-brief {
+      width: 100%; max-width: 680px; margin: 0 auto 14px;
+      padding: 12px 16px; border-radius: 12px;
+      background: rgba(255, 255, 255, 0.72); border: 1px solid var(--border);
+      font-size: 12px; color: var(--ink-secondary); line-height: 1.68; text-align: left;
+    }
+    .home-brief-lead {
+      font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+    }
+    .home-brief-lead span.brief-stat { font-weight: 500; font-size: 11.5px; color: var(--ink-muted); }
+    .home-brief-lines { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; }
+    .home-brief-lines li { color: var(--ink-secondary); }
+    .home-brief-link {
+      border: none; background: transparent; padding: 0; margin: 0;
+      font-size: inherit; font-weight: 700; color: var(--primary); cursor: pointer;
+    }
+    .home-brief-link:hover { text-decoration: underline; text-underline-offset: 2px; }
+    .home-brief-link.fw-intl { color: #0f766e; }
+    .home-brief-link.fw-us { color: #6d28d9; }
+
     .home-footer {
-      width: 100%; max-width: 780px; margin: 4px auto 0; padding-top: 12px;
+      width: 100%; max-width: 680px; margin: 4px auto 0; padding-top: 12px;
       border-top: 1px solid var(--border);
       display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px;
       font-size: 11.5px; color: var(--ink-muted); text-align: center;
@@ -933,22 +980,12 @@
     }
     .home-footer-link:hover { color: var(--primary); }
 
-    /* 平板/手机端优雅退化为居中徽章 + 2列紧凑网格 */
-    @media (max-width: 820px) {
+    /* 平板/手机端紧凑适配 */
+    @media (max-width: 880px) {
       .home-main { justify-content: flex-start; padding: 20px 14px 28px; }
       .home-header h1 { font-size: 24px; }
-      .orbit-stage { width: 100%; height: auto; margin: 10px 0 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-      .orbit-svg, .orbit-side-tag { display: none; }
-      .orbit-hub { position: static; transform: none; width: 124px; height: 124px; }
-      .orbit-hub:hover { transform: scale(1.03); }
-      .orbit-hub-mark { width: 26px; height: 26px; font-size: 13px; }
-      .orbit-hub-count { font-size: 20px; }
-      .orbit-nodes-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-      .orbit-node { position: static; width: 100%; text-align: left; align-items: flex-start; padding: 9px 11px; }
-      .orbit-title { font-size: 13.5px; }
-    }
-    @media (max-width: 440px) {
-      .orbit-nodes-grid { grid-template-columns: 1fr; }
+      .orbit-news-hub { height: 248px; }
+      .home-brief { padding: 11px 13px; }
     }
   </style>
 </head>
@@ -958,14 +995,14 @@
       <div class="home-main">
         <div class="home-header">
           <h1>财税法规通</h1>
-          <p class="home-hero-sub" id="homeHeroSub">中国与国际财税审结构化知识库</p>
+          <p class="home-hero-sub" id="homeHeroSub">中国、国际与美国财税审结构化知识库</p>
         </div>
 
-        <div class="orbit-stage" id="homeRadialStage" aria-label="资料库体系全景图"></div>
+        <div class="home-news-stage" id="homeRadialStage" aria-label="法规与政策动态滚动播报"></div>
 
         <div class="home-search-wrap" id="homeSearchWrap" role="search">
           <div class="home-search-box">
-            <input class="home-search-input" id="homeSearchInput" type="search" autocomplete="off" placeholder="检索中国或国际准则、文号或正文（如 CAS14 总额法 / IFRS 15 / 企业所得税）..." />
+            <input class="home-search-input" id="homeSearchInput" type="search" autocomplete="off" placeholder="检索中国、国际或美国准则、文号或正文（如 CAS14 总额法 / IFRS 15 / ASC 606）..." />
             <button class="search-clear-btn" id="homeSearchClearBtn" type="button" title="清空搜索" style="display:none;margin-right:6px;">×</button>
             <select class="home-search-scope" id="homeSearchScope" aria-label="检索体系范围">
               <option value="all">全库</option>
@@ -982,9 +1019,10 @@
 
         <div class="home-enter-row">
           <button type="button" class="home-enter-btn primary" onclick="enterWorkspace({clearQuery:true})">进入完整工作台 →</button>
-          <button type="button" class="home-enter-btn" id="homeUsEntryBtn" style="border-color:#ddd6fe;color:#6d28d9;background:#f5f3ff;" onclick="enterWorkspace({fw:'US',clearQuery:true})">🇺🇸 美国准则 US GAAP</button>
           <button type="button" class="home-enter-btn" onclick="enterWorkspace({viewMode:'graph',clearQuery:true})">🕸 关联图谱视图</button>
         </div>
+
+        <div class="home-brief" id="homeBrief" aria-label="数据库收录说明"></div>
 
         <footer class="home-footer">
           <span id="homeFooterMeta">支持离线使用 · 仅供参考</span>
@@ -4336,92 +4374,116 @@
       enterWorkspace({ fw: fwScope, domain: "all", type: "all", topic: "all", status: "all", query: q, viewMode: "list" });
     }
 
+    let homeNewsCategory = "all";
+
+    function resolveNewsTargetDoc(docQuery) {
+      if (!docQuery) return null;
+      const q = String(docQuery).trim().toLowerCase();
+      return DATA.documents.find(d => (d.doc_no || "").toLowerCase() === q)
+        || DATA.documents.find(d => (d.title || "").toLowerCase() === q)
+        || DATA.documents.find(d => (d.title || "").toLowerCase().includes(q) && d.status !== "outdated")
+        || DATA.documents.find(d => (d.title || "").toLowerCase().includes(q))
+        || null;
+    }
+
+    function openHomeNewsItem(idx) {
+      const items = (Array.isArray(DATA.home_news) ? DATA.home_news : []).filter(x => homeNewsCategory === "all" || x.category === homeNewsCategory);
+      const item = items[idx];
+      if (!item) return;
+      if (item.doc_query) {
+        const target = resolveNewsTargetDoc(item.doc_query);
+        if (target) {
+          enterWorkspace({ fw: target.framework || "CN", docId: target.id, clearQuery: true });
+          return;
+        }
+      }
+      if (item.url) {
+        window.open(item.url, "_blank", "noopener,noreferrer");
+      }
+    }
+
+    function setHomeNewsFilter(cat) {
+      homeNewsCategory = cat;
+      document.querySelectorAll("#homeNewsTabs .news-tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.cat === cat);
+      });
+      renderHomeNewsTicker(cat);
+    }
+
+    function renderHomeNewsTicker(cat = "all") {
+      const track = document.getElementById("homeNewsTrack");
+      if (!track) return;
+      const raw = Array.isArray(DATA.home_news) ? DATA.home_news : [];
+      const list = raw.filter(x => cat === "all" || x.category === cat);
+      if (!list.length) {
+        track.style.animation = "none";
+        track.innerHTML = `<div style="padding:24px;text-align:center;font-size:12px;color:var(--ink-muted);">暂无该分类动态</div>`;
+        return;
+      }
+      const renderCard = (item, idx) => {
+        const isDoc = Boolean(item.doc_query && resolveNewsTargetDoc(item.doc_query));
+        const actionHint = isDoc ? "站内直达 →" : "官方原文 ↗";
+        const tagCls = item.category === "enacted" ? "news-tag-enacted" : (item.category === "upcoming" ? "news-tag-upcoming" : "news-tag-policy");
+        return `
+          <button type="button" class="news-item" onclick="openHomeNewsItem(${idx})" title="${escapeHTML(item.title)}">
+            <div class="news-item-top">
+              <span class="news-item-meta">
+                <span class="news-tag ${tagCls}">${escapeHTML(item.tag || "")}</span>
+                <span>${escapeHTML(item.source || "")} · ${escapeHTML(item.date || "")}</span>
+              </span>
+              <span style="color:var(--primary);font-weight:600;flex-shrink:0;">${actionHint}</span>
+            </div>
+            <div class="news-item-title">${escapeHTML(item.title)}</div>
+            <div class="news-item-sum">${escapeHTML(item.summary)}</div>
+          </button>
+        `;
+      };
+      const onceHTML = list.map((it, i) => renderCard(it, i)).join("");
+      // 复制一份实现无跳变无缝循环滚动，滚动时长随条数自适应
+      track.innerHTML = onceHTML + onceHTML;
+      const durSec = Math.max(18, list.length * 4.2);
+      track.style.setProperty("--ticker-dur", `${durSec}s`);
+      track.style.animation = "none";
+      void track.offsetHeight;
+      track.style.animation = "";
+    }
+
     function renderHomePage() {
       const stage = document.getElementById("homeRadialStage");
       if (!stage) return;
       const allDocs = DATA.documents;
       const cnDocs = allDocs.filter(d => (d.framework || "CN") === "CN");
       const intlDocs = allDocs.filter(d => (d.framework || "CN") === "INTL");
-      const countDom = (list, dom) => list.filter(d => d.domain === dom).length;
+      const usDocs = allDocs.filter(d => (d.framework || "CN") === "US");
       const artFmt = (DATA.meta.article_count || 0).toLocaleString("en-US");
       const linkFmt = (DATA.meta.doc_link_count || 0).toLocaleString("en-US");
 
       const heroSub = document.getElementById("homeHeroSub");
       if (heroSub) {
-        heroSub.textContent = `中国与国际财税审结构化知识库 · ${allDocs.length} 份法规与准则 · ${artFmt} 条正文`;
+        heroSub.textContent = `中国、国际与美国财税审结构化知识库 · ${allDocs.length} 份法规与准则 · ${artFmt} 条正文`;
       }
 
-      // 左侧 4 个中国板块 + 右侧 4 个国际板块（对称弧形环绕中心徽章，仿 Wikipedia 首页极简视觉图式）
-      const leftNodes = [
-        { fw: "CN", dom: "accounting", title: "中国会计准则", sub: "准则 · 指南 · 解释 · 案例", cnt: countDom(cnDocs, "accounting"), pos: "pos-l1" },
-        { fw: "CN", dom: "audit", title: "中国审计准则", sub: "CPA 审计 · 鉴证 · 内控", cnt: countDom(cnDocs, "audit"), pos: "pos-l2" },
-        { fw: "CN", dom: "tax", title: "中国税收法规", sub: "税法 · 条例 · 税收优惠", cnt: countDom(cnDocs, "tax"), pos: "pos-l3" },
-        { fw: "CN", dom: "general", title: "综合商法监管", sub: "会计法 · 公司法 · 证券法", cnt: countDom(cnDocs, "general"), pos: "pos-l4" }
-      ];
-      const rightNodes = [
-        { fw: "INTL", dom: "accounting", title: "IFRS / ISSB 会计", sub: "IFRS · IAS · 可持续 · ESMA", cnt: countDom(intlDocs, "accounting"), pos: "pos-r1" },
-        { fw: "INTL", dom: "audit", title: "IAASB / IESBA 审计", sub: "ISQM · ISA · ISSA · 道德", cnt: countDom(intlDocs, "audit"), pos: "pos-r2" },
-        { fw: "INTL", dom: "tax", title: "OECD 国际税收", sub: "支柱二 · 协定 · 转让定价", cnt: countDom(intlDocs, "tax"), pos: "pos-r3" },
-        { fw: "INTL", dom: "general", title: "跨境治理与反洗钱", sub: "G20/OECD · COSO · FATF", cnt: countDom(intlDocs, "general"), pos: "pos-r4" }
-      ];
-
-      const renderOrbitNode = (n, side) => `
-        <button type="button" class="orbit-node orbit-${side} ${n.pos} ${n.fw === "INTL" ? "orbit-intl" : "orbit-cn"}"
-          onclick="enterWorkspace({fw:'${n.fw}',domain:'${n.dom}',clearQuery:true})"
-          title="进入工作台查看 ${escapeHTML(n.title)}（${n.cnt} 份）">
-          <span class="orbit-title">${escapeHTML(n.title)}</span>
-          <span class="orbit-meta"><strong>${n.cnt} 份</strong> · ${escapeHTML(n.sub)}</span>
-        </button>
-      `;
-
       stage.innerHTML = `
-        <svg class="orbit-svg" viewBox="0 0 820 340" aria-hidden="true">
-          <defs>
-            <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#2563eb" stop-opacity="0.14" />
-              <stop offset="70%" stop-color="#2563eb" stop-opacity="0.03" />
-              <stop offset="100%" stop-color="#2563eb" stop-opacity="0" />
-            </radialGradient>
-            <linearGradient id="hubRing" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#2563eb" />
-              <stop offset="100%" stop-color="#0f766e" />
-            </linearGradient>
-          </defs>
-          <circle cx="410" cy="170" r="146" fill="url(#hubGlow)" />
-          <circle cx="410" cy="170" r="126" fill="none" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 5" opacity="0.7" />
-          <circle cx="410" cy="170" r="92" fill="none" stroke="url(#hubRing)" stroke-width="1.2" opacity="0.32" />
-          <!-- 左侧连接弧线（中国体系） -->
-          <path d="M 326 130 Q 280 78 232 46" fill="none" stroke="#93c5fd" stroke-width="1.3" opacity="0.75" />
-          <path d="M 318 154 Q 260 132 194 128" fill="none" stroke="#93c5fd" stroke-width="1.3" opacity="0.75" />
-          <path d="M 318 186 Q 260 208 194 212" fill="none" stroke="#93c5fd" stroke-width="1.3" opacity="0.75" />
-          <path d="M 326 210 Q 280 262 232 294" fill="none" stroke="#93c5fd" stroke-width="1.3" opacity="0.75" />
-          <!-- 右侧连接弧线（国际体系） -->
-          <path d="M 494 130 Q 540 78 588 46" fill="none" stroke="#5eead4" stroke-width="1.3" opacity="0.8" />
-          <path d="M 502 154 Q 560 132 626 128" fill="none" stroke="#5eead4" stroke-width="1.3" opacity="0.8" />
-          <path d="M 502 186 Q 560 208 626 212" fill="none" stroke="#5eead4" stroke-width="1.3" opacity="0.8" />
-          <path d="M 494 210 Q 540 262 588 294" fill="none" stroke="#5eead4" stroke-width="1.3" opacity="0.8" />
-          <!-- 弧线端节点 -->
-          <circle cx="232" cy="46" r="3" fill="#2563eb" /><circle cx="194" cy="128" r="3" fill="#2563eb" />
-          <circle cx="194" cy="212" r="3" fill="#2563eb" /><circle cx="232" cy="294" r="3" fill="#2563eb" />
-          <circle cx="588" cy="46" r="3" fill="#0f766e" /><circle cx="626" cy="128" r="3" fill="#0f766e" />
-          <circle cx="626" cy="212" r="3" fill="#0f766e" /><circle cx="588" cy="294" r="3" fill="#0f766e" />
-        </svg>
-
-        <div class="orbit-side-tag orbit-side-left">🇨🇳 中国体系 · ${cnDocs.length} 份</div>
-        <div class="orbit-side-tag orbit-side-right">🌐 国际体系 · ${intlDocs.length} 份</div>
-
-        <button type="button" class="orbit-hub" onclick="enterWorkspace({clearQuery:true})" title="点击进入完整工作台">
-          <span class="orbit-hub-mark">法</span>
-          <span class="orbit-hub-count">${allDocs.length}</span>
-          <span class="orbit-hub-sub">份法规与准则</span>
-          <span class="orbit-hub-links">${linkFmt} 条关联</span>
-        </button>
-
-        <div class="orbit-nodes-grid">
-          ${leftNodes.map(n => renderOrbitNode(n, "left")).join("")}
-          ${rightNodes.map(n => renderOrbitNode(n, "right")).join("")}
+        <div class="orbit-news-hub" aria-label="法规动态与国家政策滚动播报">
+          <div class="news-hub-head">
+            <span class="news-hub-title">📢 法规与政策动态</span>
+            <div class="news-hub-tabs" id="homeNewsTabs" role="tablist">
+              <button type="button" class="news-tab-btn active" data-cat="all" onclick="setHomeNewsFilter('all')">全部</button>
+              <button type="button" class="news-tab-btn" data-cat="enacted" onclick="setHomeNewsFilter('enacted')">已实施</button>
+              <button type="button" class="news-tab-btn" data-cat="upcoming" onclick="setHomeNewsFilter('upcoming')">即将实施</button>
+              <button type="button" class="news-tab-btn" data-cat="policy" onclick="setHomeNewsFilter('policy')">政策</button>
+            </div>
+          </div>
+          <div class="news-ticker-viewport" id="homeNewsViewport" title="悬停可暂停滚动，点击条目直达法规或官方原文">
+            <div class="news-ticker-track" id="homeNewsTrack"></div>
+          </div>
+          <div class="news-hub-foot">
+            <span>悬停暂停 · 点击直达站内法规或官方政策原文</span>
+            <button type="button" class="news-hub-foot-btn" onclick="enterWorkspace({clearQuery:true})">浏览全库 →</button>
+          </div>
         </div>
       `;
+      renderHomeNewsTicker("all");
 
       const hotQueries = ["CAS14 总额法", "IFRS 15", "ASC 606", "企业所得税", "ISA 315", "公司法"];
       const hotRow = document.getElementById("homeHotRow");
@@ -4431,15 +4493,19 @@
         ).join("");
       }
 
-      const usDocs = allDocs.filter(d => (d.framework || "CN") === "US");
-      const usEntryBtn = document.getElementById("homeUsEntryBtn");
-      if (usEntryBtn) {
-        if (usDocs.length > 0) {
-          usEntryBtn.style.display = "inline-flex";
-          usEntryBtn.textContent = `🇺🇸 美国准则 US GAAP（${usDocs.length} 份）`;
-        } else {
-          usEntryBtn.style.display = "none";
-        }
+      const briefEl = document.getElementById("homeBrief");
+      if (briefEl) {
+        briefEl.innerHTML = `
+          <div class="home-brief-lead">
+            <span>数据库收录概览</span>
+            <span class="brief-stat">覆盖会计、审计、税务与商法监管 · ${linkFmt} 条跨文档与跨体系关联</span>
+          </div>
+          <ul class="home-brief-lines">
+            <li><button type="button" class="home-brief-link" onclick="enterWorkspace({fw:'CN',clearQuery:true})">中国体系（${cnDocs.length} 份）</button>：企业会计准则（含应用指南、解释、实施问答与实务案例）、注册会计师审计与内控准则、增值税/所得税等主要税法及公司法、证券法、会计法。</li>
+            <li><button type="button" class="home-brief-link fw-intl" onclick="enterWorkspace({fw:'INTL',clearQuery:true})">国际体系（${intlDocs.length} 份）</button>：IFRS / IAS 会计与 ISSB 可持续披露准则、IAASB 审计鉴证与 IESBA 职业道德准则、OECD 支柱二与国际税收协定、G20/COSO/FATF 治理框架。</li>
+            <li><button type="button" class="home-brief-link fw-us" onclick="enterWorkspace({fw:'US',clearQuery:true})">美国体系（${usDocs.length} 份）</button>：FASB ASC 核心会计准则（US GAAP）、PCAOB / AICPA 审计准则、美国联邦税法（IRC）及 SOX / SEC / FCPA 证券监管框架。</li>
+          </ul>
+        `;
       }
 
       const footMeta = document.getElementById("homeFooterMeta");
