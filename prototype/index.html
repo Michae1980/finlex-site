@@ -398,6 +398,7 @@
     }
     .lane-header.bridge-lane { background: #f8fafc; border-style: dashed; border-color: #94a3b8; color: #475569; }
     .lane-header.focus-center-lane { background: var(--primary-soft); border-color: var(--primary-border); color: #1d4ed8; }
+    .lane-header.parallel-lane { background: #f0fdfa; border-style: dashed; border-color: #5eead4; color: #0f766e; }
 
     .graph-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
     .edge-path { fill: none; stroke: #94a3b8; stroke-width: 1.5; opacity: 0.3; transition: stroke 0.18s ease, opacity 0.18s ease, stroke-width 0.18s ease; }
@@ -409,6 +410,7 @@
     .edge-path.highlight-l3 { stroke: #64748b; stroke-width: 1.5; opacity: 0.65; }
     .edge-path.highlight-l4 { stroke: #d97706; stroke-width: 1.6; opacity: 0.78; stroke-dasharray: 5 4; }
     .edge-path.highlight-l5 { stroke: #e11d48; stroke-width: 1.4; opacity: 0.72; stroke-dasharray: 3 4; }
+    .edge-path.highlight-parallel { stroke: #0f766e; stroke-width: 2.0; opacity: 0.88; stroke-dasharray: 5 4; }
     .edge-path.highlight-path { stroke: #e11d48; stroke-width: 3.1; opacity: 1; stroke-dasharray: 7 4; }
 
     .graph-node {
@@ -428,6 +430,7 @@
     .graph-node.rel-l3 { border-color: #e2e8f0; border-left: 3px solid #94a3b8; z-index: 4; opacity: 0.96; }
     .graph-node.rel-l4 { border-color: #e2e8f0; border-left: 3px solid #d97706; z-index: 4; opacity: 0.94; }
     .graph-node.rel-l5 { border-color: #e2e8f0; border-left: 3px dashed #e11d48; z-index: 4; opacity: 0.9; }
+    .graph-node.rel-parallel { border-color: #99f6e4; border-left: 3.5px solid #0f766e; z-index: 5; opacity: 1; }
     .graph-node.rel-path { border-color: #e11d48; background: #fff1f2; box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.14); z-index: 6; opacity: 1; }
     .graph-node.dimmed { opacity: 0.18; }
     .tier-tag { font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 5px; border: 1px solid transparent; flex-shrink: 0; white-space: nowrap; }
@@ -436,6 +439,7 @@
     .tier-tag.t-l3 { color: #475569; background: #f8fafc; border-color: #cbd5e1; }
     .tier-tag.t-l4 { color: #b45309; background: #fffbeb; border-color: #fde68a; }
     .tier-tag.t-l5 { color: #be123c; background: #fff1f2; border-color: #fecdd3; }
+    .tier-tag.t-parallel { color: #0f766e; background: #f0fdfa; border-color: #99f6e4; }
     .rel-card.tier-l1 { border-left: 3px solid #059669; }
     .rel-card.tier-l2 { border-left: 3px solid #2563eb; }
     .rel-card.tier-l3 { border-left: 3px solid #94a3b8; }
@@ -458,6 +462,8 @@
       cursor: pointer; box-shadow: var(--shadow-sm); white-space: nowrap; z-index: 9;
     }
     .edge-pill:hover, .edge-pill.selected { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
+    .edge-pill.parallel-pill { border-color: #5eead4; color: #0f766e; background: #f0fdfa; }
+    .edge-pill.parallel-pill:hover, .edge-pill.parallel-pill.selected { background: #0f766e; border-color: #0f766e; color: #fff; }
 
     /* 徽章样式 */
     .pill { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 6px; border: 1px solid transparent; white-space: nowrap; }
@@ -545,33 +551,6 @@
     }
     .overview-pill:hover { border-color: var(--primary-border); color: var(--primary); background: var(--primary-soft); }
     .overview-pill .dot { width: 6px; height: 6px; }
-    .overview-quick {
-      display: inline-flex; align-items: center; gap: 4px;
-      border: 1px solid #cbd5e1; border-left: 2.5px solid #059669;
-      background: var(--surface); color: var(--ink);
-      padding: 2px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 500;
-      cursor: pointer; max-width: 240px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
-    }
-    .overview-quick:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
-    .overview-framework {
-      display: inline-flex; align-items: center; gap: 4px;
-      border: 1px solid #c7d2fe; border-left: 2.5px solid #4f46e5;
-      background: var(--surface); color: #312e81;
-      padding: 2px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 500;
-      cursor: pointer; max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
-    }
-    .overview-framework:hover { border-color: #4f46e5; background: #eef2ff; }
-    .overview-intl {
-      display: inline-flex; align-items: center; gap: 4px;
-      border: 1px solid #99f6e4; border-left: 2.5px solid #0f766e;
-      background: var(--surface); color: #115e59;
-      padding: 2px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 500;
-      cursor: pointer; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
-    }
-    .overview-intl:hover { border-color: #0f766e; background: #f0fdfa; }
     .rel-group-title.flash-group { background: var(--primary-soft); color: var(--primary); transition: background 0.3s ease; }
 
     .warn-banner {
@@ -1198,6 +1177,9 @@
                   <marker id="arrow-l5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                     <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#e11d48" />
                   </marker>
+                  <marker id="dot-parallel" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5" markerHeight="5">
+                    <circle cx="4" cy="4" r="3" fill="#0f766e" />
+                  </marker>
                 </defs>
                 <g id="edgeLayer"></g>
               </svg>
@@ -1275,7 +1257,7 @@
 
     const REL_KIND_LABELS = {
       companion: "核心配套", amends: "修补 / 解释",
-      cites: "条文引用", cross_domain: "跨域衔接", intl_mapping: "中外准则对照", thematic: "专题配套",
+      cites: "条文引用", cross_domain: "跨域衔接", intl_mapping: "平行对应", thematic: "专题配套",
       supersedes: "替代旧版", superseded_by: "效力沿革",
       applies_to: "案例参考", explains: "官方解读"
     };
@@ -1415,6 +1397,7 @@
       matchedDocs: [],
       coreIds: new Set(),
       bridgeIds: new Set(),
+      parallelIds: new Set(),
       visibleDocs: [],
       visibleEdges: [],
       positions: {},
@@ -2683,8 +2666,12 @@
         ${hasLocalFilter ? `<button type="button" class="mini-btn" onclick="resetGraphLocalFilters()">清除图谱筛选</button>` : ""}`;
     }
 
+    const PARALLEL_START_Y = 264;
+    const PARALLEL_ROW_GAP = 162;
+
     function computeGraphLayout(matched, coreIds) {
       const bridgeIds = new Set();
+      let parallelIdSet = new Set();
       let visibleDocs = [];
       let visibleEdges = [];
       const positions = {};
@@ -2696,6 +2683,11 @@
         const rel = getDirectEdges(selId, DATA.doc_links);
         const allRelItems = [...rel.upstream, ...rel.downstream];
         const byScore = (a, b) => (b.edge.score || 60) - (a.edge.score || 60) || (b.edge.count || 0) - (a.edge.count || 0);
+        const FW_ORDER = { CN: 0, INTL: 1, US: 2 };
+        const byParallelOrder = (a, b) =>
+          (FW_ORDER[a.doc.framework || "CN"] ?? 9) - (FW_ORDER[b.doc.framework || "CN"] ?? 9) ||
+          (b.edge.score || 60) - (a.edge.score || 60) ||
+          a.doc.id - b.doc.id;
 
         // 若切换中心法规后原局部筛选无结果，自动恢复为全部避免空画布
         const matchLocal = (item) =>
@@ -2711,19 +2703,32 @@
         }
         renderGraphLegendBar(true, allRelItems);
 
-        const leftIds = [], rightIds = [];
+        const leftIds = [], rightIds = [], parallelIds = [];
         const seen = new Set([selId]);
         const isFiltered = state.graphTierFilter !== "all" || state.graphTypeFilter !== "all";
         const MAX_SIDE = isFiltered ? 16 : 10;
+        const MAX_PARALLEL = isFiltered ? 16 : 14;
 
-        rel.upstream.filter(matchLocal).sort(byScore).forEach(item => {
+        // 跨准则平行对应（中国 CAS / 国际 IFRS / 美国 US GAAP 等直接对应准则）独立放在聚焦法规正下方
+        allRelItems.filter(item => item.edge.rel_kind === "intl_mapping" && matchLocal(item))
+          .sort(byParallelOrder)
+          .forEach(item => {
+            if (parallelIds.length >= MAX_PARALLEL) return;
+            if (!seen.has(item.doc.id)) {
+              seen.add(item.doc.id); parallelIds.push(item.doc.id);
+              if (!coreIds.has(item.doc.id)) bridgeIds.add(item.doc.id);
+            }
+          });
+        parallelIdSet = new Set(parallelIds);
+
+        rel.upstream.filter(item => item.edge.rel_kind !== "intl_mapping" && matchLocal(item)).sort(byScore).forEach(item => {
           if (leftIds.length >= MAX_SIDE) return;
           if (!seen.has(item.doc.id)) {
             seen.add(item.doc.id); leftIds.push(item.doc.id);
             if (!coreIds.has(item.doc.id)) bridgeIds.add(item.doc.id);
           }
         });
-        rel.downstream.filter(matchLocal).sort(byScore).forEach(item => {
+        rel.downstream.filter(item => item.edge.rel_kind !== "intl_mapping" && matchLocal(item)).sort(byScore).forEach(item => {
           if (rightIds.length >= MAX_SIDE) return;
           if (!seen.has(item.doc.id)) {
             seen.add(item.doc.id); rightIds.push(item.doc.id);
@@ -2731,7 +2736,7 @@
           }
         });
 
-        const activeIds = new Set([selId, ...leftIds, ...rightIds]);
+        const activeIds = new Set([selId, ...leftIds, ...rightIds, ...parallelIds]);
         visibleDocs = DATA.documents.filter(d => activeIds.has(d.id));
         visibleEdges = DATA.doc_links.filter(e =>
           (e.from_doc_id === selId || e.to_doc_id === selId) &&
@@ -2750,20 +2755,29 @@
         const minSpan = cols.length * NODE_W + Math.max(0, cols.length - 1) * 96 + padX * 2;
         stageW = Math.max(availW, minSpan);
         const gapX = cols.length > 1 ? Math.floor((stageW - padX * 2 - cols.length * NODE_W) / (cols.length - 1)) : 0;
-        const maxRows = Math.max(1, ...cols.map(c => c.ids.length));
-        const totalH = maxRows * ROW_GAP;
-        stageH = Math.max(400, 56 + totalH + 40);
+        const sideBottom = 54 + Math.max(1, leftIds.length, rightIds.length) * ROW_GAP;
+        const centerBottom = parallelIds.length
+          ? (PARALLEL_START_Y + (parallelIds.length - 1) * PARALLEL_ROW_GAP + NODE_H)
+          : (54 + NODE_H);
+        stageH = Math.max(400, Math.max(sideBottom, centerBottom) + 44);
 
         cols.forEach((col, cIdx) => {
           const x = cols.length === 1 ? Math.max(padX, Math.floor((stageW - NODE_W) / 2)) : padX + cIdx * (NODE_W + gapX);
-          lanes.push({ x, label: col.label, isFocusCenter: col.isCenter, isBridgeLane: false });
+          lanes.push({ x, y: 4, label: col.label, isFocusCenter: col.isCenter, isBridgeLane: false, isParallelLane: false });
           const startY = 54;
           col.ids.forEach((did, rIdx) => { positions[did] = { x, y: startY + rIdx * ROW_GAP }; });
+          if (col.isCenter && parallelIds.length) {
+            lanes.push({ x, y: 198, label: `⇄ 平行对应准则 · ${parallelIds.length}`, isFocusCenter: false, isBridgeLane: false, isParallelLane: true });
+            parallelIds.forEach((pid, pIdx) => {
+              positions[pid] = { x, y: PARALLEL_START_Y + pIdx * PARALLEL_ROW_GAP };
+            });
+          }
         });
 
         const filterNote = isFiltered ? `（已筛选）` : "";
+        const parallelNote = parallelIds.length ? `（含 ${parallelIds.length} 份平行对应准则）` : "";
         document.getElementById("viewBadge").textContent = `聚焦：${docById[selId].title}`;
-        document.getElementById("layoutHint").textContent = `聚焦模式${filterNote}：展示 ${visibleDocs.length - 1} 份关联文档与 ${visibleEdges.length} 条关系边`;
+        document.getElementById("layoutHint").textContent = `聚焦模式${filterNote}：展示 ${visibleDocs.length - 1} 份关联文档${parallelNote}与 ${visibleEdges.length} 条关系边`;
       } else {
         renderGraphLegendBar(false, []);
         if (state.includeBridges && coreIds.size < DATA.documents.length) {
@@ -2801,7 +2815,7 @@
           for (let i = 0; i < col.items.length; i += MAX_PER_COL) chunks.push(col.items.slice(i, i + MAX_PER_COL));
           chunks.forEach((chunk, idx) => {
             const suf = chunks.length > 1 ? ` (${idx + 1}/${chunks.length})` : "";
-            lanes.push({ x: colX, label: `${col.label}${suf} · ${chunk.length}`, isBridgeLane: col.isBridge, isFocusCenter: false });
+            lanes.push({ x: colX, y: 4, label: `${col.label}${suf} · ${chunk.length}`, isBridgeLane: col.isBridge, isFocusCenter: false, isParallelLane: false });
             maxRows = Math.max(maxRows, chunk.length);
             chunk.forEach((d, r) => { positions[d.id] = { x: colX, y: 52 + r * ROW_GAP }; });
             colX += COL_GAP;
@@ -2814,12 +2828,30 @@
       }
 
       currentView.bridgeIds = bridgeIds;
+      currentView.parallelIds = parallelIdSet;
       currentView.visibleDocs = visibleDocs;
       currentView.visibleEdges = visibleEdges;
       currentView.positions = positions;
       currentView.lanes = lanes;
       currentView.stageW = stageW;
       currentView.stageH = stageH;
+    }
+
+    function computeParallelCurve(focusPos, parPos) {
+      const cx = focusPos.x + NODE_W / 2;
+      const topY = focusPos.y + NODE_H;
+      const targetY = parPos.y;
+      if (targetY <= PARALLEL_START_Y + 2) {
+        return { d: `M ${cx} ${topY} L ${cx} ${targetY}`, mx: cx, my: targetY - 20 };
+      }
+      const gx = focusPos.x - 18;
+      const y0 = topY + 8;
+      const yMid = targetY - 18;
+      return {
+        d: `M ${cx} ${topY} L ${cx} ${y0 - 4} Q ${cx} ${y0} ${cx - 4} ${y0} L ${gx + 6} ${y0} Q ${gx} ${y0} ${gx} ${y0 + 6} L ${gx} ${yMid - 6} Q ${gx} ${yMid} ${gx + 6} ${yMid} L ${cx - 6} ${yMid} Q ${cx} ${yMid} ${cx} ${yMid + 6} L ${cx} ${targetY}`,
+        mx: cx,
+        my: yMid
+      };
     }
 
     function computeCurve(fromPos, toPos) {
@@ -2853,7 +2885,7 @@
       document.getElementById("graphSvg").setAttribute("viewBox", `0 0 ${currentView.stageW} ${currentView.stageH}`);
 
       laneLayer.innerHTML = currentView.lanes.map(l =>
-        `<div class="lane-header ${l.isBridgeLane ? "bridge-lane" : ""} ${l.isFocusCenter ? "focus-center-lane" : ""}" style="left:${l.x}px" title="${escapeHTML(l.label)}">${escapeHTML(l.label)}</div>`
+        `<div class="lane-header ${l.isBridgeLane ? "bridge-lane" : ""} ${l.isFocusCenter ? "focus-center-lane" : ""} ${l.isParallelLane ? "parallel-lane" : ""}" style="left:${l.x}px;top:${l.y ?? 4}px" title="${escapeHTML(l.label)}">${escapeHTML(l.label)}</div>`
       ).join("");
       edgeLayer.innerHTML = "";
       nodeLayer.innerHTML = "";
@@ -2877,34 +2909,47 @@
         const toPos = currentView.positions[e.to_doc_id];
         if (!fromPos || !toPos) return;
         const vis = classifyEdgeVisual(e);
-        let cls = (vis === "l4" || vis === "l5") ? "edge-path dashed" : "edge-path";
+        const isParallelEdge = state.focusOnly && selId && e.rel_kind === "intl_mapping" &&
+          ((e.from_doc_id === selId && currentView.parallelIds.has(e.to_doc_id)) ||
+           (e.to_doc_id === selId && currentView.parallelIds.has(e.from_doc_id)));
+        let cls = (vis === "l4" || vis === "l5" || isParallelEdge) ? "edge-path dashed" : "edge-path";
         let marker = "url(#arrow-default)";
+        let markerStart = "";
         let showPill = false;
 
         if (state.activePath) {
           if (state.activePath.edgeIds.has(e.id)) { cls += " highlight-path"; marker = "url(#arrow-l5)"; showPill = true; }
           else cls += " dimmed";
         } else if (state.selectedEdgeId === e.id && state.activeTab === "relations") {
-          cls += " highlight-primary"; marker = "url(#arrow-primary)"; showPill = true;
+          cls += " highlight-primary"; marker = isParallelEdge ? "url(#dot-parallel)" : "url(#arrow-primary)";
+          if (isParallelEdge) markerStart = "url(#dot-parallel)";
+          showPill = true;
+        } else if (isParallelEdge) {
+          cls += " highlight-parallel"; marker = "url(#dot-parallel)"; markerStart = "url(#dot-parallel)"; showPill = true;
         } else if (selId && directEdgeIds.has(e.id)) {
           cls += ` highlight-${vis}`; marker = `url(#arrow-${vis})`; showPill = true;
         } else if (selId) {
           cls += " dimmed";
         }
 
-        const curve = computeCurve(fromPos, toPos);
+        const curve = isParallelEdge
+          ? computeParallelCurve(currentView.positions[selId], currentView.positions[e.from_doc_id === selId ? e.to_doc_id : e.from_doc_id])
+          : computeCurve(fromPos, toPos);
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", curve.d);
         path.setAttribute("class", cls);
-        path.setAttribute("marker-end", marker);
+        if (markerStart) path.setAttribute("marker-start", markerStart);
+        if (marker) path.setAttribute("marker-end", marker);
         edgeLayer.appendChild(path);
 
         if (showPill) {
           const pill = document.createElement("button");
-          pill.className = `edge-pill ${state.selectedEdgeId === e.id ? "selected" : ""}`;
+          pill.className = `edge-pill ${isParallelEdge ? "parallel-pill" : ""} ${state.selectedEdgeId === e.id ? "selected" : ""}`;
           pill.style.left = `${curve.mx}px`;
           pill.style.top = `${curve.my}px`;
-          pill.textContent = `${vis.toUpperCase()} ${REL_KIND_LABELS[e.rel_kind] || e.rel_kind}${e.count > 1 ? ` (${e.count})` : ""}`;
+          pill.textContent = isParallelEdge
+            ? `⇄ ${REL_KIND_LABELS[e.rel_kind] || "平行对应"}`
+            : `${vis.toUpperCase()} ${REL_KIND_LABELS[e.rel_kind] || e.rel_kind}${e.count > 1 ? ` (${e.count})` : ""}`;
           pill.onclick = (ev) => { ev.stopPropagation(); state.selectedEdgeId = e.id; state.activeTab = "relations"; renderGraphView(); renderDrawer(); };
           nodeLayer.appendChild(pill);
         }
@@ -2914,12 +2959,14 @@
         const pos = currentView.positions[d.id];
         if (!pos) return;
         const isBridge = currentView.bridgeIds.has(d.id);
+        const isParallelNode = state.focusOnly && currentView.parallelIds.has(d.id);
         const nTier = neighborTier[d.id];
         let cls = "graph-node";
         if (isBridge) cls += " bridge-node";
         if (d.is_case) cls += " is-case";
         if (state.activePath) cls += state.activePath.nodeIds.has(d.id) ? " rel-path" : " dimmed";
         else if (d.id === selId) cls += " selected";
+        else if (isParallelNode) cls += " rel-parallel";
         else if (selId && nTier) cls += ` rel-${nTier}`;
         else if (selId) cls += " dimmed";
 
@@ -2932,9 +2979,11 @@
         if (d.series_badge) nodeSubParts.push(d.series_badge);
         if (hasValidDocNo(d)) nodeSubParts.push(d.doc_no);
         else if (!d.series_badge) nodeSubParts.push(d.issuer);
-        const badgeHTML = (d.id !== selId && nTier)
-          ? `<span class="tier-tag t-${nTier}">${TIER_SHORT_LABELS[nTier] || nTier.toUpperCase()}</span>`
-          : `<span class="node-badge">${d.article_count}条</span>`;
+        const badgeHTML = isParallelNode
+          ? `<span class="tier-tag t-parallel">⇄ 平行对应</span>`
+          : ((d.id !== selId && nTier)
+            ? `<span class="tier-tag t-${nTier}">${TIER_SHORT_LABELS[nTier] || nTier.toUpperCase()}</span>`
+            : `<span class="node-badge">${d.article_count}条</span>`);
         card.innerHTML = `
           <div class="node-head">
             <div class="node-title" title="${escapeHTML(d.title)}">${escapeHTML(nodeShort)}</div>
@@ -3020,48 +3069,9 @@
           .filter(t => tierBuckets[t.key].length > 0)
           .map(t => `<button type="button" class="overview-pill" onclick="openRelationsTier('${t.key}')"><span class="dot" style="background:${t.color}"></span>${t.label} ${tierBuckets[t.key].length}</button>`)
           .join("");
-        const l1QuickHTML = tierBuckets.L1.length
-          ? `<div class="overview-row">
-              <span class="overview-label">核心配套直达</span>
-              ${tierBuckets.L1.slice(0, 3).map(item => {
-                const td = item.doc;
-                const lbl = td.display_title || td.title;
-                return `<button type="button" class="overview-quick" title="${escapeHTML(td.title)}" onclick="jumpToDoc(${td.id})">${escapeHTML(lbl)}</button>`;
-              }).join("")}
-              ${tierBuckets.L1.length > 3 ? `<button type="button" class="mini-btn" onclick="openRelationsTier('L1')">+${tierBuckets.L1.length - 3} 项</button>` : ""}
-            </div>`
-          : "";
-        const intlMapItems = allRel.filter(item => item.edge.rel_kind === "intl_mapping");
-        const intlMapRowHTML = intlMapItems.length
-          ? `<div class="overview-row">
-              <span class="overview-label">中外准则对照</span>
-              ${intlMapItems.slice(0, 4).map(item => {
-                const td = item.doc;
-                const icon = (td.framework || "CN") === "INTL" ? "🌐" : "🇨🇳";
-                const lbl = (td.framework || "CN") === "INTL" ? td.title : (td.display_title || td.title);
-                return `<button type="button" class="overview-intl" title="${escapeHTML(td.title)}" onclick="jumpToDoc(${td.id})">${icon} ${escapeHTML(lbl)}</button>`;
-              }).join("")}
-            </div>`
-          : "";
-        const fwRowHTML = fwParent
-          ? `<div class="overview-row">
-              <span class="overview-label">上位总纲</span>
-              <button type="button" class="overview-framework" title="${escapeHTML(fwParent.umbrellaDoc.title)}" onclick="jumpToDoc(${fwParent.umbrellaDoc.id})">🏛 ${escapeHTML(fwParent.umbrellaDoc.display_title || fwParent.umbrellaDoc.title)}</button>
-              <span style="font-size:11px;color:var(--ink-muted)">架构统领 · 未挂图谱连线</span>
-            </div>`
-          : (fwGroup
-            ? `<div class="overview-row">
-                <span class="overview-label">体系统领</span>
-                <span style="font-size:11.5px;color:var(--ink-secondary)">总纲型准则，统领下位 <strong>${fwGroup.childDocs.length}</strong> 份具体准则（为保持图谱聚焦未展开连线）</span>
-                <button type="button" class="mini-btn" onclick="filterUmbrellaChildren('${fwGroup.key}')">查看全部 ${fwGroup.childDocs.length} 份</button>
-              </div>`
-            : "");
-        const overviewStripHTML = (allRel.length || fwRowHTML)
+        const overviewStripHTML = allRel.length
           ? `<div class="overview-strip">
-              ${allRel.length ? `<div class="overview-row"><span class="overview-label">全貌速览</span>${tierPillsHTML}</div>` : ""}
-              ${intlMapRowHTML}
-              ${l1QuickHTML}
-              ${fwRowHTML}
+              <div class="overview-row"><span class="overview-label">全貌速览</span>${tierPillsHTML}</div>
             </div>`
           : "";
 
