@@ -34,6 +34,114 @@ REQUIRED_FILES = [
 ]
 
 PUA_RE = re.compile(r"[\ue000-\uf8ff\U00100000-\U0010ffff]")
+INTL_DATA_DIR = PROJECT_ROOT / "intl_data"
+INTL_SCHEMA_PATH = PROJECT_ROOT / "schema" / "intl-data.v1.schema.json"
+
+VALID_INTL_FRAMEWORKS = {"INTL", "US"}
+VALID_DOMAINS = {"accounting", "audit", "tax", "general"}
+VALID_DOC_TYPES = {"law", "regulation", "standard", "rule", "guidance", "normative", "interpretation", "case"}
+VALID_STATUSES = {"in_force", "will_replace", "upcoming", "outdated", "pending"}
+VALID_SOURCE_KINDS = {"official", "third_party", "official_pending", "user_submitted"}
+REQUIRED_INTL_DOC_KEYS = {
+    "code",
+    "framework",
+    "domain",
+    "doc_type",
+    "title",
+    "display_title",
+    "series_badge",
+    "doc_no",
+    "issuer",
+    "pub_date",
+    "effective_date",
+    "status",
+    "version_level",
+    "version_note",
+    "source_name",
+    "source_url",
+    "source_kind",
+    "summary",
+    "cited_codes",
+    "cas_links",
+    "articles",
+}
+ALLOWED_INTL_DOC_KEYS = REQUIRED_INTL_DOC_KEYS | {"slug", "replaced_by_code", "ifrs_links"}
+
+
+def validate_intl_data_packs(errors: list[str], warnings: list[str]) -> dict[str, int]:
+    """零依赖校验 intl_data/*.json 是否符合 schema/intl-data.v1.schema.json 契约与全局 code 唯一性。"""
+    if not INTL_SCHEMA_PATH.exists():
+        errors.append("缺少 Schema 契约文件：schema/intl-data.v1.schema.json")
+    else:
+        try:
+            json.loads(INTL_SCHEMA_PATH.read_text(encoding="utf-8"))
+        except Exception as exc:
+            errors.append(f"schema/intl-data.v1.schema.json JSON 解析失败：{exc}")
+
+    pack_count = 0
+    doc_count = 0
+    seen_codes: dict[str, str] = {}
+    if not INTL_DATA_DIR.exists():
+        return {"packs": 0, "docs": 0}
+
+    for jf in sorted(INTL_DATA_DIR.glob("*.json")):
+        if jf.name == "home_news.json":
+            continue
+        pack_count += 1
+        try:
+            pack = json.loads(jf.read_text(encoding="utf-8"))
+        except Exception as exc:
+            errors.append(f"intl_data/{jf.name} JSON 解析失败：{exc}")
+            continue
+        docs = pack.get("documents")
+        if not isinstance(docs, list) or not docs:
+            errors.append(f"intl_data/{jf.name} 缺少非空 documents 数组")
+            continue
+        for idx, doc in enumerate(docs):
+            doc_count += 1
+            if not isinstance(doc, dict):
+                errors.append(f"intl_data/{jf.name} documents[{idx}] 必须为对象")
+                continue
+            code = str(doc.get("code") or f"<idx:{idx}>")
+            missing = REQUIRED_INTL_DOC_KEYS - set(doc.keys())
+            extra = set(doc.keys()) - ALLOWED_INTL_DOC_KEYS
+            if missing:
+                errors.append(f"intl_data/{jf.name}[{code}] 缺少必填字段：{sorted(missing)}")
+            if extra:
+                errors.append(f"intl_data/{jf.name}[{code}] 含未定义字段：{sorted(extra)}")
+            if code in seen_codes:
+                errors.append(f"intl_data 全局 code 冲突：{code}（{seen_codes[code]} 与 {jf.name}）")
+            else:
+                seen_codes[code] = jf.name
+            if doc.get("framework") not in VALID_INTL_FRAMEWORKS:
+                errors.append(f"intl_data/{jf.name}[{code}] framework 非法：{doc.get('framework')}")
+            if doc.get("domain") not in VALID_DOMAINS:
+                errors.append(f"intl_data/{jf.name}[{code}] domain 非法：{doc.get('domain')}")
+            if doc.get("doc_type") not in VALID_DOC_TYPES:
+                errors.append(f"intl_data/{jf.name}[{code}] doc_type 非法：{doc.get('doc_type')}")
+            if doc.get("status") not in VALID_STATUSES:
+                errors.append(f"intl_data/{jf.name}[{code}] status 非法：{doc.get('status')}")
+            if doc.get("source_kind") not in VALID_SOURCE_KINDS:
+                errors.append(f"intl_data/{jf.name}[{code}] source_kind 非法：{doc.get('source_kind')}")
+            surl = str(doc.get("source_url") or "")
+            if not (surl.startswith("http://") or surl.startswith("https://")):
+                errors.append(f"intl_data/{jf.name}[{code}] source_url 非法：{surl}")
+            for lk_field in ("cas_links", "ifrs_links"):
+                if lk_field in doc:
+                    pairs = doc[lk_field]
+                    if not isinstance(pairs, list) or any(
+                        not isinstance(p, list) or len(p) != 2 or not all(isinstance(x, str) and x.strip() for x in p)
+                        for p in pairs
+                    ):
+                        errors.append(f"intl_data/{jf.name}[{code}] {lk_field} 须为二元字符串数组")
+            arts = doc.get("articles")
+            if not isinstance(arts, list) or not arts:
+                errors.append(f"intl_data/{jf.name}[{code}] articles 必须为非空数组")
+            else:
+                for a_idx, a in enumerate(arts):
+                    if not isinstance(a, dict) or not (a.get("no") or "").strip() or not (a.get("text") or "").strip():
+                        errors.append(f"intl_data/{jf.name}[{code}] articles[{a_idx}] 缺少非空 no 或 text")
+    return {"packs": pack_count, "docs": doc_count}
 
 
 def parse_js_json(path: Path, prefix: str, suffix: str) -> object:
@@ -46,6 +154,8 @@ def parse_js_json(path: Path, prefix: str, suffix: str) -> object:
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
+
+    intl_schema_stats = validate_intl_data_packs(errors, warnings)
 
     if not SITE_DIR.exists():
         print("ERROR: 缺少 site/ 目录，请先运行 python3 scripts/build_site.py", file=sys.stderr)
@@ -126,10 +236,33 @@ def main() -> int:
     if pua_hits:
         errors.append(f"检测到 {pua_hits} 条含私用区乱码（PUA）的条文正文")
 
-    # 校验悬空关联边
+    # 校验悬空关联边与图谱连通性/跨体系映射巡检
     dangling = sum(1 for e in links if e["from_doc_id"] not in doc_ids or e["to_doc_id"] not in doc_ids)
     if dangling:
         errors.append(f"检测到 {dangling} 条悬空关联边")
+
+    deg: dict[int, int] = {did: 0 for did in doc_ids}
+    intl_map_deg: dict[int, int] = {did: 0 for did in doc_ids}
+    for e in links:
+        f_id, t_id = e["from_doc_id"], e["to_doc_id"]
+        if f_id in deg:
+            deg[f_id] += 1
+        if t_id in deg:
+            deg[t_id] += 1
+        if e.get("rel_kind") == "intl_mapping":
+            if f_id in intl_map_deg:
+                intl_map_deg[f_id] += 1
+            if t_id in intl_map_deg:
+                intl_map_deg[t_id] += 1
+    isolated_docs = sum(1 for did in doc_ids if deg[did] == 0)
+    connected_docs = len(doc_ids) - isolated_docs
+    unmapped_intl_us_standards = sum(
+        1
+        for d in docs
+        if d.get("framework") in ("INTL", "US")
+        and d.get("doc_type") == "standard"
+        and intl_map_deg.get(d["id"], 0) == 0
+    )
 
     # 校验分片式全文语料（data/ft/ft_*.js）
     ft_shards = meta.get("ft_shards", [])
@@ -180,7 +313,12 @@ def main() -> int:
 
     summary = {
         "site_dir": "site/",
+        "intl_schema_packs": intl_schema_stats["packs"],
+        "intl_schema_docs": intl_schema_stats["docs"],
         "documents": len(docs),
+        "connected_docs": connected_docs,
+        "isolated_docs": isolated_docs,
+        "unmapped_intl_us_standards": unmapped_intl_us_standards,
         "articles_in_fulltext": total_ft_rows,
         "ft_shards": len(ft_shards),
         "ft_max_shard_kb": max_ft_kb,
