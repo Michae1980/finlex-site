@@ -411,11 +411,16 @@ def sanitize_url(raw_url: str | None) -> tuple[str | None, str]:
     return None, "official_pending"
 
 
+PUA_RE = re.compile(r"[\ue000-\uf8ff\U00100000-\U0010ffff]")
+
+
 def clean_text(text: str | None) -> tuple[str, int]:
     if not text:
         return "", 0
     hits = len(LOCAL_PATH_RE.findall(text))
     cleaned = LOCAL_PATH_RE.sub("[已脱敏路径]", text) if hits else text
+    cleaned = cleaned.replace("\uf0b7", "•")
+    cleaned = PUA_RE.sub("", cleaned)
     return cleaned.strip(), hits
 
 

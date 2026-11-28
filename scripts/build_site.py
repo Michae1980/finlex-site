@@ -163,6 +163,9 @@ def main() -> int:
             shutil.copy2(src, SITE_DIR / fname)
             shutil.copy2(src, PROTOTYPE_DIR / fname)
 
+    # GitHub Pages 禁止 Jekyll 忽略下划线或静态资源
+    (SITE_DIR / ".nojekyll").write_text("", encoding="utf-8")
+
     result = {
         "mode": "ci" if args.ci else ("db_sync" if db_stats else "cached_data"),
         "site_dir": "site/",

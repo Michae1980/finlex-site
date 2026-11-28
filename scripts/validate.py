@@ -24,6 +24,7 @@ LOCAL_PATH_RE = re.compile(r"(/Users/[^\s\"'<>]+|[A-Za-z]:\\Users\\[^\s\"'<>]+)"
 
 REQUIRED_FILES = [
     "index.html",
+    ".nojekyll",
     "manifest.webmanifest",
     "sw.js",
     "icon.svg",
@@ -31,6 +32,8 @@ REQUIRED_FILES = [
     "icon-512.png",
     "data/index.js",
 ]
+
+PUA_RE = re.compile(r"[\ue000-\uf8ff\U00100000-\U0010ffff]")
 
 
 def parse_js_json(path: Path, prefix: str, suffix: str) -> object:
@@ -71,14 +74,46 @@ def main() -> int:
     docs = index_data.get("documents", [])
     links = index_data.get("doc_links", [])
     meta = index_data.get("meta", {})
+    home_news = index_data.get("home_news", [])
     doc_ids = {d["id"] for d in docs}
 
-    # 校验每份文档的分片文件存在且案例摘要合规
+    # 校验首页动态 doc_query 全部可解析
+    unresolved_news: list[str] = []
+    for item in home_news:
+        dq = (item.get("doc_query") or "").strip()
+        if not dq:
+            continue
+        dq_low = dq.lower()
+        matched = any(
+            dq_low in (d.get("title") or "").lower()
+            or dq_low in (d.get("display_title") or "").lower()
+            or dq_low in (d.get("doc_no") or "").lower()
+            for d in docs
+        )
+        if not matched:
+            unresolved_news.append(dq)
+    if unresolved_news:
+        errors.append(f"首页动态存在无法解析的 doc_query：{unresolved_news}")
+
+    # 校验每份文档的分片文件存在、案例摘要合规及正文无空条文/私用区乱码
     missing_shards = 0
+    empty_articles = 0
+    pua_hits = 0
     for d in docs:
         shard = SITE_DIR / "data" / "docs" / f"doc_{d['id']}.js"
         if not shard.exists():
             missing_shards += 1
+        else:
+            raw_doc = shard.read_text(encoding="utf-8")
+            m_doc = re.search(r"window\.__finlexDocLoaded\(\d+,(\{.*\})\);", raw_doc, re.S)
+            if m_doc:
+                dj = json.loads(m_doc.group(1))
+                for art in dj.get("articles") or []:
+                    txt = (art.get("text") or "").strip()
+                    if not txt:
+                        empty_articles += 1
+                    if PUA_RE.search(txt):
+                        pua_hits += 1
         if d.get("doc_type") == "case":
             if not d.get("is_case"):
                 errors.append(f"案例 doc_id={d['id']} 缺少 is_case=true 标识")
@@ -86,6 +121,10 @@ def main() -> int:
                 warnings.append(f"案例 doc_id={d['id']} 摘要少于 20 字")
     if missing_shards:
         errors.append(f"缺少 {missing_shards} 份文档分片文件（site/data/docs/doc_*.js）")
+    if empty_articles:
+        errors.append(f"检测到 {empty_articles} 条空白条文正文")
+    if pua_hits:
+        errors.append(f"检测到 {pua_hits} 条含私用区乱码（PUA）的条文正文")
 
     # 校验悬空关联边
     dangling = sum(1 for e in links if e["from_doc_id"] not in doc_ids or e["to_doc_id"] not in doc_ids)
@@ -149,6 +188,9 @@ def main() -> int:
         "doc_links": len(links),
         "missing_shards": missing_shards,
         "dangling_links": dangling,
+        "empty_articles": empty_articles,
+        "pua_hits": pua_hits,
+        "unresolved_news": len(unresolved_news),
         "privacy_leaks": privacy_leaks,
         "errors": len(errors),
         "warnings": len(warnings),
