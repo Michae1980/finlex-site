@@ -712,8 +712,45 @@
       background: var(--surface); border-radius: 14px; max-width: 560px; width: 100%;
       padding: 18px 20px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25); max-height: 85vh; overflow-y: auto;
     }
-    .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 10px; }
     .modal-head h3 { margin: 0; font-size: 16px; }
+    .modal-card.wide { max-width: 860px; width: min(860px, 95vw); max-height: 90vh; }
+    .pill.local-mod { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; font-weight: 600; }
+    .pill.local-new { background: #d1fae5; color: #065f46; border: 1px solid #10b981; font-weight: 600; }
+    .local-badge-cnt { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; margin-left: 4px; }
+    .mini-btn.danger { color: #b91c1c; border-color: #fca5a5; background: #fef2f2; }
+    .mini-btn.danger:hover { background: #fee2e2; border-color: #f87171; }
+    .local-summary-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-radius: 10px; background: var(--surface-subtle); border: 1px solid var(--border); margin-bottom: 12px; font-size: 12.5px; color: var(--ink-secondary); }
+    .local-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .local-item-list { display: flex; flex-direction: column; gap: 8px; max-height: 52vh; overflow: auto; }
+    .local-item-card { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+    .local-item-main { min-width: 0; flex: 1; }
+    .local-item-title { font-weight: 600; font-size: 13.5px; color: var(--ink); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .local-item-meta { font-size: 11.5px; color: var(--ink-muted); margin-top: 3px; }
+    .local-item-actions { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; }
+    .local-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .local-field { display: flex; flex-direction: column; gap: 4px; }
+    .local-field.full { grid-column: 1 / -1; }
+    .local-field label { font-size: 12px; font-weight: 600; color: var(--ink-secondary); }
+    .local-field input, .local-field select, .local-field textarea { width: 100%; box-sizing: border-box; padding: 7px 9px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface); color: var(--ink); font-size: 13px; font-family: inherit; }
+    .local-field textarea { min-height: 64px; resize: vertical; line-height: 1.5; }
+    .local-section { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+    .local-section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+    .local-section-head h4 { margin: 0; font-size: 13.5px; color: var(--ink); }
+    .local-art-row { border: 1px solid var(--border); border-radius: 8px; padding: 8px; margin-bottom: 8px; background: var(--surface-subtle); }
+    .local-art-top { display: grid; grid-template-columns: 120px 1fr auto; gap: 6px; margin-bottom: 6px; align-items: center; }
+    .local-art-row input, .local-art-row textarea { width: 100%; box-sizing: border-box; padding: 5px 8px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--ink); font-size: 12.5px; font-family: inherit; }
+    .local-art-row textarea { min-height: 60px; resize: vertical; line-height: 1.5; }
+    .local-link-row { display: grid; grid-template-columns: 120px 1.4fr 110px 1fr auto; gap: 6px; align-items: center; margin-bottom: 6px; }
+    .local-link-row input, .local-link-row select { width: 100%; box-sizing: border-box; padding: 6px 8px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--ink); font-size: 12.5px; }
+    .local-editor-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+    .local-toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%) translateY(14px); background: rgba(15, 23, 42, 0.92); color: #fff; padding: 8px 16px; border-radius: 999px; font-size: 12.5px; z-index: 220; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22); }
+    .local-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    @media (max-width: 720px) {
+      .local-form-grid { grid-template-columns: 1fr; }
+      .local-link-row { grid-template-columns: 1fr; }
+      .local-art-top { grid-template-columns: 1fr 1fr auto; }
+    }
 
     /* 三端响应式 */
     body.preview-framed { background: #e2e8f0; display: flex; justify-content: center; align-items: stretch; padding: 10px 0; }
@@ -999,6 +1036,7 @@
         <div class="home-enter-row">
           <button type="button" class="home-enter-btn primary" onclick="enterWorkspace({clearQuery:true})">进入完整工作台 →</button>
           <button type="button" class="home-enter-btn" onclick="enterWorkspace({viewMode:'graph',clearQuery:true})">🕸 关联图谱视图</button>
+          <button type="button" class="home-enter-btn" id="homeLocalWsBtn" onclick="openLocalWorkspaceModal()">📦 个人工作区 <span class="local-badge-cnt" id="homeLocalWsCnt" style="display:none">0</span></button>
         </div>
 
         <div class="home-brief" id="homeBrief" aria-label="数据库收录说明"></div>
@@ -1033,6 +1071,8 @@
           <button class="toggle-btn" id="backHomeBtn" onclick="openHomePage()" title="返回资料库概览主页">🏠 主页</button>
           <button class="toggle-btn mobile-or-tablet-only" id="filterToggleBtn">筛选</button>
           <button class="toggle-btn desktop-or-tablet-only active" id="drawerToggleBtn">◧ 收起原文</button>
+          <button class="toggle-btn" id="localAddBtn" onclick="openLocalEditorModal(null)" title="新增仅保存在本机的自定义法规或内部制度">＋ 新增</button>
+          <button class="toggle-btn" id="localWsBtn" onclick="openLocalWorkspaceModal()" title="管理本地修订、新增文档与 JSON 补丁包">📦 工作区<span class="local-badge-cnt" id="localWsCnt" style="display:none">0</span></button>
           <button class="toggle-btn" id="complianceBtn" title="查看免责声明、合规边界与官方来源">⚖ 合规</button>
           <div class="select-field" title="切换桌面端、平板端或手机端界面">
             <label for="deviceModeSelect">界面</label>
@@ -1242,6 +1282,138 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="localWorkspaceModal" role="dialog" aria-modal="true" aria-labelledby="localWsModalTitle">
+    <div class="modal-card wide">
+      <div class="modal-head">
+        <h3 id="localWsModalTitle">📦 离线个人工作区（本地修订与自定义文档）</h3>
+        <button class="mini-btn" type="button" onclick="closeLocalWorkspaceModal()">关闭</button>
+      </div>
+      <div class="local-summary-bar" id="localWsSummary"></div>
+      <div class="local-toolbar">
+        <button class="mini-btn primary" type="button" onclick="openLocalEditorModal(null)">＋ 新增本地文档</button>
+        <button class="mini-btn" type="button" onclick="exportLocalPatch()">⬇ 导出 JSON 补丁包</button>
+        <button class="mini-btn" type="button" onclick="triggerImportLocalPatch('merge')">⬆ 导入补丁包（合并）</button>
+        <button class="mini-btn" type="button" onclick="triggerImportLocalPatch('replace')">⬆ 导入并覆盖</button>
+        <button class="mini-btn danger" type="button" onclick="clearAllLocalChanges()">🗑 清空本地改动</button>
+      </div>
+      <div class="local-item-list" id="localWsList"></div>
+      <p style="font-size:11.5px; color:var(--ink-muted); margin:10px 0 0;">
+        所有修订与新增内容仅保存在当前浏览器的本地存储（优先 IndexedDB），不修改官方基线数据；升级新版离线包后，可重新导入 JSON 补丁包自动还原个人改动。
+      </p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="localEditorModal" role="dialog" aria-modal="true" aria-labelledby="localEditorTitle">
+    <div class="modal-card wide">
+      <div class="modal-head">
+        <h3 id="localEditorTitle">✎ 编辑本地文档</h3>
+        <button class="mini-btn" type="button" onclick="closeLocalEditorModal()">关闭</button>
+      </div>
+      <div id="localEditorBanner" style="display:none; margin-bottom:10px; padding:8px 10px; border-radius:8px; background:var(--surface-subtle); border:1px solid var(--border); font-size:12px; color:var(--ink-secondary);"></div>
+      <form id="localEditorForm" onsubmit="saveLocalEditorForm(event)">
+        <div class="local-form-grid">
+          <div class="local-field full">
+            <label for="leTitle">法规/制度标题 *</label>
+            <input id="leTitle" type="text" required placeholder="例如：企业会计准则解释第19号 / 内部收入确认实施细则" />
+          </div>
+          <div class="local-field">
+            <label for="leDocNo">文号（可补齐「待核实」）</label>
+            <input id="leDocNo" type="text" placeholder="例如：财会〔2025〕XX号" />
+          </div>
+          <div class="local-field">
+            <label for="leIssuer">发布单位</label>
+            <input id="leIssuer" type="text" placeholder="例如：财政部 / 集团财务部" />
+          </div>
+          <div class="local-field">
+            <label for="lePubDate">发布日期</label>
+            <input id="lePubDate" type="text" placeholder="YYYY-MM-DD" />
+          </div>
+          <div class="local-field">
+            <label for="leEffDate">生效日期</label>
+            <input id="leEffDate" type="text" placeholder="YYYY-MM-DD" />
+          </div>
+          <div class="local-field">
+            <label for="leFramework">准则体系</label>
+            <select id="leFramework">
+              <option value="CN">🇨🇳 中国体系（CN）</option>
+              <option value="INTL">🌐 国际准则（INTL）</option>
+              <option value="US">🇺🇸 美国准则（US）</option>
+            </select>
+          </div>
+          <div class="local-field">
+            <label for="leDomain">业务领域</label>
+            <select id="leDomain"></select>
+          </div>
+          <div class="local-field">
+            <label for="leDocType">文档类型</label>
+            <select id="leDocType"></select>
+          </div>
+          <div class="local-field">
+            <label for="leStatus">效力状态</label>
+            <select id="leStatus"></select>
+          </div>
+          <div class="local-field">
+            <label for="leTopic">业务专题</label>
+            <select id="leTopic"></select>
+          </div>
+          <div class="local-field">
+            <label for="leSourceName">来源标注（可选）</label>
+            <input id="leSourceName" type="text" placeholder="例如：个人离线补录 / 内部制度库" />
+          </div>
+          <div class="local-field full">
+            <label for="leSummary">核心摘要</label>
+            <textarea id="leSummary" placeholder="简要概括适用范围、核心口径或本地备注..."></textarea>
+          </div>
+        </div>
+
+        <div class="local-section">
+          <div class="local-section-head">
+            <h4>📄 正文条文 <span id="leArtCountHint" style="font-weight:400; color:var(--ink-muted); font-size:12px;"></span></h4>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" class="mini-btn" id="leLoadOfficialArtsBtn" style="display:none;" onclick="loadOfficialArticlesIntoEditor()">📥 载入官方条文以编辑</button>
+              <button type="button" class="mini-btn" onclick="toggleBulkArticleParser()">⚡ 批量粘贴拆条</button>
+              <button type="button" class="mini-btn primary" onclick="addEditorArticleRow()">＋ 添加条文</button>
+            </div>
+          </div>
+          <div id="leBulkWrap" style="display:none; margin-bottom:8px; padding:8px; border:1px dashed var(--border-strong); border-radius:8px; background:var(--surface-subtle);">
+            <div style="font-size:12px; color:var(--ink-secondary); margin-bottom:4px;">粘贴整段文本，按「第X条 / Article X / 1. / 空行」自动拆分并追加到下方条文列表：</div>
+            <textarea id="leBulkText" style="width:100%; box-sizing:border-box; min-height:80px; padding:6px 8px; border:1px solid var(--border-strong); border-radius:6px; font-size:12.5px;"></textarea>
+            <div style="display:flex; gap:6px; margin-top:6px;">
+              <button type="button" class="mini-btn primary" onclick="bulkParseEditorArticles(false)">追加拆分条文</button>
+              <button type="button" class="mini-btn" onclick="bulkParseEditorArticles(true)">替换现有条文</button>
+              <button type="button" class="mini-btn" onclick="toggleBulkArticleParser()">收起</button>
+            </div>
+          </div>
+          <div id="leArticlesNote" style="display:none; font-size:12px; color:var(--ink-muted); margin-bottom:6px;"></div>
+          <div id="leArticlesList" style="max-height:240px; overflow:auto;"></div>
+        </div>
+
+        <div class="local-section">
+          <div class="local-section-head">
+            <h4>🕸 自定义图谱关联（挂接到现有或本地文档）</h4>
+            <button type="button" class="mini-btn primary" onclick="addEditorLinkRow()">＋ 添加关联边</button>
+          </div>
+          <div id="leLinksList"></div>
+        </div>
+
+        <div class="local-editor-foot">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="mini-btn danger" id="leRestoreBtn" style="display:none;" onclick="restoreCurrentEditorDoc()">↺ 还原官方版</button>
+            <button type="button" class="mini-btn danger" id="leDeleteBtn" style="display:none;" onclick="deleteCurrentEditorDoc()">🗑 删除本地文档</button>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="mini-btn" onclick="closeLocalEditorModal()">取消</button>
+            <button type="submit" class="mini-btn primary">💾 保存到本地工作区</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <input type="file" id="localPatchFileInput" accept=".json,application/json" style="display:none" />
+  <datalist id="localDocDatalist"></datalist>
+  <div class="local-toast" id="localToast" aria-live="polite"></div>
+
   <script src="./data/index.js"></script>
   <script>
     const DATA = window.FINLEX_INDEX;
@@ -1328,24 +1500,57 @@
       if (started) updateFtBadge();
     }
 
+    const officialArticlesBackup = {};
+    const officialRawCallbacks = {};
+
     window.__finlexDocLoaded = function(docId, payload) {
-      docArticlesCache[docId] = payload.articles || [];
+      const arts = payload.articles || [];
+      officialArticlesBackup[docId] = arts;
+      if (!docArticlesCache[docId] || !docArticlesCache[docId]._localOverride) {
+        docArticlesCache[docId] = arts;
+      }
       const cbs = docLoadCallbacks[docId] || [];
       delete docLoadCallbacks[docId];
       cbs.forEach(fn => fn(docArticlesCache[docId]));
+      const rawCbs = officialRawCallbacks[docId] || [];
+      delete officialRawCallbacks[docId];
+      rawCbs.forEach(fn => fn(arts));
     };
+
+    function loadOfficialArticlesRaw(docId, cb) {
+      if (officialArticlesBackup[docId]) { cb(officialArticlesBackup[docId]); return; }
+      if (docId >= 900000) { cb([]); return; }
+      if (!officialRawCallbacks[docId]) {
+        officialRawCallbacks[docId] = [cb];
+        if (!docLoadCallbacks[docId]) {
+          const s = document.createElement("script");
+          s.src = `./data/docs/doc_${docId}.js`;
+          s.onerror = () => {
+            officialArticlesBackup[docId] = [];
+            const rc = officialRawCallbacks[docId] || [];
+            delete officialRawCallbacks[docId];
+            rc.forEach(fn => fn([]));
+          };
+          document.body.appendChild(s);
+        }
+      } else {
+        officialRawCallbacks[docId].push(cb);
+      }
+    }
 
     function loadDocArticles(docId, cb) {
       if (docArticlesCache[docId]) { cb(docArticlesCache[docId]); return; }
+      if (docId >= 900000) { cb([]); return; }
       if (!docLoadCallbacks[docId]) {
         docLoadCallbacks[docId] = [cb];
         const s = document.createElement("script");
         s.src = `./data/docs/doc_${docId}.js`;
         s.onerror = () => {
-          docArticlesCache[docId] = [];
+          officialArticlesBackup[docId] = [];
+          if (!docArticlesCache[docId]) docArticlesCache[docId] = [];
           const cbs = docLoadCallbacks[docId] || [];
           delete docLoadCallbacks[docId];
-          cbs.forEach(fn => fn([]));
+          cbs.forEach(fn => fn(docArticlesCache[docId]));
         };
         document.body.appendChild(s);
       } else {
@@ -2526,6 +2731,7 @@
             </div>
             <div class="doc-card-meta">
               ${renderFrameworkBadge(d)}
+              ${renderLocalBadge(d)}
               <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain] || d.domain}</span>
               <span class="pill type-pill">${TYPE_LABELS[d.doc_type] || d.doc_type}</span>
               ${hasValidDocNo(d) ? `<span class="chip" style="padding:1px 6px;">${highlightText(d.doc_no, q)}</span>` : ""}
@@ -2561,6 +2767,7 @@
               <div class="ledger-title" title="${escapeHTML(d.title)}">
                 ${d.series_badge ? `<span class="series-pill dom-${d.domain}" style="margin-right:5px;">${highlightText(d.series_badge, q)}</span>` : ""}
                 ${highlightText(shortTitle, q)}
+                ${renderLocalBadge(d, true)}
                 ${d.revision_badge ? `<span class="rev-pill" style="margin-left:5px;">${highlightText(d.revision_badge, q)}</span>` : ""}
                 ${ft ? `<span class="pill hit-pill" style="margin-left:5px;">正文 ${ft.count}</span>` : ""}
                 ${d.is_case ? `<span class="pill case-pill" style="margin-left:5px;">参考</span>` : ""}
@@ -2993,6 +3200,7 @@
           <div class="node-foot">
             <span style="display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap;">
               ${renderFrameworkBadge(d)}
+              ${renderLocalBadge(d)}
               <span class="pill dom-${d.domain}">${DOMAIN_SHORT[d.domain] || DOMAIN_LABELS[d.domain] || d.domain}</span>
               <span class="pill type-pill">${TYPE_LABELS[d.doc_type] || d.doc_type}</span>
             </span>
@@ -3090,6 +3298,7 @@
             <h2 class="hero-title">${escapeHTML(d.title)}</h2>
             <div class="meta-row">
               ${renderFrameworkBadge(d)}
+              ${renderLocalBadge(d)}
               <span class="pill dom-${d.domain}">${DOMAIN_LABELS[d.domain]}</span>
               <span class="pill type-pill">${TYPE_LABELS[d.doc_type]}</span>
               <span class="pill st-${d.status}">${STATUS_LABELS[d.status]}</span>
@@ -3105,6 +3314,9 @@
               <span class="chip">出处：${sourceHTML}</span>
               <button class="mini-btn primary" onclick="openInGraph(${d.id})">🕸 在图谱中聚焦</button>
               <button class="mini-btn" onclick="copyCitation(${d.id}, '')">📋 复制文件引用</button>
+              <button class="mini-btn" onclick="openLocalEditorModal(${d.id})">✎ 本地编辑</button>
+              ${d._local_status === "modified" ? `<button class="mini-btn danger" onclick="restoreOfficialDoc(${d.id})">↺ 还原官方版</button>` : ""}
+              ${d._local_status === "custom" ? `<button class="mini-btn danger" onclick="deleteCustomLocalDoc(${d.id})">🗑 删除本地文档</button>` : ""}
             </div>
             ${d.summary ? `<div style="margin-top:9px; padding-top:8px; border-top:1px dashed var(--border); font-size:12.5px; color:var(--ink-secondary);"><strong>摘要：</strong>${escapeHTML(d.summary)}</div>` : ""}
           </div>
@@ -4583,6 +4795,890 @@
       });
     }
 
+    // =========================================================================
+    // V1 离线个人工作台（Overlay 补丁层 + IndexedDB 持久化 + JSON 导入导出）
+    // =========================================================================
+    const LOCAL_DB_NAME = "finlex_local_workspace_v1";
+    const LOCAL_DB_STORE = "kv";
+    const LOCAL_DB_KEY = "patch_v1";
+    const LOCAL_LS_KEY = "finlex_local_patch_v1";
+
+    const OFFICIAL_DOCS_BASE = DATA.documents.map(d => JSON.parse(JSON.stringify(d)));
+    const OFFICIAL_LINKS_BASE = DATA.doc_links.map(e => JSON.parse(JSON.stringify(e)));
+    const OFFICIAL_META_BASE = JSON.parse(JSON.stringify(DATA.meta || {}));
+    const OFFICIAL_FT_REMOVED_CACHE = new Map();
+
+    let localStorageBackend = "IndexedDB";
+    let localPatch = createEmptyLocalPatch();
+    let localEditorState = { mode: "create", docId: null, articlesLoaded: true, articlesDirty: false };
+    let localImportMode = "merge";
+    let localToastTimer = null;
+
+    function createEmptyLocalPatch() {
+      return {
+        schema_version: "1.0",
+        app: "finlex-site",
+        updated_at: null,
+        next_custom_id: 900001,
+        overrides: {},
+        custom_docs: []
+      };
+    }
+
+    function showLocalToast(msg) {
+      const el = document.getElementById("localToast");
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(localToastTimer);
+      localToastTimer = setTimeout(() => el.classList.remove("show"), 2600);
+    }
+
+    function renderLocalBadge(d, inlineMargin = false) {
+      if (!d || !d._local_status) return "";
+      const st = inlineMargin ? ' style="margin-left:5px;"' : "";
+      if (d._local_status === "modified") return `<span class="pill local-mod"${st} title="该文档包含本机离线修订，可随时还原官方版">🏷 本地修订</span>`;
+      if (d._local_status === "custom") return `<span class="pill local-new"${st} title="仅保存在本机工作区的自定义文档">🏷 本地新增</span>`;
+      return "";
+    }
+
+    function openLocalIDB() {
+      return new Promise((resolve, reject) => {
+        if (typeof indexedDB === "undefined") { reject(new Error("no_idb")); return; }
+        try {
+          const req = indexedDB.open(LOCAL_DB_NAME, 1);
+          req.onupgradeneeded = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains(LOCAL_DB_STORE)) db.createObjectStore(LOCAL_DB_STORE);
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error || new Error("idb_open_err"));
+        } catch (err) { reject(err); }
+      });
+    }
+
+    async function loadLocalPatchFromStore() {
+      try {
+        const db = await openLocalIDB();
+        const val = await new Promise((resolve, reject) => {
+          const tx = db.transaction(LOCAL_DB_STORE, "readonly");
+          const req = tx.objectStore(LOCAL_DB_STORE).get(LOCAL_DB_KEY);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+        db.close();
+        localStorageBackend = "IndexedDB";
+        if (val && typeof val === "object") return normalizeLocalPatch(val);
+      } catch (_) {
+        localStorageBackend = "localStorage";
+      }
+      try {
+        const raw = localStorage.getItem(LOCAL_LS_KEY);
+        if (raw) return normalizeLocalPatch(JSON.parse(raw));
+      } catch (_) {}
+      return createEmptyLocalPatch();
+    }
+
+    async function saveLocalPatchToStore(patch) {
+      patch.updated_at = new Date().toISOString();
+      let savedIdb = false;
+      try {
+        const db = await openLocalIDB();
+        await new Promise((resolve, reject) => {
+          const tx = db.transaction(LOCAL_DB_STORE, "readwrite");
+          tx.objectStore(LOCAL_DB_STORE).put(patch, LOCAL_DB_KEY);
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
+        db.close();
+        savedIdb = true;
+        localStorageBackend = "IndexedDB";
+      } catch (_) {
+        localStorageBackend = "localStorage";
+      }
+      try {
+        localStorage.setItem(LOCAL_LS_KEY, JSON.stringify(patch));
+      } catch (_) {
+        if (!savedIdb) showLocalToast("本地存储空间不足，请导出 JSON 补丁包备份");
+      }
+    }
+
+    function normalizeLocalPatch(raw) {
+      const p = createEmptyLocalPatch();
+      if (!raw || typeof raw !== "object") return p;
+      p.updated_at = raw.updated_at || null;
+      p.next_custom_id = Number.isInteger(raw.next_custom_id) && raw.next_custom_id >= 900001 ? raw.next_custom_id : 900001;
+      if (raw.overrides && typeof raw.overrides === "object") p.overrides = raw.overrides;
+      if (Array.isArray(raw.custom_docs)) p.custom_docs = raw.custom_docs;
+      p.custom_docs.forEach(cd => {
+        if (cd && Number.isInteger(cd.id) && cd.id >= p.next_custom_id) p.next_custom_id = cd.id + 1;
+      });
+      return p;
+    }
+
+    function resolveOverrideTargetId(ovKey, ov, officialMap) {
+      const numId = Number(ov.doc_id || ovKey);
+      if (officialMap.has(numId)) return numId;
+      if (ov.anchor_doc_no && ov.anchor_doc_no !== "待核实" && ov.anchor_doc_no !== "无文号") {
+        for (const d of OFFICIAL_DOCS_BASE) {
+          if (d.doc_no === ov.anchor_doc_no) return d.id;
+        }
+      }
+      if (ov.anchor_title) {
+        for (const d of OFFICIAL_DOCS_BASE) {
+          if (d.title === ov.anchor_title) return d.id;
+        }
+      }
+      return null;
+    }
+
+    function buildRuntimeCustomDoc(cd) {
+      const fw = cd.framework || "CN";
+      const dom = cd.domain || "accounting";
+      const dtype = cd.doc_type || "rule_norm";
+      const st = cd.status || "effective";
+      const tid = cd.topic_id || (DATA.taxonomy.topics[0] ? DATA.taxonomy.topics[0].id : "general");
+      const arts = Array.isArray(cd.articles) ? cd.articles : [];
+      const rankMap = { law: 1, standard: 2, guide: 3, interp_qa: 3, rule_norm: 4, case_interp: 5 };
+      return {
+        id: cd.id,
+        title: cd.title || "未命名本地文档",
+        display_title: cd.title || "未命名本地文档",
+        doc_no: cd.doc_no || "本地自建",
+        framework: fw,
+        domain: dom,
+        doc_type: dtype,
+        status: st,
+        topic_id: tid,
+        topic_label: TOPIC_LABELS[tid] || tid,
+        issuer: cd.issuer || "个人工作区",
+        pub_date: cd.pub_date || "",
+        effective_date: cd.effective_date || "",
+        source_name: cd.source_name || "本地个人工作区",
+        source_url: cd.source_url || "",
+        summary: cd.summary || "",
+        first_preview: arts.length ? (arts[0].text || "").slice(0, 120) : (cd.summary || ""),
+        article_count: arts.length,
+        authority_rank: rankMap[dtype] || 4,
+        is_case: dtype === "case_interp",
+        in_degree: 0,
+        out_degree: 0,
+        total_degree: 0,
+        _local_status: "custom"
+      };
+    }
+
+    function syncLocalFulltextRows(overriddenDocIds) {
+      const kept = [];
+      for (let i = 0; i < fulltextRows.length; i++) {
+        const row = fulltextRows[i];
+        if (row && row[4] === "__local__") continue;
+        kept.push(row);
+      }
+      OFFICIAL_FT_REMOVED_CACHE.forEach((rows, docId) => {
+        if (!overriddenDocIds.has(docId)) {
+          rows.forEach(r => kept.push(r));
+          OFFICIAL_FT_REMOVED_CACHE.delete(docId);
+        }
+      });
+      const finalRows = [];
+      for (let i = 0; i < kept.length; i++) {
+        const r = kept[i];
+        const did = r[0];
+        if (overriddenDocIds.has(did)) {
+          if (!OFFICIAL_FT_REMOVED_CACHE.has(did)) OFFICIAL_FT_REMOVED_CACHE.set(did, []);
+          OFFICIAL_FT_REMOVED_CACHE.get(did).push(r);
+          continue;
+        }
+        finalRows.push(r);
+      }
+      overriddenDocIds.forEach(did => {
+        const arts = docArticlesCache[did] || [];
+        arts.forEach(a => finalRows.push([did, a.no || `第${a.seq}条`, a.heading || "", a.text || "", "__local__"]));
+      });
+      (localPatch.custom_docs || []).forEach(cd => {
+        const arts = Array.isArray(cd.articles) ? cd.articles : [];
+        arts.forEach(a => finalRows.push([cd.id, a.no || `第${a.seq}条`, a.heading || "", a.text || "", "__local__"]));
+      });
+      fulltextRows = finalRows;
+      updateFtBadge();
+    }
+
+    function applyLocalPatchToRuntime() {
+      const docs = OFFICIAL_DOCS_BASE.map(d => JSON.parse(JSON.stringify(d)));
+      const links = OFFICIAL_LINKS_BASE.map(e => JSON.parse(JSON.stringify(e)));
+      const officialMap = new Map(docs.map(d => [d.id, d]));
+      const overriddenArtDocIds = new Set();
+      let nextLocalEdgeId = 9900001;
+
+      Object.keys(docArticlesCache).forEach(k => {
+        const id = Number(k);
+        if (id >= 900000) {
+          delete docArticlesCache[k];
+        } else if (docArticlesCache[k] && docArticlesCache[k]._localOverride) {
+          if (officialArticlesBackup[id]) docArticlesCache[id] = officialArticlesBackup[id];
+          else delete docArticlesCache[id];
+        }
+      });
+
+      Object.entries(localPatch.overrides || {}).forEach(([ovKey, ov]) => {
+        if (!ov || typeof ov !== "object") return;
+        const tid = resolveOverrideTargetId(ovKey, ov, officialMap);
+        if (tid === null) return;
+        const d = officialMap.get(tid);
+        const f = ov.fields || {};
+        ["title", "doc_no", "issuer", "pub_date", "effective_date", "status", "framework", "domain", "doc_type", "topic_id", "summary", "source_name"].forEach(k => {
+          if (f[k] !== undefined && f[k] !== null) d[k] = f[k];
+        });
+        if (f.title) d.display_title = f.title;
+        if (f.topic_id) d.topic_label = TOPIC_LABELS[f.topic_id] || f.topic_id;
+        if (f.doc_type) d.is_case = f.doc_type === "case_interp";
+        d._local_status = "modified";
+        if (Array.isArray(ov.articles)) {
+          const cloned = ov.articles.map((a, idx) => ({
+            id: a.id || (tid * 10000 + idx + 1),
+            seq: idx + 1,
+            no: a.no || `第${idx + 1}条`,
+            heading: a.heading || "",
+            text: a.text || ""
+          }));
+          cloned._localOverride = true;
+          docArticlesCache[tid] = cloned;
+          d.article_count = cloned.length;
+          if (cloned.length) d.first_preview = (cloned[0].text || "").slice(0, 120);
+          overriddenArtDocIds.add(tid);
+        }
+        if (Array.isArray(ov.custom_links)) {
+          ov.custom_links.forEach(lk => {
+            if (!lk || !lk.target_doc_id) return;
+            const isOut = lk.dir !== "in";
+            links.push({
+              id: nextLocalEdgeId++,
+              from_doc_id: isOut ? tid : Number(lk.target_doc_id),
+              to_doc_id: isOut ? Number(lk.target_doc_id) : tid,
+              kind: lk.kind || "companion",
+              strength: "strong",
+              tier: "l1",
+              score: 92,
+              note: lk.note || "本地自定义关联",
+              citation_count: 1,
+              auto_generated: false,
+              _local: true
+            });
+          });
+        }
+      });
+
+      (localPatch.custom_docs || []).forEach(cd => {
+        if (!cd || !cd.id) return;
+        const d = buildRuntimeCustomDoc(cd);
+        docs.push(d);
+        const arts = (Array.isArray(cd.articles) ? cd.articles : []).map((a, idx) => ({
+          id: a.id || (cd.id * 1000 + idx + 1),
+          seq: idx + 1,
+          no: a.no || `第${idx + 1}条`,
+          heading: a.heading || "",
+          text: a.text || ""
+        }));
+        arts._localOverride = true;
+        docArticlesCache[cd.id] = arts;
+        if (Array.isArray(cd.custom_links)) {
+          cd.custom_links.forEach(lk => {
+            if (!lk || !lk.target_doc_id) return;
+            const isOut = lk.dir !== "in";
+            links.push({
+              id: nextLocalEdgeId++,
+              from_doc_id: isOut ? cd.id : Number(lk.target_doc_id),
+              to_doc_id: isOut ? Number(lk.target_doc_id) : cd.id,
+              kind: lk.kind || "companion",
+              strength: "strong",
+              tier: "l1",
+              score: 92,
+              note: lk.note || "本地自定义关联",
+              citation_count: 1,
+              auto_generated: false,
+              _local: true
+            });
+          });
+        }
+      });
+
+      Object.keys(docById).forEach(k => delete docById[k]);
+      docs.forEach(d => {
+        d.in_degree = 0;
+        d.out_degree = 0;
+        d.total_degree = 0;
+        docById[d.id] = d;
+      });
+      const validLinks = links.filter(e => docById[e.from_doc_id] && docById[e.to_doc_id] && e.from_doc_id !== e.to_doc_id);
+      validLinks.forEach(e => {
+        docById[e.from_doc_id].out_degree++;
+        docById[e.to_doc_id].in_degree++;
+      });
+      docs.forEach(d => { d.total_degree = d.in_degree + d.out_degree; });
+
+      DATA.documents = docs;
+      DATA.doc_links = validLinks;
+      DATA.meta.document_count = docs.length;
+      DATA.meta.doc_link_count = validLinks.length;
+      DATA.meta.article_count = docs.reduce((acc, x) => acc + (x.article_count || 0), 0);
+
+      syncLocalFulltextRows(overriddenArtDocIds);
+      updateLocalWorkspaceBadges();
+    }
+
+    function updateLocalWorkspaceBadges() {
+      const ovCount = Object.keys(localPatch.overrides || {}).length;
+      const cdCount = (localPatch.custom_docs || []).length;
+      const total = ovCount + cdCount;
+      ["localWsCnt", "homeLocalWsCnt"].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = String(total);
+        el.style.display = total > 0 ? "inline-flex" : "none";
+      });
+    }
+
+    function populateLocalEditorSelects() {
+      const domSel = document.getElementById("leDomain");
+      const typeSel = document.getElementById("leDocType");
+      const stSel = document.getElementById("leStatus");
+      const topSel = document.getElementById("leTopic");
+      if (domSel && !domSel.options.length) {
+        domSel.innerHTML = DATA.taxonomy.domains.map(x => `<option value="${escapeHTML(x.id)}">${escapeHTML(x.label)}</option>`).join("");
+      }
+      if (typeSel && !typeSel.options.length) {
+        typeSel.innerHTML = DATA.taxonomy.doc_types.map(x => `<option value="${escapeHTML(x.id)}">${escapeHTML(x.label)}</option>`).join("");
+      }
+      if (stSel && !stSel.options.length) {
+        stSel.innerHTML = DATA.taxonomy.statuses.map(x => `<option value="${escapeHTML(x.id)}">${escapeHTML(x.label)}</option>`).join("");
+      }
+      if (topSel && !topSel.options.length) {
+        topSel.innerHTML = DATA.taxonomy.topics.map(x => `<option value="${escapeHTML(x.id)}">${escapeHTML(x.label)}</option>`).join("");
+      }
+      const dl = document.getElementById("localDocDatalist");
+      if (dl) {
+        dl.innerHTML = DATA.documents.map(d => `<option value="${d.id} | ${escapeHTML(d.title)}"></option>`).join("");
+      }
+    }
+
+    function openLocalWorkspaceModal() {
+      renderLocalWorkspaceModal();
+      document.getElementById("localWorkspaceModal").classList.add("open");
+    }
+    function closeLocalWorkspaceModal() {
+      document.getElementById("localWorkspaceModal").classList.remove("open");
+    }
+
+    function renderLocalWorkspaceModal() {
+      const ovEntries = Object.entries(localPatch.overrides || {});
+      const customs = localPatch.custom_docs || [];
+      const customLinkCount = ovEntries.reduce((s, [, ov]) => s + ((ov.custom_links || []).length), 0) + customs.reduce((s, c) => s + ((c.custom_links || []).length), 0);
+      const summaryEl = document.getElementById("localWsSummary");
+      summaryEl.innerHTML = `
+        <span>本地修订：<strong>${ovEntries.length}</strong> 部 · 本地新增：<strong>${customs.length}</strong> 部 · 自定义关联：<strong>${customLinkCount}</strong> 条</span>
+        <span>存储引擎：<strong>${localStorageBackend}</strong>${localPatch.updated_at ? ` · 最近保存 ${localPatch.updated_at.slice(0, 16).replace("T", " ")}` : ""}</span>
+      `;
+      const listEl = document.getElementById("localWsList");
+      if (!ovEntries.length && !customs.length) {
+        listEl.innerHTML = `<div style="text-align:center; padding:28px 12px; color:var(--ink-muted); font-size:13px;">当前尚未创建本地修订或自定义文档。<br>可在任意法规详情点击「✎ 本地编辑」，或点击上方「＋ 新增本地文档」开始构建个人知识台。</div>`;
+        return;
+      }
+      const items = [];
+      customs.forEach(cd => {
+        const d = docById[cd.id];
+        items.push(`
+          <div class="local-item-card">
+            <div class="local-item-main">
+              <div class="local-item-title"><span class="pill local-new">🏷 本地新增</span><span>${escapeHTML(cd.title)}</span></div>
+              <div class="local-item-meta">ID #${cd.id} · ${escapeHTML(cd.doc_no || "本地自建")} · ${(cd.articles || []).length} 条正文 · ${(cd.custom_links || []).length} 条自定义关联</div>
+            </div>
+            <div class="local-item-actions">
+              ${d ? `<button type="button" class="mini-btn" onclick="jumpToLocalDoc(${cd.id})">定位</button>` : ""}
+              <button type="button" class="mini-btn primary" onclick="openLocalEditorModal(${cd.id})">编辑</button>
+              <button type="button" class="mini-btn danger" onclick="deleteCustomLocalDoc(${cd.id})">删除</button>
+            </div>
+          </div>
+        `);
+      });
+      ovEntries.forEach(([k, ov]) => {
+        const id = Number(ov.doc_id || k);
+        const d = docById[id];
+        const title = (ov.fields && ov.fields.title) || (d ? d.title : ov.anchor_title) || `文档 #${id}`;
+        const docNo = (ov.fields && ov.fields.doc_no) || (d ? d.doc_no : ov.anchor_doc_no) || "";
+        const artInfo = Array.isArray(ov.articles) ? `已修订正文（${ov.articles.length} 条）` : "仅修订元数据/关联";
+        items.push(`
+          <div class="local-item-card">
+            <div class="local-item-main">
+              <div class="local-item-title"><span class="pill local-mod">🏷 本地修订</span><span>${escapeHTML(title)}</span></div>
+              <div class="local-item-meta">官方 ID #${id} · ${escapeHTML(docNo)} · ${artInfo} · ${(ov.custom_links || []).length} 条自定义关联</div>
+            </div>
+            <div class="local-item-actions">
+              ${d ? `<button type="button" class="mini-btn" onclick="jumpToLocalDoc(${id})">定位</button>` : ""}
+              <button type="button" class="mini-btn primary" onclick="openLocalEditorModal(${id})">编辑</button>
+              <button type="button" class="mini-btn danger" onclick="restoreOfficialDoc(${id})">还原官方版</button>
+            </div>
+          </div>
+        `);
+      });
+      listEl.innerHTML = items.join("");
+    }
+
+    function jumpToLocalDoc(docId) {
+      closeLocalWorkspaceModal();
+      if (state.pageMode !== "workspace") enterWorkspace({ clearQuery: true });
+      const d = docById[docId];
+      if (!d) return;
+      if (state.frameworkFilter !== "all" && state.frameworkFilter !== (d.framework || "CN")) {
+        state.frameworkFilter = d.framework || "CN";
+      }
+      state.domainFilter = "all";
+      state.typeFilter = "all";
+      state.statusFilter = "all";
+      state.topicFilter = "all";
+      state.searchQuery = "";
+      searchInputEl.value = "";
+      syncCascadingDropdowns();
+      state.selectedDocId = docId;
+      updateView(false, { keepSelected: true });
+      if (typeof openDrawerIfCollapsed === "function") openDrawerIfCollapsed();
+    }
+
+    function openLocalEditorModal(docId) {
+      closeLocalWorkspaceModal();
+      populateLocalEditorSelects();
+      const isNew = (docId === null || docId === undefined);
+      const isCustom = !isNew && docId >= 900000;
+      const d = isNew ? null : docById[docId];
+      localEditorState = { mode: isNew ? "create" : (isCustom ? "edit_custom" : "edit_official"), docId: isNew ? null : docId, articlesLoaded: true, articlesDirty: false };
+
+      document.getElementById("localEditorTitle").textContent = isNew
+        ? "＋ 新增本地文档（挂接离线图谱）"
+        : (isCustom ? `✎ 编辑本地新增文档（#${docId}）` : `✎ 本地修订官方监管文档（#${docId}）`);
+      const banner = document.getElementById("localEditorBanner");
+      if (localEditorState.mode === "edit_official") {
+        banner.style.display = "block";
+        banner.textContent = "提示：所有改动仅保存在本机工作区，不覆盖官方原件；可随时点击左下角「↺ 还原官方版」恢复。";
+      } else {
+        banner.style.display = "none";
+      }
+
+      document.getElementById("leTitle").value = d ? (d.title || "") : "";
+      document.getElementById("leDocNo").value = d ? (d.doc_no || "") : "";
+      document.getElementById("leIssuer").value = d ? (d.issuer || "") : "";
+      document.getElementById("lePubDate").value = d ? (d.pub_date || "") : "";
+      document.getElementById("leEffDate").value = d ? (d.effective_date || "") : "";
+      document.getElementById("leFramework").value = d ? (d.framework || "CN") : (state.frameworkFilter === "all" ? "CN" : state.frameworkFilter);
+      document.getElementById("leDomain").value = d ? (d.domain || "accounting") : (state.domainFilter === "all" ? "accounting" : state.domainFilter);
+      document.getElementById("leDocType").value = d ? (d.doc_type || "rule_norm") : "rule_norm";
+      document.getElementById("leStatus").value = d ? (d.status || "effective") : "effective";
+      document.getElementById("leTopic").value = d ? (d.topic_id || DATA.taxonomy.topics[0].id) : DATA.taxonomy.topics[0].id;
+      document.getElementById("leSourceName").value = d ? (d.source_name || "") : "本地个人工作区";
+      document.getElementById("leSummary").value = d ? (d.summary || "") : "";
+
+      document.getElementById("leBulkWrap").style.display = "none";
+      document.getElementById("leBulkText").value = "";
+      document.getElementById("leRestoreBtn").style.display = (localEditorState.mode === "edit_official" && localPatch.overrides[String(docId)]) ? "inline-flex" : "none";
+      document.getElementById("leDeleteBtn").style.display = isCustom ? "inline-flex" : "none";
+
+      const linksEl = document.getElementById("leLinksList");
+      linksEl.innerHTML = "";
+      let existingLinks = [];
+      if (isCustom) {
+        const cd = (localPatch.custom_docs || []).find(x => x.id === docId);
+        existingLinks = (cd && cd.custom_links) ? cd.custom_links : [];
+      } else if (!isNew) {
+        const ov = localPatch.overrides[String(docId)];
+        existingLinks = (ov && ov.custom_links) ? ov.custom_links : [];
+      }
+      existingLinks.forEach(lk => addEditorLinkRow(lk));
+
+      const artsEl = document.getElementById("leArticlesList");
+      const artsNote = document.getElementById("leArticlesNote");
+      const loadBtn = document.getElementById("leLoadOfficialArtsBtn");
+      artsEl.innerHTML = "";
+      artsNote.style.display = "none";
+      loadBtn.style.display = "none";
+
+      if (isNew) {
+        addEditorArticleRow({ no: "第1条", heading: "", text: "" });
+        updateEditorArtCountHint();
+      } else if (isCustom) {
+        const cd = (localPatch.custom_docs || []).find(x => x.id === docId);
+        const arts = (cd && Array.isArray(cd.articles)) ? cd.articles : [];
+        arts.forEach(a => addEditorArticleRow(a));
+        updateEditorArtCountHint();
+      } else {
+        const ov = localPatch.overrides[String(docId)];
+        if (ov && Array.isArray(ov.articles)) {
+          localEditorState.articlesDirty = true;
+          ov.articles.forEach(a => addEditorArticleRow(a));
+          updateEditorArtCountHint();
+        } else if ((d.article_count || 0) <= 60) {
+          artsNote.style.display = "block";
+          artsNote.textContent = "正在载入官方条文...";
+          loadOfficialArticlesRaw(docId, (arts) => {
+            artsNote.style.display = "none";
+            if (arts && arts.length) {
+              arts.forEach(a => addEditorArticleRow(a));
+            } else {
+              artsNote.style.display = "block";
+              artsNote.textContent = "当前官方原件无结构化条文，可直接点击「＋ 添加条文」或「⚡ 批量粘贴拆条」补录。";
+            }
+            updateEditorArtCountHint();
+          });
+        } else {
+          localEditorState.articlesLoaded = false;
+          loadBtn.style.display = "inline-flex";
+          artsNote.style.display = "block";
+          artsNote.textContent = `该官方文件包含 ${d.article_count} 条正文。仅修订文号/元数据/关联时无需展开条文；如需修订正文，请点击上方「📥 载入官方条文以编辑」。`;
+          updateEditorArtCountHint();
+        }
+      }
+
+      document.getElementById("localEditorModal").classList.add("open");
+    }
+
+    function closeLocalEditorModal() {
+      document.getElementById("localEditorModal").classList.remove("open");
+    }
+
+    function loadOfficialArticlesIntoEditor() {
+      if (!localEditorState.docId) return;
+      const artsNote = document.getElementById("leArticlesNote");
+      artsNote.style.display = "block";
+      artsNote.textContent = "正在载入官方条文...";
+      loadOfficialArticlesRaw(localEditorState.docId, (arts) => {
+        localEditorState.articlesLoaded = true;
+        localEditorState.articlesDirty = true;
+        document.getElementById("leLoadOfficialArtsBtn").style.display = "none";
+        artsNote.style.display = "none";
+        const listEl = document.getElementById("leArticlesList");
+        listEl.innerHTML = "";
+        (arts || []).forEach(a => addEditorArticleRow(a));
+        updateEditorArtCountHint();
+      });
+    }
+
+    function updateEditorArtCountHint() {
+      const n = document.querySelectorAll("#leArticlesList .local-art-row").length;
+      const el = document.getElementById("leArtCountHint");
+      if (el) el.textContent = localEditorState.articlesLoaded ? `（当前 ${n} 条）` : "（保持官方原文不变）";
+    }
+
+    function addEditorArticleRow(art = null) {
+      if (!localEditorState.articlesLoaded) {
+        localEditorState.articlesLoaded = true;
+        document.getElementById("leLoadOfficialArtsBtn").style.display = "none";
+        document.getElementById("leArticlesNote").style.display = "none";
+      }
+      const listEl = document.getElementById("leArticlesList");
+      const idx = listEl.querySelectorAll(".local-art-row").length + 1;
+      const row = document.createElement("div");
+      row.className = "local-art-row";
+      row.innerHTML = `
+        <div class="local-art-top">
+          <input type="text" class="le-art-no" placeholder="条号，如 第1条" value="${escapeHTML((art && art.no) || `第${idx}条`)}" />
+          <input type="text" class="le-art-heading" placeholder="章节/小标题（可选）" value="${escapeHTML((art && art.heading) || "")}" />
+          <button type="button" class="mini-btn danger" onclick="this.closest('.local-art-row').remove(); localEditorState.articlesDirty=true; updateEditorArtCountHint();">删除</button>
+        </div>
+        <textarea class="le-art-text" placeholder="输入条文正文内容...">${escapeHTML((art && art.text) || "")}</textarea>
+      `;
+      row.querySelectorAll("input, textarea").forEach(inp => inp.addEventListener("input", () => { localEditorState.articlesDirty = true; }));
+      listEl.appendChild(row);
+      if (!art) localEditorState.articlesDirty = true;
+      updateEditorArtCountHint();
+    }
+
+    function toggleBulkArticleParser() {
+      const wrap = document.getElementById("leBulkWrap");
+      wrap.style.display = wrap.style.display === "none" ? "block" : "none";
+    }
+
+    function bulkParseEditorArticles(replaceExisting) {
+      const raw = (document.getElementById("leBulkText").value || "").trim();
+      if (!raw) { showLocalToast("请先粘贴需要拆分的文本"); return; }
+      let chunks = [];
+      const artRegex = /(?:^|\n)(?=(?:第[零一二三四五六七八九十百千万\d]+条|Article\s+\d+|\d+\.)\s*)/g;
+      const splitByArt = raw.split(artRegex).map(s => s.trim()).filter(Boolean);
+      if (splitByArt.length >= 2) {
+        chunks = splitByArt;
+      } else {
+        chunks = raw.split(/\n\s*\n+/).map(s => s.trim()).filter(Boolean);
+      }
+      if (replaceExisting) document.getElementById("leArticlesList").innerHTML = "";
+      const baseIdx = document.querySelectorAll("#leArticlesList .local-art-row").length;
+      chunks.forEach((txt, i) => {
+        const m = txt.match(/^(第[零一二三四五六七八九十百千万\d]+条|Article\s+\d+)[\s　:：]*(.*)$/s);
+        if (m) {
+          addEditorArticleRow({ no: m[1].trim(), heading: "", text: m[2].trim() || txt });
+        } else {
+          addEditorArticleRow({ no: `第${baseIdx + i + 1}条`, heading: "", text: txt });
+        }
+      });
+      localEditorState.articlesDirty = true;
+      document.getElementById("leBulkText").value = "";
+      document.getElementById("leBulkWrap").style.display = "none";
+      showLocalToast(`已拆分并填入 ${chunks.length} 条正文`);
+    }
+
+    function addEditorLinkRow(lk = null) {
+      const listEl = document.getElementById("leLinksList");
+      const row = document.createElement("div");
+      row.className = "local-link-row";
+      const targetDoc = lk && lk.target_doc_id && docById[lk.target_doc_id] ? docById[lk.target_doc_id] : null;
+      const targetVal = targetDoc ? `${targetDoc.id} | ${targetDoc.title}` : (lk && lk.target_doc_id ? String(lk.target_doc_id) : "");
+      const kindOpts = ["companion", "amends", "cites", "cross_domain", "intl_mapping", "applies_to", "supersedes", "explains"]
+        .map(k => `<option value="${k}" ${(lk && lk.kind === k) ? "selected" : ""}>${REL_KIND_LABELS[k] || k}</option>`).join("");
+      row.innerHTML = `
+        <select class="le-link-dir">
+          <option value="out" ${(!lk || lk.dir !== "in") ? "selected" : ""}>本文件 → 目标</option>
+          <option value="in" ${(lk && lk.dir === "in") ? "selected" : ""}>目标 → 本文件</option>
+        </select>
+        <input type="text" class="le-link-target" list="localDocDatalist" placeholder="搜索并选择目标文档..." value="${escapeHTML(targetVal)}" />
+        <select class="le-link-kind">${kindOpts}</select>
+        <input type="text" class="le-link-note" placeholder="关联说明（可选）" value="${escapeHTML((lk && lk.note) || "")}" />
+        <button type="button" class="mini-btn danger" onclick="this.closest('.local-link-row').remove()">移除</button>
+      `;
+      listEl.appendChild(row);
+    }
+
+    function collectEditorLinks() {
+      const out = [];
+      document.querySelectorAll("#leLinksList .local-link-row").forEach(row => {
+        const rawTarget = (row.querySelector(".le-link-target").value || "").trim();
+        if (!rawTarget) return;
+        let tid = null;
+        const m = rawTarget.match(/^(\d+)\s*\|/);
+        if (m) tid = Number(m[1]);
+        else if (/^\d+$/.test(rawTarget)) tid = Number(rawTarget);
+        else {
+          const found = DATA.documents.find(d => d.title === rawTarget || d.display_title === rawTarget);
+          if (found) tid = found.id;
+        }
+        if (!tid || !docById[tid]) return;
+        out.push({
+          dir: row.querySelector(".le-link-dir").value || "out",
+          target_doc_id: tid,
+          kind: row.querySelector(".le-link-kind").value || "companion",
+          note: (row.querySelector(".le-link-note").value || "").trim()
+        });
+      });
+      return out;
+    }
+
+    function collectEditorArticles() {
+      const out = [];
+      document.querySelectorAll("#leArticlesList .local-art-row").forEach((row, idx) => {
+        const no = (row.querySelector(".le-art-no").value || "").trim() || `第${idx + 1}条`;
+        const heading = (row.querySelector(".le-art-heading").value || "").trim();
+        const text = (row.querySelector(".le-art-text").value || "").trim();
+        if (!text && !heading) return;
+        out.push({ seq: out.length + 1, no, heading, text });
+      });
+      return out;
+    }
+
+    async function saveLocalEditorForm(ev) {
+      ev.preventDefault();
+      const title = (document.getElementById("leTitle").value || "").trim();
+      if (!title) { showLocalToast("请填写法规/制度标题"); return; }
+      const fields = {
+        title,
+        doc_no: (document.getElementById("leDocNo").value || "").trim() || "待核实",
+        issuer: (document.getElementById("leIssuer").value || "").trim() || "未标注",
+        pub_date: (document.getElementById("lePubDate").value || "").trim(),
+        effective_date: (document.getElementById("leEffDate").value || "").trim(),
+        framework: document.getElementById("leFramework").value || "CN",
+        domain: document.getElementById("leDomain").value || "accounting",
+        doc_type: document.getElementById("leDocType").value || "rule_norm",
+        status: document.getElementById("leStatus").value || "effective",
+        topic_id: document.getElementById("leTopic").value || DATA.taxonomy.topics[0].id,
+        source_name: (document.getElementById("leSourceName").value || "").trim() || "本地个人工作区",
+        summary: (document.getElementById("leSummary").value || "").trim()
+      };
+      const customLinks = collectEditorLinks();
+      let targetDocId = localEditorState.docId;
+
+      if (localEditorState.mode === "create") {
+        const newId = localPatch.next_custom_id++;
+        targetDocId = newId;
+        localPatch.custom_docs.push({
+          id: newId,
+          ...fields,
+          articles: collectEditorArticles(),
+          custom_links: customLinks,
+          updated_at: new Date().toISOString()
+        });
+      } else if (localEditorState.mode === "edit_custom") {
+        const idx = localPatch.custom_docs.findIndex(x => x.id === targetDocId);
+        if (idx >= 0) {
+          localPatch.custom_docs[idx] = {
+            ...localPatch.custom_docs[idx],
+            ...fields,
+            articles: collectEditorArticles(),
+            custom_links: customLinks,
+            updated_at: new Date().toISOString()
+          };
+        }
+      } else {
+        const orig = OFFICIAL_DOCS_BASE.find(x => x.id === targetDocId);
+        const prevOv = localPatch.overrides[String(targetDocId)] || {};
+        const ov = {
+          doc_id: targetDocId,
+          anchor_title: orig ? orig.title : title,
+          anchor_doc_no: orig ? orig.doc_no : "",
+          fields,
+          custom_links: customLinks,
+          updated_at: new Date().toISOString()
+        };
+        if (localEditorState.articlesLoaded && localEditorState.articlesDirty) {
+          ov.articles = collectEditorArticles();
+        } else if (Array.isArray(prevOv.articles)) {
+          ov.articles = prevOv.articles;
+        }
+        localPatch.overrides[String(targetDocId)] = ov;
+      }
+
+      applyLocalPatchToRuntime();
+      await saveLocalPatchToStore(localPatch);
+      closeLocalEditorModal();
+      renderHomePage();
+      if (state.pageMode !== "workspace") enterWorkspace({ clearQuery: false });
+      state.selectedDocId = targetDocId;
+      if (state.frameworkFilter !== "all" && state.frameworkFilter !== fields.framework) {
+        state.frameworkFilter = fields.framework;
+      }
+      syncCascadingDropdowns();
+      updateView(false, { keepSelected: true });
+      showLocalToast(localEditorState.mode === "create" ? "已新增本地文档并挂接至工作台" : "已保存本地修订");
+    }
+
+    async function restoreOfficialDoc(docId) {
+      if (!localPatch.overrides[String(docId)]) return;
+      if (!confirm("确定丢弃该文档的所有本地修订并还原为官方原版？")) return;
+      delete localPatch.overrides[String(docId)];
+      applyLocalPatchToRuntime();
+      await saveLocalPatchToStore(localPatch);
+      closeLocalEditorModal();
+      renderLocalWorkspaceModal();
+      renderHomePage();
+      updateView(false, { keepSelected: true });
+      showLocalToast("已还原为官方原版");
+    }
+
+    function restoreCurrentEditorDoc() {
+      if (localEditorState.docId) restoreOfficialDoc(localEditorState.docId);
+    }
+
+    async function deleteCustomLocalDoc(docId) {
+      if (!confirm("确定从本地工作区删除该自定义文档？")) return;
+      localPatch.custom_docs = (localPatch.custom_docs || []).filter(x => x.id !== docId);
+      applyLocalPatchToRuntime();
+      await saveLocalPatchToStore(localPatch);
+      closeLocalEditorModal();
+      if (state.selectedDocId === docId) state.selectedDocId = null;
+      renderLocalWorkspaceModal();
+      renderHomePage();
+      updateView(false);
+      showLocalToast("已删除本地自定义文档");
+    }
+
+    function deleteCurrentEditorDoc() {
+      if (localEditorState.docId) deleteCustomLocalDoc(localEditorState.docId);
+    }
+
+    function exportLocalPatch() {
+      const payload = {
+        ...localPatch,
+        exported_at: new Date().toISOString(),
+        base_generated_at: OFFICIAL_META_BASE.generated_at || ""
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      a.href = url;
+      a.download = `finlex-workspace-patch-${stamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showLocalToast("已导出个人工作区 JSON 补丁包");
+    }
+
+    function triggerImportLocalPatch(mode) {
+      localImportMode = mode || "merge";
+      const inp = document.getElementById("localPatchFileInput");
+      inp.value = "";
+      inp.click();
+    }
+
+    async function handleImportLocalPatchFile(ev) {
+      const file = ev.target.files && ev.target.files[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        if (!parsed || typeof parsed !== "object" || (!parsed.overrides && !parsed.custom_docs)) {
+          showLocalToast("补丁文件格式无效：缺少 overrides 或 custom_docs");
+          return;
+        }
+        const incoming = normalizeLocalPatch(parsed);
+        if (localImportMode === "replace") {
+          localPatch = incoming;
+        } else {
+          Object.assign(localPatch.overrides, incoming.overrides);
+          const existingMap = new Map(localPatch.custom_docs.map(x => [x.id, x]));
+          incoming.custom_docs.forEach(cd => existingMap.set(cd.id, cd));
+          localPatch.custom_docs = Array.from(existingMap.values());
+          localPatch.next_custom_id = Math.max(localPatch.next_custom_id, incoming.next_custom_id);
+        }
+        applyLocalPatchToRuntime();
+        await saveLocalPatchToStore(localPatch);
+        renderLocalWorkspaceModal();
+        renderHomePage();
+        syncCascadingDropdowns();
+        updateView(false, { keepSelected: true });
+        showLocalToast(localImportMode === "replace" ? "已覆盖导入个人工作区补丁包" : "已合并导入个人工作区补丁包");
+      } catch (err) {
+        showLocalToast("导入失败：JSON 解析异常");
+      }
+    }
+
+    async function clearAllLocalChanges() {
+      const ovCount = Object.keys(localPatch.overrides || {}).length;
+      const cdCount = (localPatch.custom_docs || []).length;
+      if (!ovCount && !cdCount) { showLocalToast("当前没有本地改动"); return; }
+      if (!confirm(`确定清空全部 ${ovCount} 项本地修订与 ${cdCount} 部本地新增文档？建议先导出 JSON 补丁包备份。`)) return;
+      localPatch = createEmptyLocalPatch();
+      applyLocalPatchToRuntime();
+      await saveLocalPatchToStore(localPatch);
+      renderLocalWorkspaceModal();
+      renderHomePage();
+      syncCascadingDropdowns();
+      updateView(false);
+      showLocalToast("已清空全部本地改动并还原官方基线");
+    }
+
+    async function initLocalWorkspace() {
+      const fileInp = document.getElementById("localPatchFileInput");
+      if (fileInp) fileInp.addEventListener("change", handleImportLocalPatchFile);
+      ["localWorkspaceModal", "localEditorModal"].forEach(mid => {
+        const m = document.getElementById(mid);
+        if (m) m.addEventListener("click", (e) => { if (e.target === m) m.classList.remove("open"); });
+      });
+      localPatch = await loadLocalPatchFromStore();
+      const hasLocal = Object.keys(localPatch.overrides || {}).length > 0 || (localPatch.custom_docs || []).length > 0;
+      updateLocalWorkspaceBadges();
+      if (hasLocal) {
+        applyLocalPatchToRuntime();
+        renderHomePage();
+        syncCascadingDropdowns();
+        updateView(false, { keepSelected: true });
+      }
+    }
+
     const totalArtFmt = (DATA.meta.article_count || 0).toLocaleString("en-US");
     searchInputEl.placeholder = `检索中国或国际准则（如 CAS14 总额法 / IFRS 15 / IAS 36），覆盖 ${totalArtFmt} 条正文...`;
     document.getElementById("ftBadge").title = `点击搜索框自动加载全库 ${totalArtFmt} 条条文正文索引`;
@@ -4594,6 +5690,7 @@
     syncCascadingDropdowns();
     updateView(false);
     applyDeviceMode(false);
+    initLocalWorkspace();
   </script>
 </body>
 </html>
